@@ -25,35 +25,63 @@ def process_edges():
     return edges_dict, reversed_edges_dict
 
 
-def do_depth_first_search(edges_dict, pivot_node, process_dict, stack_list, visited_list):
-    if (len(edges_dict) <= 0) | (pivot_node not in edges_dict.keys()):
-        return process_dict  # Return process dict for these two unreasonable cases.
+class DepthFirstSearch:
+    def __init__(self, edges_dict, process_dict=None):
+        self.edges_dict = edges_dict
+        if process_dict is None:
+            self.process_dict = dict()
 
-    outgoing_nodes_list = list(edges_dict.keys())  # Keys are all nodes with outgoing edge(s).
+        else:
+            self.process_dict = process_dict
 
-    # If pivot node is a sink node or only walks to visited nodes.
-    if pivot_node not in outgoing_nodes_list or set(edges_dict[pivot_node]).issubset(set(visited_list)):
-        process_order = max(process_dict.values()) + 1 if len(process_dict) > 0 else 1
-        process_dict.update({pivot_node: process_order})
-        del process_order
+    def execute(self, pivot_node=None):
+        if pivot_node is None:  # Select any unprocessed node as pivot.
+            unprocessed_nodes_list = list(set(self.edges_dict.keys()) - set(self.process_dict.keys()))
+            if len(unprocessed_nodes_list) <= 0:  # If nodes are all processed.
+                return self.process_dict
+            pivot_node = unprocessed_nodes_list.pop()
 
-        stack_list.remove(pivot_node)
-        visited_list.append(pivot_node)
-        return process_dict, stack_list[-1], stack_list, visited_list
+        if (len(self.edges_dict) <= 0) | (pivot_node not in self.edges_dict.keys()):
+            return self.process_dict  # Return process dict for these two unreasonable cases.
 
-    stack_list.extend(edges_dict[pivot_node])
-    process_dict, stack_list, visited_list, pivot_node = do_depth_first_search(edges_dict, pivot_node,
-                                                                               process_dict, stack_list, visited_list)
+        process_order = max(self.process_dict.values()) + 1 if len(self.process_dict) > 0 else 1
+        outgoing_nodes_list = list(set(self.edges_dict.keys()))  # All nodes with outgoing edge(s).
+        stack_list = [pivot_node]  # Stack always starts with pivot.
 
-    del edges_dict, outgoing_nodes_list
-    return process_dict, pivot_node, stack_list, visited_list
+        while True:
+            known_nodes_set = set(self.process_dict.keys()).union(set(stack_list))
+
+            # If pivot node is a sink node or only walks to known nodes.
+            if pivot_node not in outgoing_nodes_list or set(self.edges_dict[pivot_node]).issubset(known_nodes_set):
+                self.process_dict.update({pivot_node: process_order})
+                process_order += 1  # Increment after updating pivot node's process order.
+                stack_list.remove(pivot_node)  # Pivot node becomes processed and leaves stack.
+
+            if len(stack_list) <= 0:  # When stack is empty, check if there are unprocessed nodes.
+                unprocessed_nodes_list = list(set(self.edges_dict.keys()) - set(self.process_dict.keys()))
+                if len(unprocessed_nodes_list) <= 0:  # Only if all processed will the while break.
+                    break
+
+                pivot_node = unprocessed_nodes_list.pop()  # Otherwise, pick any unprocessed node as new pivot.
+                stack_list.append(pivot_node)
+
+            if pivot_node in stack_list:
+                for node in self.edges_dict[pivot_node]:
+                    if node not in known_nodes_set:  # From pivot node's outgoing edges, add unknown nodes into stack.
+                        stack_list.append(node)
+
+            pivot_node = stack_list[-1]  # DFS stack rule: last in first out.
+
+        del pivot_node, process_order, outgoing_nodes_list, stack_list, known_nodes_set, unprocessed_nodes_list, node
+        return self.process_dict
 
 
 if __name__ == '__main__':
-    edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
+    edges_dictionary = {'0': {'1'}, '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
                         '4': ['5', '6'], '5': ['4', '6', '7'],
                         '6': ['7'], '7': ['8'], '8': ['6']}
-    starting_node = '4'
-    process_dictionary = do_depth_first_search(edges_dictionary, starting_node, dict(),
-                                               edges_dictionary[starting_node], [starting_node])[0]
+    # starting_node = '6'
+
+    dfs = DepthFirstSearch(edges_dictionary)
+    process_dictionary = dfs.execute()
     print(dict(sorted(process_dictionary.items(), key=lambda item: item[1], reverse=True)))
