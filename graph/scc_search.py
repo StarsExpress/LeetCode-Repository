@@ -9,7 +9,7 @@ def process_edges():
         nodes = file.read().splitlines()
         file.close()
 
-    edges_dict, reversed_dict = dict(), dict()
+    edges_dict = dict()
     for node in nodes:
         nodes_list = node.lstrip().rstrip().split(' ')  # Remove boundary spaces and split by middle space.
 
@@ -18,22 +18,29 @@ def process_edges():
         if nodes_list[1] not in edges_dict[nodes_list[0]]:  # Prevent duplicated edges.
             edges_dict[nodes_list[0]].append(nodes_list[1])
 
-        if nodes_list[1] not in reversed_dict.keys():  # Reversed dict: edges from 2nd node to 1st node.
-            reversed_dict.update({nodes_list[1]: list()})
-        if nodes_list[0] not in reversed_dict[nodes_list[1]]:  # Prevent duplicated edges.
-            reversed_dict[nodes_list[1]].append(nodes_list[0])
-
     del file, file_path, node, nodes, nodes_list
-    return edges_dict, reversed_dict
+    return edges_dict
 
 
 class DepthFirstSearch:
     """Depth first search and strongly-connected components search."""
 
-    def __init__(self, edges_dict):
-        self.edges_dict, self.topology_dict = edges_dict, dict()  # Topology keys: orders; values: nodes.
+    def __init__(self, edges_dict):  # Topology dict keys: orders; values: nodes.
+        self.edges_dict, self.reversed_dict, self.topology_dict, self.scc_dict = edges_dict, dict(), dict(), dict()
 
-    def sort_topology(self, pivot_node=None):  # Record topology orders of all nodes via DFS.
+    def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
+        for outgoing_node in self.edges_dict.keys():
+            incoming_nodes_list = self.edges_dict[outgoing_node]
+            for incoming_node in incoming_nodes_list:
+                if incoming_node not in self.reversed_dict.keys():
+                    self.reversed_dict.update({incoming_node: list()})
+                self.reversed_dict[incoming_node].append(outgoing_node)
+
+        del outgoing_node, incoming_node, incoming_nodes_list
+        if return_dict:
+            return self.reversed_dict
+
+    def sort_topology(self, pivot_node=None, return_topology=False):
         if pivot_node is None:  # Pending nodes: in edges dict but haven't done topology.
             pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.values()))
             if len(pending_nodes_list) <= 0:
@@ -75,13 +82,15 @@ class DepthFirstSearch:
         del outgoing_nodes_list, stack_list, visited_nodes_set, pending_nodes_list
         del pivot_node, pivot_node_child, topology_order
         self.topology_dict = dict(sorted(self.topology_dict.items(), key=lambda item: item[0], reverse=True))
-        return self.topology_dict  # Return dict sorted by descending topology orders.
+
+        if return_topology:
+            return self.topology_dict  # Return dict sorted by descending topology orders.
 
 
 if __name__ == '__main__':
+    # edges_dictionary = process_edges()
     edges_dictionary = {'0': {'1'}, '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
                         '4': ['5', '6'], '5': ['4', '6', '7'],
                         '6': ['7'], '7': ['8'], '8': ['6']}
-
     dfs = DepthFirstSearch(edges_dictionary)
-    print(dfs.sort_topology())
+    print(dfs.sort_topology(return_topology=True))
