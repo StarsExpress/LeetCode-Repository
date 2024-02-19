@@ -150,10 +150,13 @@ class DepthFirstSearch:
 
 
 if __name__ == '__main__':
-    # edges_dictionary = process_edges()
-    edges_dictionary = {'0': {'1'}, '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
-                        '4': ['5', '6'], '5': ['4', '6', '7'],
-                        '6': ['7'], '7': ['8'], '8': ['6']}
+    import time
+
+    start_time = time.time()
+    edges_dictionary = dict(list(process_edges().items())[8000:10000])
+    # edges_dictionary = {'0': {'1'}, '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
+    #                     '4': ['5', '6'], '5': ['4', '6', '7'],
+    #                     '6': ['7'], '7': ['8'], '8': ['6']}
     dfs = DepthFirstSearch(edges_dictionary)
     # Rank by descending SCC size.
     scc_dict = dict(sorted(dfs.search_scc(return_scc=True).items(), key=lambda item: len(item[1]), reverse=True))
@@ -169,4 +172,6 @@ if __name__ == '__main__':
         if i == 4:
             break
         top_5_scc_size_string += ','
-    print(top_5_scc_size_string)
+
+    end_time = time.time()
+    print(f'{top_5_scc_size_string}\nRun Time: {str(round(end_time - start_time))} seconds.')
