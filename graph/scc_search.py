@@ -1,5 +1,6 @@
 from config import DATA_FOLDER_PATH
 import os
+import random
 
 
 def process_edges():
@@ -8,69 +9,73 @@ def process_edges():
         nodes = file.read().splitlines()
         file.close()
 
-    edges_dict, reversed_edges_dict = dict(), dict()
+    edges_dict, reversed_dict = dict(), dict()
     for node in nodes:
         nodes_list = node.lstrip().rstrip().split(' ')  # Remove boundary spaces and split by middle space.
 
         if nodes_list[0] not in edges_dict.keys():  # Edges dict: edges from 1st node to 2nd node.
             edges_dict.update({nodes_list[0]: list()})
-        edges_dict[nodes_list[0]].append(nodes_list[1])
+        if nodes_list[1] not in edges_dict[nodes_list[0]]:  # Prevent duplicated edges.
+            edges_dict[nodes_list[0]].append(nodes_list[1])
 
-        if nodes_list[1] not in reversed_edges_dict.keys():  # Reversed dict: edges from 2nd node to 1st node.
-            reversed_edges_dict.update({nodes_list[1]: list()})
-        reversed_edges_dict[nodes_list[1]].append(nodes_list[0])
+        if nodes_list[1] not in reversed_dict.keys():  # Reversed dict: edges from 2nd node to 1st node.
+            reversed_dict.update({nodes_list[1]: list()})
+        if nodes_list[0] not in reversed_dict[nodes_list[1]]:  # Prevent duplicated edges.
+            reversed_dict[nodes_list[1]].append(nodes_list[0])
 
     del file, file_path, node, nodes, nodes_list
-    return edges_dict, reversed_edges_dict
+    return edges_dict, reversed_dict
 
 
 class DepthFirstSearch:
-    def __init__(self, edges_dict):
-        self.edges_dict = edges_dict
-        self.topology_dict = dict()  # Record topological orders of each node under DFS.
+    """Depth first search and strongly-connected components search."""
 
-    def sort_topology(self, pivot_node=None):
+    def __init__(self, edges_dict):
+        self.edges_dict, self.topology_dict = edges_dict, dict()  # Topology keys: orders; values: nodes.
+
+    def sort_topology(self, pivot_node=None):  # Record topology orders of all nodes via DFS.
         if pivot_node is None:  # Pending nodes: in edges dict but haven't done topology.
-            pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.keys()))
+            pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.values()))
             if len(pending_nodes_list) <= 0:
                 return self.topology_dict
-            pivot_node = pending_nodes_list.pop()
+            pivot_node = random.choice(pending_nodes_list)
 
         if (len(self.edges_dict) <= 0) | (pivot_node not in self.edges_dict.keys()):
             return self.topology_dict  # Return topology dict for these two unreasonable cases.
 
-        topology_order = max(self.topology_dict.values()) + 1 if len(self.topology_dict) > 0 else 1
+        topology_order = max(self.topology_dict.keys()) + 1 if len(self.topology_dict) > 0 else 1
         stack_list = [pivot_node]  # Stack always starts with pivot.
         outgoing_nodes_list = list(set(self.edges_dict.keys()))  # Nodes with outgoing edge(s).
 
         while True:
             # Visited nodes: either complete topology or are in stack.
-            visited_nodes_set = set(self.topology_dict.keys()).union(set(stack_list))
+            visited_nodes_set = set(self.topology_dict.values()).union(set(stack_list))
 
-            # Pivot node completes topology if it's a sink node or only walks to visited nodes.
+            # Pivot completes topology if it's a sink node or only walks to visited nodes.
             if pivot_node not in outgoing_nodes_list or set(self.edges_dict[pivot_node]).issubset(visited_nodes_set):
-                self.topology_dict.update({pivot_node: topology_order})
+                self.topology_dict.update({topology_order: pivot_node})
                 topology_order += 1  # Increment for the next topology completion.
                 stack_list.remove(pivot_node)  # Leave stack.
 
             if len(stack_list) <= 0:  # When stack is empty, check if there are pending nodes.
-                pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.keys()))
+                pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.values()))
                 if len(pending_nodes_list) <= 0:  # Only break while if all nodes have done topology.
                     break
 
-                pivot_node = pending_nodes_list.pop()
+                pivot_node = random.choice(pending_nodes_list)
                 stack_list.append(pivot_node)
 
-            if pivot_node in stack_list:
+            if pivot_node in stack_list:  # If pivot is in stack, add its unvisited children into stack.
                 for pivot_node_child in self.edges_dict[pivot_node]:
                     if pivot_node_child not in visited_nodes_set:
-                        stack_list.append(pivot_node_child)  # Add pivot node's unvisited children into stack.
+                        stack_list.append(pivot_node_child)
 
             pivot_node = stack_list[-1]  # DFS stack rule: last in first out.
 
         del outgoing_nodes_list, stack_list, visited_nodes_set, pending_nodes_list
         del pivot_node, pivot_node_child, topology_order
-        return self.topology_dict
+        self.topology_dict = dict(sorted(self.topology_dict.items(), key=lambda item: item[0], reverse=True))
+        return self.topology_dict  # Return dict sorted by descending topology orders.
 
 
 if __name__ == '__main__':
@@ -79,5 +84,4 @@ if __name__ == '__main__':
                         '6': ['7'], '7': ['8'], '8': ['6']}
 
     dfs = DepthFirstSearch(edges_dictionary)
-    topology_dictionary = dfs.sort_topology()
-    print(dict(sorted(topology_dictionary.items(), key=lambda item: item[1], reverse=True)))
+    print(dfs.sort_topology())
