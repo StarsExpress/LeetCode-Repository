@@ -28,7 +28,7 @@ class DepthFirstSearch:
     def __init__(self, edges_dict):
         # Edges dict stores graph and reversed dict stores reversed graph.
         self.edges_dict, self.reversed_dict = edges_dict, dict()
-        self.topology_dict, self.past_scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
+        self.topology_dict, self.scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
 
     def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
         for outgoing_node in self.edges_dict.keys():
@@ -81,15 +81,14 @@ class DepthFirstSearch:
 
             pivot_node = stack_list[-1]  # DFS stack rule: last in first out.
 
-        del outgoing_nodes_set, stack_list, visited_nodes_set, pending_nodes_list
-        del pivot_node, pivot_node_child, topology_order
+        del outgoing_nodes_set, stack_list, visited_nodes_set, pending_nodes_list, pivot_node, topology_order
 
         if return_topology:
             return self.topology_dict
 
     def search_scc(self, return_scc=False):  # Search SCC on reversed graph.
         if len(self.edges_dict) <= 0:
-            return self.past_scc_dict  # Early return if edges dict is empty.
+            return self.scc_dict  # Early return if edges dict is empty.
         if len(self.topology_dict) <= 0:
             self.sort_topology()  # Ensure edges dict has been through topology.
         if len(self.reversed_dict) <= 0:
@@ -110,9 +109,9 @@ class DepthFirstSearch:
 
         while True:
             # All SCC set: set of nodes from current or past SCC search.
-            all_scc_set = set(sum(current_scc_dict.values(), [])).union(set(sum(self.past_scc_dict.values(), [])))
+            all_scc_set = set(sum(current_scc_dict.values(), [])).union(set(sum(self.scc_dict.values(), [])))
 
-            # If a pivot becomes blocked.
+            # If a pivot is blocked.
             if pivot_node not in outgoing_nodes_set or set(self.reversed_dict[pivot_node]).issubset(all_scc_set):
                 current_scc_dict['blocked'].append(pivot_node)  # Move pivot from unblocked into blocked list.
                 current_scc_dict['unblocked'].remove(pivot_node)
@@ -125,16 +124,15 @@ class DepthFirstSearch:
 
             # If unblocked pivot has no unblocked children, current SCC search is completed in either cases.
             if len(current_scc_dict['unblocked']) <= 1:
-                current_scc_nodes_list = sum(current_scc_dict.values(), [])
-                self.past_scc_dict.update({str(scc_ordinal): current_scc_nodes_list})
+                self.scc_dict.update({str(scc_ordinal): current_scc_dict['unblocked'] + current_scc_dict['blocked']})
                 scc_ordinal += 1  # Increment for the next round of SCC search.
 
-                # Pending nodes: reversed graph's edges that haven't done SCC search.
-                pending_nodes_list = list(set(self.reversed_dict.keys()) - set(sum(self.past_scc_dict.values(), [])))
-                if len(pending_nodes_list) <= 0:  # Only break while if all nodes have done SCC search.
+                # Only break while if all nodes have done SCC search.
+                if set(self.reversed_dict.keys()) - set(sum(self.scc_dict.values(), [])) == set():
                     break
 
-                for current_scc_node in current_scc_nodes_list:  # Remove current SCC nodes' orders from list.
+                # Remove current SCC nodes' orders from list.
+                for current_scc_node in current_scc_dict['unblocked'] + current_scc_dict['blocked']:
                     current_scc_index = list(self.topology_dict.values()).index(current_scc_node)
                     topology_orders_list.remove(list(self.topology_dict.keys())[current_scc_index])
 
@@ -146,9 +144,9 @@ class DepthFirstSearch:
 
             pivot_node = current_scc_dict['unblocked'][-1]  # Follow DFS stack rule: last in first out.
 
-        del outgoing_nodes_set, current_scc_dict, all_scc_set, scc_ordinal, pivot_node, pivot_node_child
+        del outgoing_nodes_set, current_scc_dict, all_scc_set, scc_ordinal, pivot_node
         if return_scc:
-            return self.past_scc_dict
+            return self.scc_dict
 
 
 if __name__ == '__main__':
