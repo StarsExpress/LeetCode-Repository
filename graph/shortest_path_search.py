@@ -2,35 +2,86 @@ from config import DATA_FOLDER_PATH
 import os
 
 
+no_path_dist = 1000000  # Value for any non-existing edge and upper bound of results from Dijkstra's algorithm.
+
+
 def process_distances():
     file_path = os.path.join(DATA_FOLDER_PATH, 'edges_distances.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
         file.close()
 
-    distances_dict = dict()  # Keys: nodes tuple (smaller ordinal, bigger ordinal); values: distance.
+    adjacency_matrix = [[no_path_dist] * len(nodes) for _ in range(len(nodes))]
+    for i in range(len(nodes)):  # The entire diagonal should be 0 as it's the "self" distance.
+        adjacency_matrix[i][i] = 0
 
+    visited_edges_set = set()
     for node in nodes:
-        distances_list = node.lstrip().rstrip().split('\t')  # Remove boundary spaces and split by \t.
-        outgoing_node = distances_list.pop(0)  # 1st item of list is the outgoing node.
+        dist_list = node.lstrip().rstrip().split('\t')  # Remove boundary spaces and split by \t.
+        pivot_node = int(dist_list.pop(0))  # 1st item of list is pivot node. Convert to integer.
 
-        for distance_str in distances_list:  # The rest items indicate distances between outgoing node and other nodes,
-            (incoming_node, distance) = distance_str.split(',')
-            distance = int(distance)  # Convert distance into integer.
-            distance_tuple = (min([outgoing_node, incoming_node]), max([outgoing_node, incoming_node]))
+        for dist_str in dist_list:  # The rest items indicate distances between pivot node and other nodes,
+            (destination_node, dist) = dist_str.split(',')
+            destination_node, dist = int(destination_node), int(dist)  # Convert to integer.
 
-            if distance_tuple not in distances_dict.keys():
-                distances_dict.update({distance_tuple: distance})
+            # Edge format: the smaller one on left, and the bigger one on right.
+            edge = (min([pivot_node, destination_node]), max([pivot_node, destination_node]))
 
-    del file, file_path, node, nodes, distances_list, outgoing_node, incoming_node, distance
-    return distances_dict
+            if edge not in visited_edges_set:  # Store unvisited edge' distance into matrix.
+                # Minus 1: nodes order starts from 1, not 0.
+                adjacency_matrix[pivot_node - 1][destination_node - 1] = dist
+                adjacency_matrix[destination_node - 1][pivot_node - 1] = dist
+
+    del file, file_path, visited_edges_set, node, nodes, dist_list, pivot_node, destination_node, dist
+    return adjacency_matrix
+
+
+def find_min_unvisited_node(shortest_paths_dict, visited_nodes_set):
+    min_dist, min_node = no_path_dist, None
+    unvisited_nodes_set = set(shortest_paths_dict.keys()) - visited_nodes_set
+
+    for node in unvisited_nodes_set:
+        if shortest_paths_dict[node] < min_dist:
+            min_dist, min_node = shortest_paths_dict[node], node
+
+    del unvisited_nodes_set, shortest_paths_dict, visited_nodes_set
+    return min_dist, min_node
+
+
+def find_shortest_path(adjacency_matrix, source_node):
+    # Nodes order starts from 1, not 0. Indexing needs +/- 1.
+    if (source_node < 1) | (source_node > len(adjacency_matrix)):
+        return dict()  # If source node isn't found in adjacency matrix.
+
+    shortest_paths_dict = dict()  # Dictionary of shortest paths from source node to all nodes.
+    for i in range(len(adjacency_matrix)):
+        shortest_paths_dict.update({i + 1: adjacency_matrix[source_node - 1][i]})
+
+    visited_nodes_set = {source_node}  # No need to visit source.
+    while True:
+        min_dist, min_node = find_min_unvisited_node(shortest_paths_dict, visited_nodes_set)
+        shortest_paths_dict.update({min_node: min_dist})  # The closest unvisited node to source.
+
+        for node in shortest_paths_dict.keys():  # Update distances from min node to other nodes.
+            if adjacency_matrix[min_node - 1][node - 1] + min_dist < shortest_paths_dict[node]:
+                shortest_paths_dict.update({node: adjacency_matrix[min_node - 1][node - 1] + min_dist})
+
+        visited_nodes_set.add(min_node)  # Now this closest unvisited node becomes visited.
+        if len(visited_nodes_set) == len(adjacency_matrix):  # Break whenever all nodes are visited.
+            break
+
+    del visited_nodes_set, source_node, adjacency_matrix
+    return shortest_paths_dict
 
 
 if __name__ == '__main__':
-    import time
+    source, destinations_list, distances_str = 1, [7, 37, 59, 82, 99, 115, 133, 165, 188, 197], ''
+    shortest_paths_dictionary = find_shortest_path(process_distances(), source)
 
-    start_time = time.time()
-    distances_dictionary = process_distances()
+    if len(shortest_paths_dictionary) > 0:
+        for destination in destinations_list:
+            distances_str += str(shortest_paths_dictionary[destination])
+            if destinations_list[-1] != destination:
+                distances_str += ','
 
-    end_time = time.time()
-    print(f'Run Time: {str(round(end_time - start_time))} seconds.')
+    print(f'Distances from {source} to each of {destinations_list}:\n{distances_str}')
