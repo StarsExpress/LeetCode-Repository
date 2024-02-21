@@ -1,8 +1,8 @@
 import math
 
 
-class MinHeap:
-    """Apply min heap to sort items."""
+class MaxHeap:
+    """Apply max heap to sort items."""
 
     def __init__(self, items_list):
         self.items_list = items_list
@@ -19,11 +19,11 @@ class MinHeap:
             return self.items_list
 
         if 2 * tree_idx + 2 < len(self.items_list):  # If both children exist.
-            # If parent > either child, a swap happens.
-            if self.items_list[tree_idx] > min(self.items_list[2 * tree_idx + 1], self.items_list[2 * tree_idx + 2]):
+            # If parent < either child, a swap happens.
+            if self.items_list[tree_idx] < max(self.items_list[2 * tree_idx + 1], self.items_list[2 * tree_idx + 2]):
                 swap_idx = 2 * tree_idx + 1
-                # If right child < left child, add 1 to swap idx. Otherwise, don't change.
-                if self.items_list[2 * tree_idx + 2] < self.items_list[2 * tree_idx + 1]:
+                # If right child > left child, add 1 to swap idx. Otherwise, don't change.
+                if self.items_list[2 * tree_idx + 2] > self.items_list[2 * tree_idx + 1]:
                     swap_idx += 1
 
                 self.items_list[tree_idx], self.items_list[swap_idx] = (
@@ -36,8 +36,8 @@ class MinHeap:
             return self.heapify(tree_idx - 1)  # Go to next subtree.
 
         if 2 * tree_idx + 1 < len(self.items_list):  # If just left child exists.
-            # If parent > left child.
-            if self.items_list[tree_idx] > self.items_list[2 * tree_idx + 1]:
+            # If parent < left child.
+            if self.items_list[tree_idx] < self.items_list[2 * tree_idx + 1]:
                 self.items_list[tree_idx], self.items_list[2 * tree_idx + 1] = (
                     self.items_list[2 * tree_idx + 1], self.items_list[tree_idx])
 
@@ -55,15 +55,15 @@ class MinHeap:
             self.items_list.extend(sorted_list)
             return self.items_list
 
-        # Swap the last item with root in self list. Now root, the min item, is at last index.
+        # Swap the last item with root in self list. Now root, the max item, is at last index.
         self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
-        sorted_list.append(self.items_list.pop(-1))  # Pop out min item and add to sorted list.
+        sorted_list.append(self.items_list.pop(-1))  # Pop out max item and add to sorted list.
         self.sort(sorted_list)
         return self.items_list
 
 
 if __name__ == '__main__':
-    numbers_list = [i for i in reversed(range(1, 11))]
-    min_heap = MinHeap(numbers_list)
-    assert min_heap.sort() == sorted(numbers_list)
-    print(min_heap.sort())
+    numbers_list = [i for i in range(1, 11)]
+    max_heap = MaxHeap(numbers_list)
+    assert max_heap.sort() == sorted(numbers_list, reverse=True)
+    print(max_heap.sort())
