@@ -6,63 +6,67 @@ class MaxHeap:
 
     def __init__(self, items_list):
         self.items_list = items_list
-        self.total_subtrees = math.floor(len(self.items_list) / 2)
+        self.build_heap()  # Build items list into max heap structure during initialization.
 
-    # Heapify special case: if subtree of ith idx has both children and does a swap.
-    # Jump to swap idx to ensure relative order. Then go to subtree of (temp_idx - 1) idx to continue to heapify.
-    def heapify(self, tree_idx=None, temp_idx=None):  # tree_idx: current subtree's index.
-        # For subtree with ith idx, parent idx: i; left child idx: 2i + 1; right child idx: 2i + 2.
-        if tree_idx is None:
-            tree_idx = self.total_subtrees - 1  # Subtrees recursive call: from bottom to top.
+    def build_heap(self):
+        total_subtrees = math.floor(len(self.items_list) / 2)
+        for i in reversed(range(total_subtrees)):
+            self.heapify(root_idx=i)
+        del total_subtrees
 
-        if (len(self.items_list) <= 1) | (tree_idx < 0):
-            return self.items_list
+    # Heapify special case: if subtree of ith index has both children and does a swap.
+    # Jump to the subtree at swap index to ensure relative order.
+    def heapify(self, root_idx):  # root_idx: the index where a subtree's root is.
+        # Root index at ith: left child index at 2i + 1; right child index at 2i + 2.
+        if (len(self.items_list) <= 1) | (root_idx < 0):
+            return
 
-        if 2 * tree_idx + 2 < len(self.items_list):  # If both children exist.
+        if 2 * root_idx + 2 < len(self.items_list):  # If both children exist.
             # If parent < either child, a swap happens.
-            if self.items_list[tree_idx] < max(self.items_list[2 * tree_idx + 1], self.items_list[2 * tree_idx + 2]):
-                swap_idx = 2 * tree_idx + 1
-                # If right child > left child, add 1 to swap idx. Otherwise, don't change.
-                if self.items_list[2 * tree_idx + 2] > self.items_list[2 * tree_idx + 1]:
+            if self.items_list[root_idx] < max(self.items_list[2 * root_idx + 1], self.items_list[2 * root_idx + 2]):
+                swap_idx = 2 * root_idx + 1  # Left child's index.
+                # If right child > left child, switch to right child's index. Otherwise, keep left child's index.
+                if self.items_list[2 * root_idx + 2] > self.items_list[2 * root_idx + 1]:
                     swap_idx += 1
 
-                self.items_list[tree_idx], self.items_list[swap_idx] = (
-                    self.items_list[swap_idx], self.items_list[tree_idx])
+                self.items_list[root_idx], self.items_list[swap_idx] = (
+                    self.items_list[swap_idx], self.items_list[root_idx])
 
-                return self.heapify(swap_idx, tree_idx)  # Apply the special case.
+                self.heapify(root_idx=swap_idx)  # Apply the special case.
+            return
 
-            if temp_idx is not None:
-                return self.heapify(temp_idx - 1)
-            return self.heapify(tree_idx - 1)  # Go to next subtree.
-
-        if 2 * tree_idx + 1 < len(self.items_list):  # If just left child exists.
+        if 2 * root_idx + 1 < len(self.items_list):  # If just left child exists.
             # If parent < left child.
-            if self.items_list[tree_idx] < self.items_list[2 * tree_idx + 1]:
-                self.items_list[tree_idx], self.items_list[2 * tree_idx + 1] = (
-                    self.items_list[2 * tree_idx + 1], self.items_list[tree_idx])
+            if self.items_list[root_idx] < self.items_list[2 * root_idx + 1]:
+                self.items_list[root_idx], self.items_list[2 * root_idx + 1] = (
+                    self.items_list[2 * root_idx + 1], self.items_list[root_idx])
 
-        if temp_idx is not None:
-            return self.heapify(temp_idx - 1)
-        return self.heapify(tree_idx - 1)  # Go to next subtree.
-
-    def sort(self, sorted_list=None):
-        if sorted_list is None:
-            sorted_list = []  # Initiate empty sorted list.
-
-        if len(self.items_list) <= 0:  # When all items are sorted.
-            self.items_list.extend(sorted_list)
+    def sort(self):
+        if len(self.items_list) <= 1:
             return self.items_list
 
-        self.heapify()  # Ensure each subtree is a max heap.
-        # Swap the last item with root in self list. Now root, the max item, is at last index.
-        self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
-        sorted_list.append(self.items_list.pop(-1))  # Pop out max item and add to sorted list.
-        self.sort(sorted_list)
+        sorted_list = []  # Carry sorted items.
+        while True:
+            # At the start of each iteration, switch the last item with root (max item) in self list.
+            self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
+            sorted_list.append(self.items_list.pop(-1))  # Pop out max item and add to sorted list.
+            if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
+                break
+            self.heapify(root_idx=0)  # Otherwise, heapify for the next iteration.
+
+        self.items_list.extend(sorted_list)
+        del sorted_list
         return self.items_list
 
 
 if __name__ == '__main__':
-    numbers_list = [i for i in range(1, 11)]
+    import time
+
+    start_time = time.time()
+    numbers_list = [i for i in range(1, 100001)]
     max_heap = MaxHeap(numbers_list)
     assert max_heap.sort() == sorted(numbers_list, reverse=True)
-    print(max_heap.sort())
+
+    end_time = time.time()
+    print(f'Sorted list:\n{max_heap.sort()}\n')
+    print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.')
