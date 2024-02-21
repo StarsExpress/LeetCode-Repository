@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 
 
 class MinHeap:
@@ -6,13 +7,15 @@ class MinHeap:
 
     def __init__(self, items_list):
         self.items_list = items_list
-        self.build_heap()  # Build items list into min heap structure during initialization.
+
+    def renew_items(self, items_list):
+        self.items_list.clear()
+        self.items_list.extend(items_list)
 
     def build_heap(self):
         total_subtrees = math.floor(len(self.items_list) / 2)
         for i in reversed(range(total_subtrees)):
             self.heapify(root_idx=i)
-        del total_subtrees
 
     # Heapify special case: if subtree of ith index has both children and does a swap.
     # Jump to the subtree at swap index to ensure relative order.
@@ -45,18 +48,45 @@ class MinHeap:
         if len(self.items_list) <= 1:
             return self.items_list
 
+        copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
+
         sorted_list = []  # Carry sorted items.
+        self.build_heap()  # Build items list into min heap structure before sorting.
         while True:
-            # At the start of each iteration, switch the last item with root (min item) in self list.
+            # At the start of each iteration, switch the last item with root (min item).
             self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
-            sorted_list.append(self.items_list.pop(-1))  # Pop out min item and add to sorted list.
+            sorted_list.append(self.items_list.pop(-1))  # Add min item to sorted list.
             if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
                 break
             self.heapify(root_idx=0)  # Otherwise, heapify for the next iteration.
 
-        self.items_list.extend(sorted_list)
-        del sorted_list
-        return self.items_list
+        self.items_list.extend(copied_items_list)  # Restoration.
+        return sorted_list
+
+    def find_median(self):
+        if len(self.items_list) == 0:
+            return None
+        if len(self.items_list) == 1:
+            return self.items_list[0]
+
+        copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
+        total_items = len(self.items_list)
+        # Median is defined by rank from smallest to largest.
+        median_depth = (total_items + 1) // 2 if total_items % 2 == 1 else total_items // 2
+
+        self.build_heap()  # Build items list into min heap structure before sorting.
+        for i in range(median_depth):
+            # At the start of each iteration, switch the last item with root (min item).
+            self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
+
+            if i + 1 == median_depth:  # After popping out first (median - 1) items, the next one is median.
+                median = self.items_list.pop(-1)
+                self.items_list.clear()  # Clear and restore.
+                self.items_list.extend(copied_items_list)
+                return median
+
+            self.items_list.pop(-1)
+            self.heapify(root_idx=0)  # Heapify for the next iteration.
 
 
 if __name__ == '__main__':
@@ -65,8 +95,9 @@ if __name__ == '__main__':
     start_time = time.time()
     numbers_list = [i for i in reversed(range(1, 100001))]
     min_heap = MinHeap(numbers_list)
-    assert min_heap.sort() == sorted(numbers_list)
 
+    assert min_heap.sort() == sorted(numbers_list)
     end_time = time.time()
     print(f'Sorted list:\n{min_heap.sort()}\n')
-    print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.')
+    print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.\n')
+    print(f'(From smallest to biggest) Median item: {str(min_heap.find_median())}.')
