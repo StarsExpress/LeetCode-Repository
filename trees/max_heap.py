@@ -46,8 +46,6 @@ class MaxHeap:
         return self.heapify(tree_idx - 1)  # Go to next subtree.
 
     def sort(self, sorted_list=None):
-        self.heapify()  # Ensure each subtree is a max heap.
-
         if sorted_list is None:
             sorted_list = []  # Initiate empty sorted list.
 
@@ -55,6 +53,7 @@ class MaxHeap:
             self.items_list.extend(sorted_list)
             return self.items_list
 
+        self.heapify()  # Ensure each subtree is a max heap.
         # Swap the last item with root in self list. Now root, the max item, is at last index.
         self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
         sorted_list.append(self.items_list.pop(-1))  # Pop out max item and add to sorted list.
