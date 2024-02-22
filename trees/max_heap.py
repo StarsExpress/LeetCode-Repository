@@ -5,21 +5,31 @@ from copy import deepcopy
 class MaxHeap:
     """Apply max heap to sort items."""
 
-    def __init__(self, items_list):
-        self.items_list = items_list
+    def __init__(self, items: list | tuple):
+        self.items_list = []
+        self.items_list.extend(items)
 
-    def renew_items(self, items_list):
-        self.items_list.clear()
-        self.items_list.extend(items_list)
-
-    def build_heap(self):
+    def build_heap(self):  # Ensure the max item is at root before any "non-recursive" heapify calls.
         total_subtrees = math.floor(len(self.items_list) / 2)
         for i in reversed(range(total_subtrees)):
             self.heapify(root_idx=i)
 
-    # Heapify special case: if subtree of ith index has both children and does a swap.
-    # Jump to the subtree at swap index to ensure relative order.
-    def heapify(self, root_idx):  # root_idx: the index where a subtree's root is.
+    def add_items(self, items, reset=False):  # Heapify as long as items list changes.
+        if isinstance(items, dict):
+            return
+
+        if reset:
+            self.items_list.clear()
+
+        if isinstance(items, list) | isinstance(items, tuple):
+            self.items_list.extend(items)
+
+        else:
+            self.items_list.append(items)
+        self.build_heap()
+        self.heapify()
+
+    def heapify(self, root_idx: int = 0):  # Subtree's root index has default of uppermost subtree's index.
         # Root index at ith: left child index at 2i + 1; right child index at 2i + 2.
         if (len(self.items_list) <= 1) | (root_idx < 0):
             return
@@ -35,7 +45,9 @@ class MaxHeap:
                 self.items_list[root_idx], self.items_list[swap_idx] = (
                     self.items_list[swap_idx], self.items_list[root_idx])
 
-                self.heapify(root_idx=swap_idx)  # Apply the special case.
+                # Heapify special case: if subtree has both children and does a swap.
+                # Jump to the subtree at swap index to ensure relative order.
+                self.heapify(root_idx=swap_idx)
             return
 
         if 2 * root_idx + 1 < len(self.items_list):  # If just left child exists.
@@ -49,21 +61,28 @@ class MaxHeap:
             return self.items_list
 
         copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
-
         sorted_list = []  # Carry sorted items.
-        self.build_heap()  # Build items list into max heap structure before sorting.
+        self.build_heap()
         while True:
             # At the start of each iteration, switch the last item with root (max item).
             self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
             sorted_list.append(self.items_list.pop(-1))  # Add max item to sorted list.
             if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
                 break
-            self.heapify(root_idx=0)  # Otherwise, heapify for the next iteration.
+            self.heapify()  # Otherwise, heapify for the next iteration.
 
         self.items_list.extend(copied_items_list)  # Restoration.
         return sorted_list
 
-    def find_median(self):
+    def find_root_value(self, remove=False):
+        if remove:
+            root_value = self.items_list.pop(0)
+            self.build_heap()
+            self.heapify()  # Heapify once the root value is popped out.
+            return root_value
+        return self.items_list[0]
+
+    def find_median_value(self):
         if len(self.items_list) == 0:
             return None
         if len(self.items_list) == 1:
@@ -86,7 +105,7 @@ class MaxHeap:
                 return median
 
             self.items_list.pop(-1)
-            self.heapify(root_idx=0)  # Heapify for the next iteration.
+            self.heapify()  # Heapify for the next iteration.
 
 
 if __name__ == '__main__':
@@ -100,4 +119,4 @@ if __name__ == '__main__':
     end_time = time.time()
     print(f'Sorted list:\n{max_heap.sort()}\n')
     print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.\n')
-    print(f'(From smallest to biggest) Median item: {str(max_heap.find_median())}.')
+    print(f'(From smallest to biggest) Median item: {str(max_heap.find_median_value())}.')
