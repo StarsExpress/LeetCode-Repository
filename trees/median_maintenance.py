@@ -28,18 +28,18 @@ def track_median(items_list, return_sum=False, only_last_4_digits=False):
             min_heap.add_items(current_item)
 
         if len(max_heap.items_list) - 1 > len(min_heap.items_list):  # Ensure heaps size diff <= 1.
-            max_heap_root = max_heap.find_root_value(remove=True)
+            max_heap_root = max_heap.find_max_value(remove=True)
             min_heap.add_items(max_heap_root)
 
         if len(min_heap.items_list) - 1 > len(max_heap.items_list):  # Ensure heaps size diff <= 1.
-            min_heap_root = min_heap.find_root_value(remove=True)
+            min_heap_root = min_heap.find_min_value(remove=True)
             max_heap.add_items(min_heap_root)
 
         # Equal sign takes max heap's root: for even items count, median is defined as the (count / 2)th "smallest".
         if len(min_heap.items_list) <= len(max_heap.items_list):
-            medians_list.append(max_heap.find_root_value(remove=False))
+            medians_list.append(max_heap.find_max_value(remove=False))
             continue
-        medians_list.append(min_heap.find_root_value(remove=False))
+        medians_list.append(min_heap.find_min_value(remove=False))
 
     assert len(min_heap.items_list) + len(max_heap.items_list) == len(medians_list)
 

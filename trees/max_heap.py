@@ -14,7 +14,7 @@ class MaxHeap:
         for i in reversed(range(total_subtrees)):
             self.heapify(root_idx=i)
 
-    def add_items(self, items, reset=False):  # Heapify as long as items list changes.
+    def add_items(self, items, reset=False):
         if isinstance(items, dict):
             return
 
@@ -26,8 +26,7 @@ class MaxHeap:
 
         else:
             self.items_list.append(items)
-        self.build_heap()
-        self.heapify()
+        self.build_heap()  # Ensure the max item is still at root.
 
     def heapify(self, root_idx: int = 0):  # Subtree's root index has default of uppermost subtree's index.
         # Root index at ith: left child index at 2i + 1; right child index at 2i + 2.
@@ -74,11 +73,10 @@ class MaxHeap:
         self.items_list.extend(copied_items_list)  # Restoration.
         return sorted_list
 
-    def find_root_value(self, remove=False):
+    def find_max_value(self, remove=False):
         if remove:
             root_value = self.items_list.pop(0)
-            self.build_heap()
-            self.heapify()  # Heapify once the root value is popped out.
+            self.build_heap()  # Ensure the max item is still at root.
             return root_value
         return self.items_list[0]
 
