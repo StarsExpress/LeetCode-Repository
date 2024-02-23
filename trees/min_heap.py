@@ -9,9 +9,9 @@ class MinHeap:
         self.items_list = []
         self.items_list.extend(items)
 
-    def build_heap(self):  # Ensure the min item is at root before any "non-recursive" heapify calls.
+    def build_heap(self):  # Ensure the min item is at root.
         total_subtrees = math.floor(len(self.items_list) / 2)
-        for i in reversed(range(total_subtrees)):
+        for i in reversed(range(total_subtrees)):  # Subtrees iterate from bottom to top.
             self.heapify(root_idx=i)
 
     def add_items(self, items, reset=False):

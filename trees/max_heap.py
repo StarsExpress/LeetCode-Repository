@@ -9,9 +9,9 @@ class MaxHeap:
         self.items_list = []
         self.items_list.extend(items)
 
-    def build_heap(self):  # Ensure the max item is at root before any "non-recursive" heapify calls.
+    def build_heap(self):  # Ensure the max item is at root.
         total_subtrees = math.floor(len(self.items_list) / 2)
-        for i in reversed(range(total_subtrees)):
+        for i in reversed(range(total_subtrees)):  # Subtrees iterate from bottom to top.
             self.heapify(root_idx=i)
 
     def add_items(self, items, reset=False):
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     start_time = time.time()
     numbers_list = [i for i in range(1, 100001)]
     max_heap = MaxHeap(numbers_list)
-    assert max_heap.sort() == sorted(numbers_list, reverse=True)
 
+    assert max_heap.sort() == sorted(numbers_list, reverse=True)
     end_time = time.time()
     print(f'Sorted list:\n{max_heap.sort()}\n')
     print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.\n')
