@@ -50,7 +50,7 @@ if __name__ == '__main__':
     from config import DATA_FOLDER_PATH
     import os
 
-    integers_array_path = os.path.join(DATA_FOLDER_PATH, 'integers_10000.txt')
+    integers_array_path = os.path.join(DATA_FOLDER_PATH, 'int_10k.txt')
     lines = open(integers_array_path, 'r').readlines()
     integers_list = [int(line.strip()) for line in lines]
     print(quick_sort_list(integers_list)[1])

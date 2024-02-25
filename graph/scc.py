@@ -1,6 +1,7 @@
 from config import DATA_FOLDER_PATH
 import os
 import random
+from copy import deepcopy
 
 
 def process_edges():
@@ -28,7 +29,20 @@ class DepthFirstSearch:
     def __init__(self, edges_dict):
         # Edges dict stores graph and reversed dict stores reversed graph.
         self.edges_dict, self.reversed_dict = edges_dict, dict()
+
+        outgoing_nodes_set = set(self.edges_dict.keys())  # Outgoing nodes' incoming edges are in list format.
+        incoming_nodes_set = set(sum(self.edges_dict.values(), []))
+        self.all_nodes_set = outgoing_nodes_set.union(incoming_nodes_set)  # All nodes of graph.
+
         self.topology_dict, self.scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
+        # At initialization, stack is empty and two orders are both 1.
+        self.stack_list, self.topology_order, self.scc_order = [], 1, 1
+
+        # Used during SCC search: list of topology orders; list of current SCC components;.set of nodes from past SCC.
+        self.topology_orders_list, self.current_scc_list, self.scc_nodes_set = [], [], set()
+
+        self.pending_nodes_list = list(self.all_nodes_set)  # Initially, all nodes haven't done topology.
+        self.visited_nodes_set = set()  # Visited nodes: either complete topology or are in stack.
 
     def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
         for outgoing_node in self.edges_dict.keys():
@@ -42,51 +56,47 @@ class DepthFirstSearch:
         if return_dict:
             return self.reversed_dict
 
-    def sort_topology(self, pivot_node=None, return_topology=False):  # Sort topology on graph.
-        if pivot_node is None:  # Pending nodes: graph's edges that haven't done topology.
-            pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.values()))
-            if len(pending_nodes_list) <= 0:
-                return self.topology_dict
-            pivot_node = random.choice(pending_nodes_list)
+    def sort_topology(self):
+        if len(self.stack_list) <= 0:  # If stack is empty, randomly choose a node that hasn't done topology.
+            if len(self.pending_nodes_list) <= 0:
+                return
+            start_node = random.choice(self.pending_nodes_list)
+            self.stack_list.append(start_node)
+            self.visited_nodes_set.add(start_node)
 
-        if (len(self.edges_dict) <= 0) | (pivot_node not in self.edges_dict.keys()):
-            return self.topology_dict  # Early return for these two unreasonable cases.
+        start_node = self.stack_list[-1]  # Start node is the last item in stack. DFS stack rule: last in first out.
 
-        outgoing_nodes_set = set(self.edges_dict.keys())  # Outgoing nodes in original graph.
-        topology_order = max(self.topology_dict.keys()) + 1 if len(self.topology_dict) > 0 else 1
-        stack_list = [pivot_node]  # Stack always starts with pivot.
+        original_stack_count = len(self.stack_list)
+        if start_node in self.edges_dict.keys():  # Add unvisited children of start node to stack.
+            for child in self.edges_dict[start_node]:
+                if child not in self.visited_nodes_set:
+                    self.stack_list.append(child)
+                    self.visited_nodes_set.add(child)
 
-        while True:
-            # Visited nodes: either complete topology or are in stack.
-            visited_nodes_set = set(self.topology_dict.values()).union(set(stack_list))
+        # Start node completes topology if it's a "sink" node or only walks to visited children.
+        if len(self.stack_list) == original_stack_count:
+            self.topology_dict.update({self.topology_order: start_node})
+            self.stack_list.remove(start_node)  # Leave stack.
+            self.pending_nodes_list.remove(start_node)
+            self.topology_order += 1  # Increment for the next node that completes topology.
 
-            # Pivot completes topology if it's a sink node or only walks to visited nodes.
-            if pivot_node not in outgoing_nodes_set or set(self.edges_dict[pivot_node]).issubset(visited_nodes_set):
-                self.topology_dict.update({topology_order: pivot_node})
-                topology_order += 1  # Increment for the next topology completion.
-                stack_list.remove(pivot_node)  # Leave stack.
+            if len(self.stack_list) <= 0:  # When stack is empty, check if there are pending nodes.
+                if len(self.pending_nodes_list) <= 0:  # If all nodes have done topology.
+                    self.topology_order -= (self.topology_order - 1)  # Topology order is back to 1.
 
-            if len(stack_list) <= 0:  # When stack is empty, check if there are pending nodes.
-                pending_nodes_list = list(set(self.edges_dict.keys()) - set(self.topology_dict.values()))
-                if len(pending_nodes_list) <= 0:  # Only break while if all nodes have done topology.
-                    break
+                    # Prepare lists that have to be used in search SCC function.
+                    self.topology_orders_list.clear()
+                    self.topology_orders_list.extend(sorted(self.topology_dict.keys()))  # Sort from low to high.
+                    self.current_scc_list.clear()
+                    self.pending_nodes_list.extend(self.all_nodes_set)
+                    return  # Return as graph topology completes.
 
-                pivot_node = random.choice(pending_nodes_list)
-                stack_list.append(pivot_node)
+                start_node = random.choice(self.pending_nodes_list)
+                self.stack_list.append(start_node)  # Added a new start node to stack.
+                self.visited_nodes_set.add(start_node)
+        self.sort_topology()
 
-            if pivot_node in stack_list:  # If pivot is in stack, add its unvisited children into stack.
-                for pivot_node_child in self.edges_dict[pivot_node]:
-                    if pivot_node_child not in visited_nodes_set:
-                        stack_list.append(pivot_node_child)
-
-            pivot_node = stack_list[-1]  # DFS stack rule: last in first out.
-
-        del outgoing_nodes_set, stack_list, visited_nodes_set, pending_nodes_list, pivot_node, topology_order
-
-        if return_topology:
-            return self.topology_dict
-
-    def search_scc(self, return_scc=False):  # Search SCC on reversed graph.
+    def search_scc(self):  # Search SCC on reversed graph.
         if len(self.edges_dict) <= 0:
             return self.scc_dict  # Early return if edges dict is empty.
         if len(self.topology_dict) <= 0:
@@ -94,73 +104,63 @@ class DepthFirstSearch:
         if len(self.reversed_dict) <= 0:
             self.reverse_edges()  # Ensure a reversed version of edges dict.
 
-        outgoing_nodes_set = set(self.reversed_dict.keys())  # Outgoing nodes in reversed graph.
-        scc_ordinal = 1  # SCC ordinal starts from 1.
+        if len(self.stack_list) <= 0:
+            if len(self.topology_orders_list) <= 0:
+                return self.scc_dict
 
-        pivot_node = self.topology_dict[max(self.topology_dict.keys())]  # Start from the highest-ordered node.
+            # Add the node that has the biggest topology order of topology orders list.
+            biggest_order_node = self.topology_dict[max(self.topology_orders_list)]
+            self.stack_list.append(biggest_order_node)
 
-        # Current SCC dict stores all nodes related to "current" SCC search.
-        # Unblocked: a node that either isn't sink node or hasn't reached nodes from current or "past" SCC search.
-        # Blocked: the opposite of an unblocked node.
-        # Just as stack, unblocked list always starts with pivot.
-        current_scc_dict = {'unblocked': [pivot_node], 'blocked': []}
+        start_node = self.stack_list[-1]  # Start node is the last item in stack. DFS stack rule: last in first out.
+        self.scc_nodes_set.update(set(self.stack_list))
+        self.scc_nodes_set.union(set(self.current_scc_list))
 
-        topology_orders_list = list(self.topology_dict.keys())
+        original_stack_count = len(self.stack_list)
+        if start_node in self.reversed_dict.keys():  # Add unvisited children of start node to stack.
+            for child in self.reversed_dict[start_node]:
+                if child not in self.scc_nodes_set:
+                    self.stack_list.append(child)
 
-        while True:
-            # All SCC set: set of nodes from current or past SCC search.
-            all_scc_set = set(sum(current_scc_dict.values(), [])).union(set(sum(self.scc_dict.values(), [])))
+        # Start node reaches end if it's a "sink" node or only walks to visited children.
+        if len(self.stack_list) == original_stack_count:
+            self.current_scc_list.append(start_node)  # Move start node from stack to current SCC list.
+            self.stack_list.remove(start_node)
 
-            # If a pivot is blocked.
-            if pivot_node not in outgoing_nodes_set or set(self.reversed_dict[pivot_node]).issubset(all_scc_set):
-                current_scc_dict['blocked'].append(pivot_node)  # Move pivot from unblocked into blocked list.
-                current_scc_dict['unblocked'].remove(pivot_node)
+            if len(self.stack_list) <= 0:  # When stack is empty, current SCC search is complete.
+                # Update current SCC components into SCC dict and set.
+                self.scc_dict.update({self.scc_order: deepcopy(self.current_scc_list)})  # Deep copy to prevent bugs.
+                self.current_scc_list.clear()  # Clear list after updates are finished.
 
-            # Add unblocked pivot's unblocked children into unblocked list.
-            if pivot_node in current_scc_dict['unblocked']:
-                for pivot_node_child in self.reversed_dict[pivot_node]:
-                    if pivot_node_child not in all_scc_set:
-                        current_scc_dict['unblocked'].append(pivot_node_child)
+                # In current SCC search, all N components have the N biggest topology orders. Remove them from list.
+                for _ in range(len(self.scc_dict[self.scc_order])):
+                    self.topology_orders_list.remove(self.topology_orders_list[-1])
 
-            # If unblocked pivot has no unblocked children, current SCC search is completed in either cases.
-            if len(current_scc_dict['unblocked']) <= 1:
-                self.scc_dict.update({str(scc_ordinal): current_scc_dict['unblocked'] + current_scc_dict['blocked']})
-                scc_ordinal += 1  # Increment for the next round of SCC search.
+                if len(self.topology_orders_list) <= 0:  # If all graph nodes have done SCC search.
+                    self.scc_order -= (self.scc_order - 1)  # SCC order is back to 1.
 
-                # Only break while if all nodes have done SCC search.
-                if set(self.reversed_dict.keys()) - set(sum(self.scc_dict.values(), [])) == set():
-                    break
+                    self.topology_orders_list.clear()  # Restore topology orders. Sort from low to high.
+                    self.topology_orders_list.extend(sorted(self.topology_dict.keys()))
+                    return self.scc_dict  # Return as SCC search completes.
 
-                # Remove current SCC nodes' orders from list.
-                for current_scc_node in current_scc_dict['unblocked'] + current_scc_dict['blocked']:
-                    current_scc_index = list(self.topology_dict.values()).index(current_scc_node)
-                    topology_orders_list.remove(list(self.topology_dict.keys())[current_scc_index])
+                self.scc_order += 1  # Increment SCC order for the next round of SCC search.
 
-                current_scc_dict['unblocked'].clear()
-                current_scc_dict['blocked'].clear()
-
-                pivot_node = self.topology_dict[max(topology_orders_list)]
-                current_scc_dict['unblocked'].append(pivot_node)
-
-            pivot_node = current_scc_dict['unblocked'][-1]  # Follow DFS stack rule: last in first out.
-
-        del outgoing_nodes_set, current_scc_dict, all_scc_set, scc_ordinal, pivot_node
-        if return_scc:
-            return self.scc_dict
+        self.search_scc()
+        return self.scc_dict
 
 
 if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    edges_dictionary = dict(list(process_edges().items())[8000:10000])
-    # edges_dictionary = {'0': {'1'}, '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
+    edges_dictionary = process_edges()
+    # edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
     #                     '4': ['5', '6'], '5': ['4', '6', '7'],
     #                     '6': ['7'], '7': ['8'], '8': ['6']}
     dfs = DepthFirstSearch(edges_dictionary)
-    # Rank by descending SCC size.
-    scc_dict = dict(sorted(dfs.search_scc(return_scc=True).items(), key=lambda item: len(item[1]), reverse=True))
 
+    # Rank by descending SCC size.
+    scc_dict = dict(sorted(dfs.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
     top_5_scc_size_string = 'Top 5 SCC Size: '
     for i in range(5):
         if i + 1 > len(scc_dict):
