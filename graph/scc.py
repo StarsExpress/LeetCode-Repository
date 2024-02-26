@@ -14,6 +14,8 @@ def read_graph():
     edges_dict = dict()
     for node in nodes:
         nodes_list = node.lstrip().rstrip().split(' ')  # Remove boundary spaces and split by middle space.
+        if nodes_list[0] == nodes_list[1]:
+            continue  # Ignore self edges.
 
         if nodes_list[0] not in edges_dict.keys():  # Edges dict: edges from 1st node to 2nd node.
             edges_dict.update({nodes_list[0]: list()})
@@ -24,13 +26,12 @@ def read_graph():
     return edges_dict
 
 
-class DepthFirstSearch:
-    """Depth first search and strongly-connected components search."""
+class KosarajuSearch:
+    """Search strongly-connected components via Kosaraju algorithm."""
 
     def __init__(self, edges_dict: dict):
-        # Edges dict stores graph and reversed dict stores reversed graph.
-        self.edges_dict, self.iso_nodes_set = self.reduce_graph_complexity(edges_dict)
-        self.reversed_dict = dict()
+        self.edges_dict, self.one_sided_nodes_set = self.remove_one_sided_nodes(edges_dict)
+        self.reversed_dict = dict()  # Stores reversed graph.
         self.all_nodes_set = set(self.edges_dict.keys())  # All nodes of graph.
 
         self.topology_dict, self.scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
@@ -44,40 +45,68 @@ class DepthFirstSearch:
         self.visited_nodes_set = set()  # Visited nodes: either complete topology or are in stack.
 
     @staticmethod
-    def reduce_graph_complexity(edges_dict: dict):  # Graph is stored in a format of edges dict.
+    def remove_one_sided_nodes(edges_dict: dict):  # Graph is stored in a format of edges dict.
         out_nodes_set = set(edges_dict.keys())  # Nodes with outgoing edges.
         # Outgoing nodes' incoming edges are in list format.
         in_nodes_set = set(chain.from_iterable(edges_dict.values()))  # Nodes with incoming edges.
 
         # If SCC has size > 1, all of its nodes have "both outgoing and incoming" edges.
         # From edges dict, find all the nodes with only one of outgoing and incoming edges.
-        # Remove their edges from edges dict. Put these "isolated" nodes in another dict.
-        iso_nodes_set = in_nodes_set - out_nodes_set  # Nodes with only incoming edges are directly isolated.
+        # Remove these "one-side" nodes from edges dict's keys and values reference.
+        one_sided_nodes_set = set()
 
         while True:
-            only_out_nodes_set = out_nodes_set - in_nodes_set  # Outgoing nodes without incoming edges.
-            if len(only_out_nodes_set) <= 0:
-                break  # Only break while when this set is empty (graph convergence).
+            only_in_nodes_set = in_nodes_set - out_nodes_set  # Nodes with only incoming edges.
+            only_out_nodes_set = out_nodes_set - in_nodes_set  # Nodes with only outgoing edges.
 
-            iso_nodes_set = iso_nodes_set.union(only_out_nodes_set)  # Add such nodes to isolated set.
-            for only_out_node in only_out_nodes_set:  # Delete these nodes from edges dict.
+            # Some nodes may become one-sided in current iteration.
+            iter_one_sided_nodes_set = only_in_nodes_set.union(only_out_nodes_set)
+            one_sided_nodes_set = one_sided_nodes_set.union(iter_one_sided_nodes_set)
+
+            if (len(out_nodes_set) <= 0) or (out_nodes_set == in_nodes_set):
+                del only_in_nodes_set, only_out_nodes_set, iter_one_sided_nodes_set
+                break  # Graph converges if outgoing nodes set is empty or equals incoming nodes set.
+
+            for only_out_node in only_out_nodes_set:  # Delete keys reference.
                 del edges_dict[only_out_node]
 
-            out_nodes_set = set(edges_dict.keys())  # Make updates for next iteration.
+            for key, value in edges_dict.items():  # Delete values reference.
+                if set(value).intersection(iter_one_sided_nodes_set) == set():
+                    continue
+
+                new_value = list(set(value) - iter_one_sided_nodes_set)
+                edges_dict[key].clear()
+                edges_dict[key].extend(new_value)
+
+            out_nodes_set = set(edges_dict.keys())  # Update for next iteration.
             in_nodes_set = set(chain.from_iterable(edges_dict.values()))
 
-        del out_nodes_set, in_nodes_set, only_out_nodes_set
-        return edges_dict, iso_nodes_set  # Now all nodes in edges dict have both outgoing and incoming edges.
+        del out_nodes_set, in_nodes_set
+        return edges_dict, one_sided_nodes_set  # Now all nodes in edges dict have both outgoing and incoming edges.
+
+    @staticmethod
+    def remove_closed_pairs(edges_dict: dict):
+        closed_pairs_set = set()  # Two nodes are a closed pair if their outgoing edges only go to each other.
+        # Nodes that have only one outgoing edge.
+        one_out_nodes_set = set(filter(lambda x: len(edges_dict[x]) == 1, edges_dict.keys()))
+
+        for out_node in one_out_nodes_set:
+            receiving_node = edges_dict[out_node][0]
+            if (receiving_node in one_out_nodes_set) and (edges_dict[receiving_node][0] == out_node):
+                closed_pairs_set.add(out_node)
+                closed_pairs_set.add(receiving_node)
+
+        print(len(closed_pairs_set))
 
     def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
-        for outgoing_node in self.edges_dict.keys():
-            incoming_nodes_list = self.edges_dict[outgoing_node]
-            for incoming_node in incoming_nodes_list:
-                if incoming_node not in self.reversed_dict.keys():
-                    self.reversed_dict.update({incoming_node: list()})
-                self.reversed_dict[incoming_node].append(outgoing_node)
+        for out_node in self.edges_dict.keys():
+            in_nodes_list = self.edges_dict[out_node]
+            for in_node in in_nodes_list:
+                if in_node not in self.reversed_dict.keys():
+                    self.reversed_dict.update({in_node: list()})
+                self.reversed_dict[in_node].append(out_node)
 
-        del outgoing_node, incoming_node, incoming_nodes_list
+        del out_node, in_node, in_nodes_list
         if return_dict:
             return self.reversed_dict
 
@@ -183,11 +212,12 @@ if __name__ == '__main__':
     #                     '4': ['5', '6'], '5': ['4', '6', '7'],
     #                     '6': ['7'], '7': ['8'], '8': ['6']}
 
-    dfs = DepthFirstSearch(edges_dictionary)
-    print(len(dfs.edges_dict), len(dfs.iso_nodes_set))
-    #
+    kosaraju = KosarajuSearch(edges_dictionary)
+    kosaraju.remove_closed_pairs(kosaraju.edges_dict)
+    # print(len(kosaraju.edges_dict), len(kosaraju.one_sided_nodes_set))
+
     # # Rank by descending SCC size.
-    # scc_dict = dict(sorted(dfs.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
+    # scc_dict = dict(sorted(kosaraju.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
     # top_5_scc_size_string = 'Top 5 SCC Size: '
     # for i in range(5):
     #     if i + 1 > len(scc_dict):
