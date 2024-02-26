@@ -1,29 +1,29 @@
 
-def count_split_inversions(nums_list_1, nums_list_2):
+def count_split_inversions(input_array_1: list | tuple | set, input_array_2: list | tuple | set):
     merged_list, split_inversions, list_1_idx, list_2_idx = [], 0, 0, 0
 
-    while list_1_idx < len(nums_list_1) and list_2_idx < len(nums_list_2):
-        if nums_list_1[list_1_idx] <= nums_list_2[list_2_idx]:
-            merged_list.append(nums_list_1[list_1_idx])
+    while list_1_idx < len(input_array_1) and list_2_idx < len(input_array_2):
+        if input_array_1[list_1_idx] <= input_array_2[list_2_idx]:
+            merged_list.append(input_array_1[list_1_idx])
             list_1_idx += 1
 
         else:
-            merged_list.append(nums_list_2[list_2_idx])
-            split_inversions += len(nums_list_1) - list_1_idx
+            merged_list.append(input_array_2[list_2_idx])
+            split_inversions += len(input_array_1) - list_1_idx
             list_2_idx += 1
 
-    merged_list.extend(nums_list_1[list_1_idx:] + nums_list_2[list_2_idx:])
-    del nums_list_1, nums_list_2
+    merged_list.extend(input_array_1[list_1_idx:] + input_array_2[list_2_idx:])
+    del input_array_1, input_array_2
     return merged_list, split_inversions
 
 
-def merge_sort_list(nums_list):
-    if len(nums_list) <= 1:
-        return nums_list, 0
+def merge_sort_list(input_array: list | tuple | set):
+    if len(input_array) <= 1:
+        return input_array, 0
 
-    center_index = len(nums_list) // 2
-    nums_list_part_1, left_inversions = merge_sort_list(nums_list[:center_index])
-    nums_list_part_2, right_inversions = merge_sort_list(nums_list[center_index:])
+    center_index = len(input_array) // 2
+    nums_list_part_1, left_inversions = merge_sort_list(input_array[:center_index])
+    nums_list_part_2, right_inversions = merge_sort_list(input_array[center_index:])
     merged_list, split_inversions = count_split_inversions(nums_list_part_1, nums_list_part_2)
     return merged_list, left_inversions + right_inversions + split_inversions
 

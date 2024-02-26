@@ -1,5 +1,5 @@
 
-def multiply_big_int(int_1, int_2):
+def multiply_big_int(int_1: int, int_2: int):
     smaller_digit_len = min(len(str(int_1)), len(str(int_2)))  # Check if both integers are single digits.
     if smaller_digit_len == 1:
         return int_1 * int_2

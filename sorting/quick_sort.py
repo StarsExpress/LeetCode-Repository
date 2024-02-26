@@ -1,49 +1,49 @@
 
-def quick_sort_list(nums_list):
-    if len(nums_list) <= 1:
-        return nums_list, 0
+def quick_sort_list(input_array: list | tuple | set):
+    if len(input_array) <= 1:
+        return input_array, 0
 
     pivot_choice = 'median'
 
     if pivot_choice == 'first':  # In any pivot choice, always ensure pivot ends up at 1st place of list.
-        pivot = nums_list[0]
+        pivot = input_array[0]
 
     else:
         if pivot_choice == 'last':
-            pivot = nums_list[-1]
+            pivot = input_array[-1]
 
         else:  # Median of the three (1st item, middle item, last item) method.
-            median_of_3_list = [nums_list[0], nums_list[-1]]
-            if len(nums_list) % 2 == 1:
-                median_of_3_list.append(nums_list[len(nums_list) // 2])
+            median_of_3_list = [input_array[0], input_array[-1]]
+            if len(input_array) % 2 == 1:
+                median_of_3_list.append(input_array[len(input_array) // 2])
 
             else:
-                median_of_3_list.append(nums_list[len(nums_list) // 2 - 1])
+                median_of_3_list.append(input_array[len(input_array) // 2 - 1])
 
             median_of_3_list.sort()
             pivot = median_of_3_list[1]
             del median_of_3_list
 
-        pivot_idx = nums_list.index(pivot)
-        nums_list[0], nums_list[pivot_idx] = nums_list[pivot_idx], nums_list[0]
+        pivot_idx = input_array.index(pivot)
+        input_array[0], input_array[pivot_idx] = input_array[pivot_idx], input_array[0]
         del pivot_idx
 
     front_idx, back_idx = 1, 1  # Both front and back indices start at 2nd item.
 
-    while front_idx < len(nums_list):  # Once front index reaches the end, break while.
-        if nums_list[front_idx] < pivot:  # Switch items at front and back indices.
-            nums_list[back_idx], nums_list[front_idx] = nums_list[front_idx], nums_list[back_idx]
+    while front_idx < len(input_array):  # Once front index reaches the end, break while.
+        if input_array[front_idx] < pivot:  # Switch items at front and back indices.
+            input_array[back_idx], input_array[front_idx] = input_array[front_idx], input_array[back_idx]
             back_idx += 1  # Only increment back index when swap happens.
 
         front_idx += 1  # Always increment front index.
 
     # Switch pivot with the item at back index - 1.
-    nums_list[0], nums_list[back_idx - 1] = nums_list[back_idx - 1], nums_list[0]
+    input_array[0], input_array[back_idx - 1] = input_array[back_idx - 1], input_array[0]
 
-    nums_list[:back_idx - 1], back_comparisons_count = quick_sort_list(nums_list[:back_idx - 1])
-    nums_list[back_idx:], front_comparisons_count = quick_sort_list(nums_list[back_idx:])
+    input_array[:back_idx - 1], back_comparisons_count = quick_sort_list(input_array[:back_idx - 1])
+    input_array[back_idx:], front_comparisons_count = quick_sort_list(input_array[back_idx:])
 
-    return nums_list, back_comparisons_count + front_comparisons_count + len(nums_list) - 1
+    return input_array, back_comparisons_count + front_comparisons_count + len(input_array) - 1
 
 
 if __name__ == '__main__':

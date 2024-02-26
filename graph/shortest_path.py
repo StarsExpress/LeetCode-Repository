@@ -6,7 +6,7 @@ no_path_dist = 1000000  # Value for any non-existing edge and upper bound of res
 
 
 def process_distances():
-    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_distances.txt')
+    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_2k.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
         file.close()

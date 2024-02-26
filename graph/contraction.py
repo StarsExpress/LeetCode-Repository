@@ -6,7 +6,7 @@ from copy import deepcopy
 
 def find_vertices_relations():  # Return a dictionary showing all vertices connected to each vertex.
     vertices_dict = dict()
-    lines = open(os.path.join(DATA_FOLDER_PATH, 'vertices.txt'), 'r').readlines()
+    lines = open(os.path.join(DATA_FOLDER_PATH, 'edges_4k.txt'), 'r').readlines()
     for line in lines:
         items_list = line.replace('\n', '').split('\t')
         items_list.pop(-1)  # Remove last element, which is an empty string.
@@ -16,7 +16,7 @@ def find_vertices_relations():  # Return a dictionary showing all vertices conne
     return vertices_dict
 
 
-def find_min_cut(vertices_dict):
+def find_min_cut(vertices_dict: dict):
     if len(vertices_dict) <= 2:  # Only run random contraction when at least 3 vertices exist.
         return
 

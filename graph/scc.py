@@ -5,7 +5,7 @@ from copy import deepcopy
 
 
 def process_edges():
-    file_path = os.path.join(DATA_FOLDER_PATH, 'directed_edges.txt')
+    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_1m.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
         file.close()
