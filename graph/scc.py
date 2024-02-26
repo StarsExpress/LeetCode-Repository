@@ -1,10 +1,11 @@
 from config import DATA_FOLDER_PATH
 import os
+from itertools import chain
 import random
 from copy import deepcopy
 
 
-def process_edges():
+def read_graph():
     file_path = os.path.join(DATA_FOLDER_PATH, 'edges_1m.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
@@ -26,13 +27,11 @@ def process_edges():
 class DepthFirstSearch:
     """Depth first search and strongly-connected components search."""
 
-    def __init__(self, edges_dict):
+    def __init__(self, edges_dict: dict):
         # Edges dict stores graph and reversed dict stores reversed graph.
-        self.edges_dict, self.reversed_dict = edges_dict, dict()
-
-        outgoing_nodes_set = set(self.edges_dict.keys())  # Outgoing nodes' incoming edges are in list format.
-        incoming_nodes_set = set(sum(self.edges_dict.values(), []))
-        self.all_nodes_set = outgoing_nodes_set.union(incoming_nodes_set)  # All nodes of graph.
+        self.edges_dict, self.iso_nodes_set = self.reduce_graph_complexity(edges_dict)
+        self.reversed_dict = dict()
+        self.all_nodes_set = set(self.edges_dict.keys())  # All nodes of graph.
 
         self.topology_dict, self.scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
         # At initialization, stack is empty and two orders are both 1.
@@ -43,6 +42,32 @@ class DepthFirstSearch:
 
         self.pending_nodes_list = list(self.all_nodes_set)  # Initially, all nodes haven't done topology.
         self.visited_nodes_set = set()  # Visited nodes: either complete topology or are in stack.
+
+    @staticmethod
+    def reduce_graph_complexity(edges_dict: dict):  # Graph is stored in a format of edges dict.
+        out_nodes_set = set(edges_dict.keys())  # Nodes with outgoing edges.
+        # Outgoing nodes' incoming edges are in list format.
+        in_nodes_set = set(chain.from_iterable(edges_dict.values()))  # Nodes with incoming edges.
+
+        # If SCC has size > 1, all of its nodes have "both outgoing and incoming" edges.
+        # From edges dict, find all the nodes with only one of outgoing and incoming edges.
+        # Remove their edges from edges dict. Put these "isolated" nodes in another dict.
+        iso_nodes_set = in_nodes_set - out_nodes_set  # Nodes with only incoming edges are directly isolated.
+
+        while True:
+            only_out_nodes_set = out_nodes_set - in_nodes_set  # Outgoing nodes without incoming edges.
+            if len(only_out_nodes_set) <= 0:
+                break  # Only break while when this set is empty (graph convergence).
+
+            iso_nodes_set = iso_nodes_set.union(only_out_nodes_set)  # Add such nodes to isolated set.
+            for only_out_node in only_out_nodes_set:  # Delete these nodes from edges dict.
+                del edges_dict[only_out_node]
+
+            out_nodes_set = set(edges_dict.keys())  # Make updates for next iteration.
+            in_nodes_set = set(chain.from_iterable(edges_dict.values()))
+
+        del out_nodes_set, in_nodes_set, only_out_nodes_set
+        return edges_dict, iso_nodes_set  # Now all nodes in edges dict have both outgoing and incoming edges.
 
     def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
         for outgoing_node in self.edges_dict.keys():
@@ -153,25 +178,27 @@ if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    edges_dictionary = process_edges()
+    edges_dictionary = read_graph()
     # edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
     #                     '4': ['5', '6'], '5': ['4', '6', '7'],
     #                     '6': ['7'], '7': ['8'], '8': ['6']}
+
     dfs = DepthFirstSearch(edges_dictionary)
-
-    # Rank by descending SCC size.
-    scc_dict = dict(sorted(dfs.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
-    top_5_scc_size_string = 'Top 5 SCC Size: '
-    for i in range(5):
-        if i + 1 > len(scc_dict):
-            top_5_scc_size_string += '0'
-
-        else:
-            top_5_scc_size_string += f'{len(list(scc_dict.values())[i])}'
-
-        if i == 4:
-            break
-        top_5_scc_size_string += ','
-
-    end_time = time.time()
-    print(f'{top_5_scc_size_string}\nRun Time: {str(round(end_time - start_time))} seconds.')
+    print(len(dfs.edges_dict), len(dfs.iso_nodes_set))
+    #
+    # # Rank by descending SCC size.
+    # scc_dict = dict(sorted(dfs.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
+    # top_5_scc_size_string = 'Top 5 SCC Size: '
+    # for i in range(5):
+    #     if i + 1 > len(scc_dict):
+    #         top_5_scc_size_string += '0'
+    #
+    #     else:
+    #         top_5_scc_size_string += f'{len(list(scc_dict.values())[i])}'
+    #
+    #     if i == 4:
+    #         break
+    #     top_5_scc_size_string += ','
+    #
+    # end_time = time.time()
+    # print(f'{top_5_scc_size_string}\nRun Time: {str(round(end_time - start_time))} seconds.')
