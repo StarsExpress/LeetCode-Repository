@@ -1,102 +1,30 @@
-from config import DATA_FOLDER_PATH
-import os
-from itertools import chain
+from graph.scc_utils.convergence import converge_graph
 import random
 from copy import deepcopy
-
-
-def read_graph():
-    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_1m.txt')
-    with open(file_path, 'r') as file:
-        nodes = file.read().splitlines()
-        file.close()
-
-    edges_dict = dict()
-    for node in nodes:
-        nodes_list = node.lstrip().rstrip().split(' ')  # Remove boundary spaces and split by middle space.
-        if nodes_list[0] == nodes_list[1]:
-            continue  # Ignore self edges.
-
-        if nodes_list[0] not in edges_dict.keys():  # Edges dict: edges from 1st node to 2nd node.
-            edges_dict.update({nodes_list[0]: list()})
-        if nodes_list[1] not in edges_dict[nodes_list[0]]:  # Prevent duplicated edges.
-            edges_dict[nodes_list[0]].append(nodes_list[1])
-
-    del file, file_path, node, nodes, nodes_list
-    return edges_dict
 
 
 class KosarajuSearch:
     """Search strongly-connected components via Kosaraju algorithm."""
 
     def __init__(self, edges_dict: dict):
-        self.edges_dict, self.one_sided_nodes_set = self.remove_one_sided_nodes(edges_dict)
+        self.edges_dict, self.one_sided_set, self.closed_pairs_set = converge_graph(edges_dict)
         self.reversed_dict = dict()  # Stores reversed graph.
-        self.all_nodes_set = set(self.edges_dict.keys())  # All nodes of graph.
+        self.all_nodes_set = set(self.edges_dict.keys())  # All nodes of "converged" graph.
 
-        self.topology_dict, self.scc_dict = dict(), dict()  # Topology dict keys: orders; values: nodes.
-        # At initialization, stack is empty and two orders are both 1.
-        self.stack_list, self.topology_order, self.scc_order = [], 1, 1
+        self.topology_dict = dict()  # Topology dict keys: orders; values: nodes.
+        self.stack_list, self.topology_order = [], 1  # Initially, stack is empty and topology order is 1.
+
+        # One-sided nodes and closed pairs are finalized SCC and can be stored directly.
+        self.scc_dict = dict(zip(range(1, len(self.one_sided_set) + 1), [[node] for node in self.one_sided_set]))
+        for closed_pair in self.closed_pairs_set:
+            self.scc_dict.update({len(self.scc_dict) + 1: [closed_pair[0], closed_pair[-1]]})
+        self.scc_order = len(self.scc_dict) + 1
 
         # Used during SCC search: list of topology orders; list of current SCC components;.set of nodes from past SCC.
         self.topology_orders_list, self.current_scc_list, self.scc_nodes_set = [], [], set()
 
         self.pending_nodes_list = list(self.all_nodes_set)  # Initially, all nodes haven't done topology.
         self.visited_nodes_set = set()  # Visited nodes: either complete topology or are in stack.
-
-    @staticmethod
-    def remove_one_sided_nodes(edges_dict: dict):  # Graph is stored in a format of edges dict.
-        out_nodes_set = set(edges_dict.keys())  # Nodes with outgoing edges.
-        # Outgoing nodes' incoming edges are in list format.
-        in_nodes_set = set(chain.from_iterable(edges_dict.values()))  # Nodes with incoming edges.
-
-        # If SCC has size > 1, all of its nodes have "both outgoing and incoming" edges.
-        # From edges dict, find all the nodes with only one of outgoing and incoming edges.
-        # Remove these "one-side" nodes from edges dict's keys and values reference.
-        one_sided_nodes_set = set()
-
-        while True:
-            only_in_nodes_set = in_nodes_set - out_nodes_set  # Nodes with only incoming edges.
-            only_out_nodes_set = out_nodes_set - in_nodes_set  # Nodes with only outgoing edges.
-
-            # Some nodes may become one-sided in current iteration.
-            iter_one_sided_nodes_set = only_in_nodes_set.union(only_out_nodes_set)
-            one_sided_nodes_set = one_sided_nodes_set.union(iter_one_sided_nodes_set)
-
-            if (len(out_nodes_set) <= 0) or (out_nodes_set == in_nodes_set):
-                del only_in_nodes_set, only_out_nodes_set, iter_one_sided_nodes_set
-                break  # Graph converges if outgoing nodes set is empty or equals incoming nodes set.
-
-            for only_out_node in only_out_nodes_set:  # Delete keys reference.
-                del edges_dict[only_out_node]
-
-            for key, value in edges_dict.items():  # Delete values reference.
-                if set(value).intersection(iter_one_sided_nodes_set) == set():
-                    continue
-
-                new_value = list(set(value) - iter_one_sided_nodes_set)
-                edges_dict[key].clear()
-                edges_dict[key].extend(new_value)
-
-            out_nodes_set = set(edges_dict.keys())  # Update for next iteration.
-            in_nodes_set = set(chain.from_iterable(edges_dict.values()))
-
-        del out_nodes_set, in_nodes_set
-        return edges_dict, one_sided_nodes_set  # Now all nodes in edges dict have both outgoing and incoming edges.
-
-    @staticmethod
-    def remove_closed_pairs(edges_dict: dict):
-        closed_pairs_set = set()  # Two nodes are a closed pair if their outgoing edges only go to each other.
-        # Nodes that have only one outgoing edge.
-        one_out_nodes_set = set(filter(lambda x: len(edges_dict[x]) == 1, edges_dict.keys()))
-
-        for out_node in one_out_nodes_set:
-            receiving_node = edges_dict[out_node][0]
-            if (receiving_node in one_out_nodes_set) and (edges_dict[receiving_node][0] == out_node):
-                closed_pairs_set.add(out_node)
-                closed_pairs_set.add(receiving_node)
-
-        print(len(closed_pairs_set))
 
     def reverse_edges(self, return_dict=False):  # For each edge, reverse incoming node and outgoing node.
         for out_node in self.edges_dict.keys():
@@ -136,8 +64,6 @@ class KosarajuSearch:
 
             if len(self.stack_list) <= 0:  # When stack is empty, check if there are pending nodes.
                 if len(self.pending_nodes_list) <= 0:  # If all nodes have done topology.
-                    self.topology_order -= (self.topology_order - 1)  # Topology order is back to 1.
-
                     # Prepare lists that have to be used in search SCC function.
                     self.topology_orders_list.clear()
                     self.topology_orders_list.extend(sorted(self.topology_dict.keys()))  # Sort from low to high.
@@ -192,7 +118,6 @@ class KosarajuSearch:
 
                 if len(self.topology_orders_list) <= 0:  # If all graph nodes have done SCC search.
                     self.scc_order -= (self.scc_order - 1)  # SCC order is back to 1.
-
                     self.topology_orders_list.clear()  # Restore topology orders. Sort from low to high.
                     self.topology_orders_list.extend(sorted(self.topology_dict.keys()))
                     return self.scc_dict  # Return as SCC search completes.
@@ -204,17 +129,17 @@ class KosarajuSearch:
 
 
 if __name__ == '__main__':
-    import time
-
-    start_time = time.time()
+    from graph.scc_utils.reader import read_graph
+    # import time
+    #
+    # start_time = time.time()
     edges_dictionary = read_graph()
     # edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
     #                     '4': ['5', '6'], '5': ['4', '6', '7'],
     #                     '6': ['7'], '7': ['8'], '8': ['6']}
 
     kosaraju = KosarajuSearch(edges_dictionary)
-    kosaraju.remove_closed_pairs(kosaraju.edges_dict)
-    # print(len(kosaraju.edges_dict), len(kosaraju.one_sided_nodes_set))
+    print(len(kosaraju.edges_dict), len(kosaraju.one_sided_set), 2 * len(kosaraju.closed_pairs_set))
 
     # # Rank by descending SCC size.
     # scc_dict = dict(sorted(kosaraju.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
