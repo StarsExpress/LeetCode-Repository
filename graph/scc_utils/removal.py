@@ -17,7 +17,7 @@ def remove_one_sided_nodes(edges_dict: dict):  # Graph is stored in a format of 
 
         # Some nodes may become one-sided in current iteration.
         iter_one_sided_nodes_set = in_only_nodes_set.union(out_only_nodes_set)
-        one_sided_nodes_set = one_sided_nodes_set.union(iter_one_sided_nodes_set)
+        one_sided_nodes_set.update(iter_one_sided_nodes_set)
 
         if (len(out_nodes_set) <= 0) or (out_nodes_set == in_nodes_set):
             del in_only_nodes_set, out_only_nodes_set, iter_one_sided_nodes_set

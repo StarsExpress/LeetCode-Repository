@@ -94,7 +94,7 @@ class KosarajuSearch:
 
         start_node = self.stack_list[-1]  # Start node is the last item in stack. DFS stack rule: last in first out.
         self.scc_nodes_set.update(set(self.stack_list))
-        self.scc_nodes_set.union(set(self.current_scc_list))
+        self.scc_nodes_set.update(set(self.current_scc_list))
 
         original_stack_count = len(self.stack_list)
         if start_node in self.reversed_dict.keys():  # Add unvisited children of start node to stack.
@@ -137,7 +137,6 @@ if __name__ == '__main__':
     # edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
     #                     '4': ['5', '6'], '5': ['4', '6', '7'],
     #                     '6': ['7'], '7': ['8'], '8': ['6']}
-
     kosaraju = KosarajuSearch(edges_dictionary)
     print(len(kosaraju.edges_dict), len(kosaraju.one_sided_set), 2 * len(kosaraju.closed_pairs_set))
 
