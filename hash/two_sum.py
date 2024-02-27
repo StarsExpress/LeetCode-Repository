@@ -1,44 +1,35 @@
 
 
-def gather_distinct_numbers(references: list | tuple | set):  # Return distinct integers and floats.
+def find_distinct_numbers(references: list | tuple | set):  # Return set of "distinct" integers and floats.
+    if len(references) <= 0:
+        return set()
     return set(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
 
 
-def find_two_sum(target: int | float | list | tuple | set, references: list | tuple | set,
-                 hash_table=None, return_hash=False):
-    if hash_table is None:
-        hash_table = dict()  # Hash table: keys and values are just int or float themselves.
+def hash_references(references: list | tuple | set):  # Use hash table structure to seek all available two sums.
+    if len(references) <= 1:  # Number of references is required to be at least two.
+        return set()
 
-    if isinstance(target, int) | isinstance(target, float):  # If target is int or float.
-        for ref_number in references:
-            if target - ref_number not in hash_table.keys():
-                hash_table.update({ref_number: ref_number})
-                continue  # Continue to next iteration of outer for loop.
+    if isinstance(references, tuple) | isinstance(references, set):
+        references = list(references)
 
-            return ref_number, target - ref_number  # Target has distinct solutions in reference numbers.
-        return None  # No distinct solutions in reference numbers.
+    hash_set = set()  # Store all the "found sum" from two distinct numbers in references.
+    for i in range(len(references) - 1):
+        hash_set.update(set(map(lambda x: x + references[i], references[i + 1:])))
+    return hash_set
 
-    if len(target) == 1:  # If target is either of list, tuple or set and has only one item.
-        if isinstance(target[0], int) | isinstance(target[0], float):  # Check if item is int or float.
-            for ref_number in references:  # Iterate through all reference items.
-                if target[0] - ref_number not in hash_table.keys():
-                    hash_table.update({ref_number: ref_number})
-                    continue  # Continue to next iteration of for loop.
 
-                if return_hash:
-                    return 1, hash_table  # Return 1 & hash table as target has distinct solutions in reference numbers.
-                return 1
+def find_two_sum(targets: int | float | list | tuple | set, references: list | tuple | set):
+    references = find_distinct_numbers(references)
+    available_sums = hash_references(references)
 
-        if return_hash:
-            return 0, hash_table  # Return 0 & hash table as target has no distinct solutions or isn't int nor float.
-        return 0
+    if isinstance(targets, int) | isinstance(targets, float):  # If target is int or float.
+        if targets in available_sums:  # Target has distinct solutions in reference numbers.
+            return 1
+        return 0  # No distinct solutions in reference numbers.
 
-    count = find_two_sum(target[:len(target) // 2], references, hash_table, True)[0]  # Count in 1st half.
-    count += find_two_sum(target[len(target) // 2:], references, hash_table, True)[0]  # Count in 2nd half.
-
-    if return_hash:
-        return count, hash_table
-    return count
+    targets = find_distinct_numbers(targets)  # If target is either of list, tuple or set, ensure distinct numbers.
+    return len(targets.intersection(available_sums))
 
 
 if __name__ == '__main__':
@@ -49,10 +40,10 @@ if __name__ == '__main__':
     start_time = time.time()
     numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'int_1m.txt')
     lines = open(numbers_array_path, 'r').readlines()
-    references_list = [int(line.strip()) for line in lines]
-    references_list = gather_distinct_numbers(references_list)
-    targets_list = [i for i in range(-10000, 10001)]
-    print(find_two_sum(targets_list, references_list))
+    references_list = [int(line.strip()) for line in lines][:10000]
+    print(len(hash_references(references_list)))
+    # targets_list = [i for i in range(-10000, 10001)]
+    # print(find_two_sum(targets_list, references_list))
 
     end_time = time.time()
     print(f'Total runtime: {str(round(end_time - start_time, 2))}.')
