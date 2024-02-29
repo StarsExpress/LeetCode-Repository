@@ -1,49 +1,76 @@
+from queue import Queue
 
 
-def find_distinct_numbers(references: list | tuple | set):  # Return set of "distinct" integers and floats.
+def find_distinct_numbers(references: list | tuple | set):  # Return list of "distinct" integers and floats.
     if len(references) <= 0:
-        return set()
-    return set(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
+        return list()
+    return list(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
 
 
-def hash_references(references: list | tuple | set):  # Use hash table structure to seek all available two sums.
-    if len(references) <= 1:  # Number of references is required to be at least two.
-        return set()
-
-    if isinstance(references, tuple) | isinstance(references, set):
-        references = list(references)
-
-    hash_set = set()  # Store all the "found sum" from two distinct numbers in references.
-    for i in range(len(references) - 1):
-        hash_set.update(set(map(lambda x: x + references[i], references[i + 1:])))
-    return hash_set
-
-
-def find_two_sum(targets: int | float | list | tuple | set, references: list | tuple | set):
-    references = find_distinct_numbers(references)
-    available_sums = hash_references(references)
-
-    if isinstance(targets, int) | isinstance(targets, float):  # If target is int or float.
-        if targets in available_sums:  # Target has distinct solutions in reference numbers.
+def search_hash(target: int | float, references: list, hash_table: dict):
+    for reference in references:
+        diff = target - reference
+        if diff in hash_table and reference != diff:
             return 1
-        return 0  # No distinct solutions in reference numbers.
+    return 0
 
-    targets = find_distinct_numbers(targets)  # If target is either of list, tuple or set, ensure distinct numbers.
-    return len(targets.intersection(available_sums))
+
+def find_two_sum(targets: int | float | list, references: list | tuple | set, queue_obj: Queue):
+    references = find_distinct_numbers(references)
+    if len(references) <= 0:
+        queue_obj.put(0)
+        return
+
+    hash_table = dict()
+    for reference in references:
+        hash_table[reference] = True
+
+    if isinstance(targets, int) or isinstance(targets, float):
+        queue_obj.put(search_hash(targets, references, hash_table))
+        return
+
+    if len(targets) <= 0:
+        queue_obj.put(0)
+        return
+
+    if len(targets) == 1:
+        queue_obj.put(search_hash(targets[0], references, hash_table))
+        return
+
+    count, current_target = 0, targets[0]  # Current target starts from 1st item.
+    while True:
+        count += search_hash(current_target, references, hash_table)
+        targets.remove(current_target)
+
+        if -current_target in targets:
+            count += search_hash(-current_target, references, hash_table)
+            targets.remove(-current_target)
+
+        if len(targets) <= 0:
+            break
+        current_target = targets[0]
+
+    queue_obj.put(count)
 
 
 if __name__ == '__main__':
     from config import DATA_FOLDER_PATH
     import os
+    import threading
     import time
 
     start_time = time.time()
     numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'int_1m.txt')
     lines = open(numbers_array_path, 'r').readlines()
-    references_list = [int(line.strip()) for line in lines][:10000]
-    print(len(hash_references(references_list)))
-    # targets_list = [i for i in range(-10000, 10001)]
-    # print(find_two_sum(targets_list, references_list))
+    references_list = [int(line.strip()) for line in lines]
+    targets_list = [i for i in range(-10000, 10001)]
+
+    queue_object = Queue()
+    threading.stack_size(67108864)
+    thread = threading.Thread(target=find_two_sum, args=(targets_list, references_list, queue_object))
+    thread.start()
+    thread.join()
+    print(queue_object.get())
 
     end_time = time.time()
     print(f'Total runtime: {str(round(end_time - start_time, 2))}.')
