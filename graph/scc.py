@@ -130,29 +130,25 @@ class KosarajuSearch:
 
 if __name__ == '__main__':
     from graph.scc_utils.reader import read_graph
-    # import time
-    #
-    # start_time = time.time()
-    edges_dictionary = read_graph()
-    # edges_dictionary = {'0': ['1'], '1': ['2', '4'], '2': ['0', '3'], '3': ['2'],
-    #                     '4': ['5', '6'], '5': ['4', '6', '7'],
-    #                     '6': ['7'], '7': ['8'], '8': ['6']}
-    kosaraju = KosarajuSearch(edges_dictionary)
-    print(len(kosaraju.edges_dict), len(kosaraju.one_sided_set), 2 * len(kosaraju.closed_pairs_set))
+    import time
 
-    # # Rank by descending SCC size.
-    # scc_dict = dict(sorted(kosaraju.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
-    # top_5_scc_size_string = 'Top 5 SCC Size: '
-    # for i in range(5):
-    #     if i + 1 > len(scc_dict):
-    #         top_5_scc_size_string += '0'
-    #
-    #     else:
-    #         top_5_scc_size_string += f'{len(list(scc_dict.values())[i])}'
-    #
-    #     if i == 4:
-    #         break
-    #     top_5_scc_size_string += ','
-    #
-    # end_time = time.time()
-    # print(f'{top_5_scc_size_string}\nRun Time: {str(round(end_time - start_time))} seconds.')
+    start_time = time.time()
+    edges_dictionary = read_graph()
+    kosaraju = KosarajuSearch(edges_dictionary)
+
+    # Rank by descending SCC size.
+    scc_dict = dict(sorted(kosaraju.search_scc().items(), key=lambda item: len(item[1]), reverse=True))
+    top_5_scc_size_string = 'Top 5 SCC Size: '
+    for i in range(5):
+        if i + 1 > len(scc_dict):
+            top_5_scc_size_string += '0'
+
+        else:
+            top_5_scc_size_string += f'{len(list(scc_dict.values())[i])}'
+
+        if i == 4:
+            break
+        top_5_scc_size_string += ','
+
+    end_time = time.time()
+    print(f'{top_5_scc_size_string}\nRun Time: {str(round(end_time - start_time))} seconds.')
