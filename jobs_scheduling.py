@@ -39,6 +39,6 @@ if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    print(compute_weighted_time(False))
+    print(f'Weighted scheduling time: {compute_weighted_time(False)}')
     end_time = time.time()
-    print(f'Run Time: {str(round(end_time - start_time))} seconds.')
+    print(f'\nRun Time: {str(round(end_time - start_time))} seconds.')

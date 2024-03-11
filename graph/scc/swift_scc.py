@@ -1,4 +1,4 @@
-from graph.scc_utils.convergence import converge_graph
+from graph.scc.utils.graph_reducer import shrink_graph
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import connected_components
 from copy import deepcopy
@@ -8,7 +8,7 @@ class SuperSwiftSearch:
     """Super swift strongly-connected components search."""
 
     def __init__(self, edges_dict: dict):
-        self.edges_dict, self.one_sided_set, self.closed_pairs_set = converge_graph(edges_dict)
+        self.edges_dict, self.one_sided_set, self.closed_pairs_set = shrink_graph(edges_dict)
 
         # One-sided nodes and closed pairs are finalized SCC and can be stored directly.
         self.scc_dict, self.scc_order = dict(), 1
@@ -55,7 +55,7 @@ class SuperSwiftSearch:
 
 
 if __name__ == '__main__':
-    from graph.scc_utils.reader import read_graph
+    from graph.scc.utils.graph_reader import read_graph
     import time
 
     start_time = time.time()

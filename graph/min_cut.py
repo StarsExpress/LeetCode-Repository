@@ -6,13 +6,13 @@ from copy import deepcopy
 
 def find_vertices_relations():  # Return a dictionary showing all vertices connected to each vertex.
     vertices_dict = dict()
-    lines = open(os.path.join(DATA_FOLDER_PATH, 'edges_4k.txt'), 'r').readlines()
-    for line in lines:
-        items_list = line.replace('\n', '').split('\t')
+    edges = open(os.path.join(DATA_FOLDER_PATH, 'edges_4k.txt'), 'r').readlines()
+    for edge in edges:
+        items_list = edge.replace('\n', '').split('\t')
         items_list.pop(-1)  # Remove last element, which is an empty string.
         vertices_dict.update({items_list[0]: items_list[1:]})  # Key: 1st vertex; value: the rest vertices in same row.
 
-    del lines, items_list
+    del edges, items_list
     return vertices_dict
 
 

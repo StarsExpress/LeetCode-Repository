@@ -1,7 +1,7 @@
-from graph.scc_utils.removal import *
+from graph.scc.utils.nodes_removal import remove_one_sided_nodes, remove_closed_pairs
 
 
-def converge_graph(edges_dict: dict):  # Graph is stored in a format of edges dict.
+def shrink_graph(edges_dict: dict):  # Graph is stored in a format of edges dict.
     one_sided_nodes_set, closed_pairs_set = set(), set()
     while True:
         edges_dict_len = len(edges_dict)  # Update for comparison.

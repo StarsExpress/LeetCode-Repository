@@ -6,13 +6,13 @@ from itertools import chain
 class KruskalMST:
     """Find MST via Kruskal's algorithm."""
 
-    def __init__(self, edges_dict: dict = None):
+    def __init__(self, edges_dict: dict = None):   # Dict format: key = (node 1, node 2), value = edge length.
         if edges_dict is None:
             edges_dict = self.read_nodes()
         self.edges_dict = edges_dict
 
         all_nodes_set = set(chain(*list(edges_dict.keys())))
-        self.roots_dict = dict(zip(all_nodes_set, [None] * len(all_nodes_set)))  # Track each node's root in MST.
+        self.roots_dict = dict(zip(all_nodes_set, [None] * len(all_nodes_set)))  # Each node's root in MST.
         del all_nodes_set
 
     @staticmethod
@@ -51,13 +51,13 @@ class KruskalMST:
             self.roots_dict.update({node_2: root_1})
             return
 
-        self.roots_dict.update({root_2: root_1})  # If both are in, union one set to the other.
+        self.roots_dict.update({root_2: root_1})  # If both are in, union one's set to the other's set.
 
-    def find(self, node: str):
+    def find(self, node: str):  # Find a node's root in MST.
         if self.roots_dict[node] is None:  # If a node isn't in MST yet.
             return None
 
-        if self.roots_dict[node] != node:
+        if self.roots_dict[node] != node:  # If a node's root isn't itself, trace upward till the end.
             self.roots_dict.update({node: self.find(self.roots_dict[node])})
         return self.roots_dict[node]
 
@@ -70,15 +70,15 @@ class KruskalMST:
             node_1, node_2 = edges_list[edges_idx]
             root_1, root_2 = self.find(node_1), self.find(node_2)
 
-            edges_idx += 1  # Can increment index once roots of nodes are found.
+            edges_idx += 1  # Increment index once roots of nodes are found.
             if (root_1 is not None) and (root_1 == root_2):
                 continue  # If current edge causes cycle, skip this edge.
 
             # Use nodes tuple to call dict, as edges idx has incremented.
             mst_dict.update({(node_1, node_2): edges_dict[(node_1, node_2)]})
-            self.union(node_1, node_2)
-            if len(mst_dict) == len(self.roots_dict) - 1:  # Mst needs n - 1 edges where n is total nodes.
+            if len(mst_dict) == len(self.roots_dict) - 1:  # MST needs n - 1 edges; n = total nodes.
                 break
+            self.union(node_1, node_2)
 
         del edges_dict, node_1, node_2, edges_idx, edges_list
         if distance_only:

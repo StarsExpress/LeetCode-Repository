@@ -2,7 +2,7 @@ from config import DATA_FOLDER_PATH
 import os
 
 
-no_path_dist = 1000000  # Value for any non-existing edge and upper bound of results from Dijkstra's algorithm.
+no_path_dist = 1000000  # Distance for non-existing edges and upper bound of shortest path search.
 
 
 def process_distances():
@@ -36,37 +36,37 @@ def process_distances():
     return adjacency_matrix
 
 
-def find_min_unvisited_node(shortest_paths_dict, visited_nodes_set):
-    min_dist, min_node = no_path_dist, None
+def find_closest_unvisited_node(shortest_paths_dict, visited_nodes_set):
+    closest_dist, closest_node = no_path_dist, None
     unvisited_nodes_set = set(shortest_paths_dict.keys()) - visited_nodes_set
 
-    for node in unvisited_nodes_set:
-        if shortest_paths_dict[node] < min_dist:
-            min_dist, min_node = shortest_paths_dict[node], node
+    for unvisited_node in unvisited_nodes_set:
+        if shortest_paths_dict[unvisited_node] < closest_dist:
+            closest_dist, closest_node = shortest_paths_dict[unvisited_node], unvisited_node
 
     del unvisited_nodes_set, shortest_paths_dict, visited_nodes_set
-    return min_dist, min_node
+    return closest_dist, closest_node
 
 
 def find_shortest_path(adjacency_matrix, source_node):
     # Nodes order starts from 1, not 0. Indexing needs +/- 1.
-    if (source_node < 1) | (source_node > len(adjacency_matrix)):
-        return dict()  # If source node isn't found in adjacency matrix.
+    if (source_node < 1) | (source_node > len(adjacency_matrix)):  # Source node isn't in adjacency matrix.
+        return dict()
 
     shortest_paths_dict = dict()  # Dictionary of shortest paths from source node to all nodes.
     for i in range(len(adjacency_matrix)):
         shortest_paths_dict.update({i + 1: adjacency_matrix[source_node - 1][i]})
 
-    visited_nodes_set = {source_node}  # No need to visit source.
+    visited_nodes_set = {source_node}  # Source is already visited.
     while True:
-        min_dist, min_node = find_min_unvisited_node(shortest_paths_dict, visited_nodes_set)
-        shortest_paths_dict.update({min_node: min_dist})  # The closest unvisited node to source.
+        closest_dist, closest_node = find_closest_unvisited_node(shortest_paths_dict, visited_nodes_set)
+        shortest_paths_dict.update({closest_node: closest_dist})  # The closest unvisited node to source.
 
         for node in shortest_paths_dict.keys():  # Update distances from min node to other nodes.
-            if adjacency_matrix[min_node - 1][node - 1] + min_dist < shortest_paths_dict[node]:
-                shortest_paths_dict.update({node: adjacency_matrix[min_node - 1][node - 1] + min_dist})
+            if adjacency_matrix[closest_node - 1][node - 1] + closest_dist < shortest_paths_dict[node]:
+                shortest_paths_dict.update({node: adjacency_matrix[closest_node - 1][node - 1] + closest_dist})
 
-        visited_nodes_set.add(min_node)  # Now this closest unvisited node becomes visited.
+        visited_nodes_set.add(closest_node)  # Now this closest unvisited node becomes visited.
         if len(visited_nodes_set) == len(adjacency_matrix):  # Break whenever all nodes are visited.
             break
 
