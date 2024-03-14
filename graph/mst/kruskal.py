@@ -6,7 +6,7 @@ from itertools import chain
 class KruskalMST:
     """Find MST via Kruskal's algorithm."""
 
-    def __init__(self, edges_dict: dict = None):   # Dict format: key = (node 1, node 2), value = edge length.
+    def __init__(self, edges_dict: dict = None):  # Dict format: key = (node 1, node 2), value = edge length.
         if edges_dict is None:
             edges_dict = self.read_nodes()
         self.edges_dict = edges_dict
