@@ -13,19 +13,6 @@ class MaxHeap:
         for i in range(total_subtrees - 1, -1, -1):  # Subtrees iterate from bottom to top.
             self.heapify(root_idx=i)
 
-    def add_items(self, items, reset=False):
-        if isinstance(items, dict):
-            return
-        if reset:
-            self.items_list.clear()
-
-        if isinstance(items, list) | isinstance(items, tuple):
-            self.items_list.extend(items)
-
-        else:
-            self.items_list.append(items)
-        self.build_heap()  # Ensure the max item is still at root.
-
     def heapify(self, root_idx: int = 0):  # Subtree's root index has default of uppermost subtree's index.
         # Root index at ith: left child index at 2i + 1; right child index at 2i + 2.
         if (len(self.items_list) <= 1) | (root_idx < 0):
@@ -52,23 +39,18 @@ class MaxHeap:
                 self.items_list[root_idx], self.items_list[2 * root_idx + 1] = (
                     self.items_list[2 * root_idx + 1], self.items_list[root_idx])
 
-    def sort(self):
-        if len(self.items_list) <= 1:
-            return self.items_list
+    def add_items(self, items, reset=False):
+        if isinstance(items, dict):
+            return
+        if reset:
+            self.items_list.clear()
 
-        copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
-        sorted_list = []  # Carry sorted items.
-        self.build_heap()
-        while True:
-            # At the start of each iteration, switch the last item with root (max item).
-            self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
-            sorted_list.append(self.items_list.pop(-1))  # Add max item to sorted list.
-            if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
-                break
-            self.heapify()  # Otherwise, heapify for the next iteration.
+        if isinstance(items, list) | isinstance(items, tuple):
+            self.items_list.extend(items)
 
-        self.items_list.extend(copied_items_list)  # Restoration.
-        return sorted_list
+        else:
+            self.items_list.append(items)
+        self.build_heap()  # Ensure the max item is still at root.
 
     def find_max(self, remove=False):
         if remove:
@@ -88,6 +70,24 @@ class MaxHeap:
         # When items count is even, median is defined as the (count / 2) smallest item.
         median_idx = total_items // 2 if total_items % 2 == 1 else total_items // 2
         return reversed_sorted_list[median_idx]
+
+    def sort(self):
+        if len(self.items_list) <= 1:
+            return self.items_list
+
+        copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
+        sorted_list = []  # Carry sorted items.
+        self.build_heap()
+        while True:
+            # At the start of each iteration, switch the last item with root (max item).
+            self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
+            sorted_list.append(self.items_list.pop(-1))  # Add max item to sorted list.
+            if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
+                break
+            self.heapify()  # Otherwise, heapify for the next iteration.
+
+        self.items_list.extend(copied_items_list)  # Restoration.
+        return sorted_list
 
 
 if __name__ == '__main__':

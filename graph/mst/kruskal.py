@@ -61,7 +61,7 @@ class KruskalMST:
             self.roots_dict.update({node: self.find(self.roots_dict[node])})
         return self.roots_dict[node]
 
-    def find_mst(self, distance_only=False):
+    def seek_mst(self, distance_only=False):
         mst_dict = dict()
         edges_dict = dict(sorted(self.edges_dict.items(), key=lambda item: item[1]))  # Sort by ascending edge distance.
         edges_list, edges_idx = list(edges_dict.keys()), 0  # Edges list: list of tuples of connected nodes.
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
     kruskal_mst = KruskalMST()
-    print(kruskal_mst.find_mst(True))
+    print(kruskal_mst.seek_mst(True))
 
     end_time = time.time()
     print(f'Run Time: {str(round(end_time - start_time))} seconds.')
