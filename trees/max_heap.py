@@ -7,6 +7,7 @@ class MaxHeap:
     def __init__(self, items: list | tuple):
         self.items_list = []
         self.items_list.extend(items)
+        self.build_heap()
 
     def build_heap(self):  # Ensure the max item is at root.
         total_subtrees = len(self.items_list) // 2
