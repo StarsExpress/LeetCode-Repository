@@ -3,7 +3,7 @@ from queue import Queue
 
 def find_distinct_numbers(references: list | tuple | set):  # Return list of "distinct" integers and floats.
     if len(references) <= 0:
-        return list()
+        raise ValueError('References empty.')
     return list(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
 
 

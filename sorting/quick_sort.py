@@ -1,9 +1,7 @@
 
-def quick_sort_list(input_array: list | tuple | set):
+def quick_sort_list(input_array: list | tuple | set, pivot_choice: str = 'median'):
     if len(input_array) <= 1:
         return input_array, 0
-
-    pivot_choice = 'median'
 
     if pivot_choice == 'first':  # In any pivot choice, always ensure pivot ends up at 1st place of list.
         pivot = input_array[0]
@@ -40,8 +38,8 @@ def quick_sort_list(input_array: list | tuple | set):
     # Switch pivot with the item at back index - 1.
     input_array[0], input_array[back_idx - 1] = input_array[back_idx - 1], input_array[0]
 
-    input_array[:back_idx - 1], back_comparisons_count = quick_sort_list(input_array[:back_idx - 1])
-    input_array[back_idx:], front_comparisons_count = quick_sort_list(input_array[back_idx:])
+    input_array[:back_idx - 1], back_comparisons_count = quick_sort_list(input_array[:back_idx - 1], pivot_choice)
+    input_array[back_idx:], front_comparisons_count = quick_sort_list(input_array[back_idx:], pivot_choice)
 
     return input_array, back_comparisons_count + front_comparisons_count + len(input_array) - 1
 
