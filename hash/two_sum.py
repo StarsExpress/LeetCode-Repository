@@ -60,7 +60,7 @@ if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'int_1m.txt')
+    numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'int_1m.txt')
     lines = open(numbers_array_path, 'r').readlines()
     references_list = [int(line.strip()) for line in lines]
     targets_list = [i for i in range(-10000, 10001)]

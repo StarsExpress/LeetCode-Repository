@@ -6,7 +6,7 @@ from copy import deepcopy
 
 def find_vertices_relations():  # Return a dictionary showing all vertices connected to each vertex.
     vertices_dict = dict()
-    edges = open(os.path.join(DATA_FOLDER_PATH, 'edges_4k.txt'), 'r').readlines()
+    edges = open(os.path.join(DATA_FOLDER_PATH, 'edges', 'edges_4k.txt'), 'r').readlines()
     for edge in edges:
         items_list = edge.replace('\n', '').split('\t')
         items_list.pop(-1)  # Remove last element, which is an empty string.

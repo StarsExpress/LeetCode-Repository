@@ -3,22 +3,21 @@ import os
 from itertools import chain
 
 
-class KruskalMST:
-    """Find MST via Kruskal's algorithm."""
+class KruskalClustering:
+    """Cluster points via Kruskal's algorithm."""
 
     def __init__(self, edges_dict: dict = None):  # Dict format: key = (node 1, node 2), value = edge length.
         if edges_dict is None:
             edges_dict = self.read_nodes()
         self.edges_dict = edges_dict
-
-        all_nodes_set = set(chain(*list(edges_dict.keys())))
-        self.roots_dict = dict(zip(all_nodes_set, [None] * len(all_nodes_set)))  # Each node's root in MST.
+        self.nodes_list = list(set(chain(*list(edges_dict.keys()))))
+        self.roots_dict = dict(zip(self.nodes_list, [None] * len(self.nodes_list)))  # Each node's root in MST.
+        self.space_list, self.clusters_dict = [], dict()  # Space list: all distances between different clusters.
         self.subset_1, self.subset_2 = [], []  # Lists to be used when two subsets union each other.
-        del all_nodes_set
 
     @staticmethod
     def read_nodes():
-        file_path = os.path.join(DATA_FOLDER_PATH, 'nodes', 'nodes_500.txt')
+        file_path = os.path.join(DATA_FOLDER_PATH, 'edges', 'edges_120k.txt')
         with open(file_path, 'r') as file:
             nodes = file.read().splitlines()[1:]  # Skip the 1st line that isn't related to edge distance.
             file.close()
@@ -79,37 +78,54 @@ class KruskalMST:
             self.roots_dict.update({node: self.find(self.roots_dict[node])})
         return self.roots_dict[node]
 
-    def seek_mst(self, distance_only=False):
-        mst_dict = dict()
-        edges_dict = dict(sorted(self.edges_dict.items(), key=lambda item: item[1]))  # Sort by ascending edge distance.
-        edges_list, edges_idx = list(edges_dict.keys()), 0  # Edges list: list of tuples of connected nodes.
+    def cluster(self, clusters_num: int, max_space_only=True):
+        if clusters_num < 1 or clusters_num > len(self.nodes_list):
+            raise ValueError('Number of clusters should >= 1 and <= total nodes.')
 
-        while True:
-            node_1, node_2 = edges_list[edges_idx]
-            root_1, root_2 = self.find(node_1), self.find(node_2)
+        if clusters_num == 1:
+            self.clusters_dict.update({'1': list(self.nodes_list)})
+            self.space_list.append(0)
 
-            edges_idx += 1  # Increment index once roots of nodes are found.
-            if (root_1 is not None) and (root_1 == root_2):
-                continue  # If current edge causes cycle, skip this edge.
+        if clusters_num == len(self.nodes_list):
+            self.clusters_dict.update(dict(zip([str(i + 1) for i in range(len(self.nodes_list))], self.nodes_list)))
+            self.space_list.append(max(self.edges_dict.values()))
 
-            # Use nodes tuple to call dict, as edges idx has incremented.
-            mst_dict.update({(node_1, node_2): edges_dict[(node_1, node_2)]})
-            if len(mst_dict) == len(self.roots_dict) - 1:  # MST needs n - 1 edges; n = total nodes.
-                break
-            self.union(node_1, node_2)
+        if 1 < clusters_num < len(self.nodes_list):
+            mst_dict = dict()
+            edges_dict = dict(sorted(self.edges_dict.items(), key=lambda item: item[1]))  # Sort by ascending distance.
+            edges_list, edges_idx = list(edges_dict.keys()), 0  # Edges list: list of tuples of connected nodes.
+            iter_count = 0
 
-        del edges_dict, node_1, node_2, edges_idx, edges_list
-        if distance_only:
-            return sum(mst_dict.values())
-        return mst_dict, sum(mst_dict.values())
+            while True:
+                node_1, node_2 = edges_list[edges_idx]
+                root_1, root_2 = self.find(node_1), self.find(node_2)
+
+                edges_idx += 1  # Increment index once roots of nodes are found.
+                if (root_1 is not None) and (root_1 == root_2):
+                    continue  # If current edge causes cycle, skip this edge.
+
+                # Use nodes tuple to call dict, as edges idx has incremented.
+                mst_dict.update({(node_1, node_2): edges_dict[(node_1, node_2)]})
+                self.union(node_1, node_2)
+                iter_count += 1
+                if iter_count == len(self.nodes_list) - clusters_num:  # MST needs n - 1 edges; n = total nodes.
+                    break
+
+            del node_1, node_2, edges_idx
+            return min(edges_dict[key] for key in set(edges_dict.keys()) - set(mst_dict.keys()))
+
+        if max_space_only:
+            return max(self.space_list)
+        return max(self.space_list), self.clusters_dict
 
 
 if __name__ == '__main__':
     import time
 
     start_time = time.time()
-    kruskal_mst = KruskalMST()
-    print(kruskal_mst.seek_mst(True))
+    # edges_dictionary = {('1', '2'): 5, ('1', '3'): 8, ('1', '4'): 3, ('2', '3'): 6, ('2', '4'): 2, ('3', '4'): 7}
+    kruskal_clustering = KruskalClustering()
+    print(kruskal_clustering.cluster(4, False))
 
     end_time = time.time()
     print(f'Run Time: {str(round(end_time - start_time))} seconds.')

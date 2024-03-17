@@ -6,7 +6,7 @@ no_path_dist = 1000000  # Distance for non-existing edges and upper bound of sho
 
 
 def process_distances():
-    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_2k.txt')
+    file_path = os.path.join(DATA_FOLDER_PATH, 'edges', 'edges_2k.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
         file.close()
@@ -51,7 +51,7 @@ def find_closest_unvisited_node(shortest_paths_dict, visited_nodes_set):
 def find_shortest_path(adjacency_matrix, source_node):
     # Nodes order starts from 1, not 0. Indexing needs +/- 1.
     if (source_node < 1) | (source_node > len(adjacency_matrix)):  # Source node isn't in adjacency matrix.
-        return dict()
+        raise ValueError('Source node not found in adjacency matrix.')
 
     shortest_paths_dict = dict()  # Dictionary of shortest paths from source node to all nodes.
     for i in range(len(adjacency_matrix)):

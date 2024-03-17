@@ -3,7 +3,7 @@ import os
 
 
 def read_graph():
-    file_path = os.path.join(DATA_FOLDER_PATH, 'edges_1m.txt')
+    file_path = os.path.join(DATA_FOLDER_PATH, 'edges', 'edges_1m.txt')
     with open(file_path, 'r') as file:
         nodes = file.read().splitlines()
         file.close()

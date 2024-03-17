@@ -5,7 +5,7 @@ from copy import deepcopy
 
 def read_nodes():
     nodes_dict = dict()  # Skip the 1st line that isn't related to node distance.
-    nodes = open(os.path.join(DATA_FOLDER_PATH, 'nodes_1k.txt'), 'r').readlines()[1:]
+    nodes = open(os.path.join(DATA_FOLDER_PATH, 'nodes', 'nodes_1k.txt'), 'r').readlines()[1:]
     for node in nodes:
         weight = int(node.replace('\n', ''))
         nodes_dict.update({str(len(nodes_dict) + 1): weight})  # Key: node ordinal; value: weight.
