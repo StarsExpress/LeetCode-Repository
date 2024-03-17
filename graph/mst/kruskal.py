@@ -13,6 +13,7 @@ class KruskalMST:
 
         all_nodes_set = set(chain(*list(edges_dict.keys())))
         self.roots_dict = dict(zip(all_nodes_set, [None] * len(all_nodes_set)))  # Each node's root in MST.
+        self.subset_1, self.subset_2 = [], []  # Lists to be used when two subsets union each other.
         del all_nodes_set
 
     @staticmethod
@@ -51,7 +52,24 @@ class KruskalMST:
             self.roots_dict.update({node_2: root_1})
             return
 
-        self.roots_dict.update({root_2: root_1})  # If both are in, union one's set to the other's set.
+        self.subset_1.clear()  # If both are in, union smaller subset to bigger subset.
+        self.subset_2.clear()
+
+        for k, v in self.roots_dict.items():
+            if v == root_1:
+                self.subset_1.append(k)
+                continue
+
+            if v == root_2:
+                self.subset_2.append(k)
+
+        if len(self.subset_1) >= len(self.subset_2):
+            for member in self.subset_2:
+                self.roots_dict.update({member: root_1})
+            return
+
+        for member in self.subset_1:
+            self.roots_dict.update({member: root_2})
 
     def find(self, node: str):  # Find a node's root in MST.
         if self.roots_dict[node] is None:  # If a node isn't in MST yet.
