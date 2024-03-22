@@ -7,7 +7,6 @@ class MinHeap:
     def __init__(self, items: list | tuple):
         self.items_list = []
         self.items_list.extend(items)
-        self.build_heap()
 
     def build_heap(self):  # Ensure the min item is at root.
         total_subtrees = len(self.items_list) // 2
@@ -51,26 +50,12 @@ class MinHeap:
 
         else:
             self.items_list.append(items)
-        self.build_heap()  # Ensure the min item is still at root.
 
     def find_min(self, remove=False):
+        self.build_heap()  # Ensure the min item is still at root.
         if remove:
-            root_value = self.items_list.pop(0)
-            self.build_heap()  # Ensure the min item is still at root.
-            return root_value
+            return self.items_list.pop(0)
         return self.items_list[0]
-
-    def find_median(self):
-        total_items = len(self.items_list)
-        if total_items == 0:
-            return None
-        if total_items == 1:
-            return self.items_list[0]
-
-        sorted_list = self.sort()  # Sort from "low to high".
-        # When items count is even, median is defined as the (count / 2) smallest item.
-        median_idx = total_items // 2 if total_items % 2 == 1 else (total_items // 2) - 1
-        return sorted_list[median_idx]
 
     def sort(self):
         if len(self.items_list) <= 1:

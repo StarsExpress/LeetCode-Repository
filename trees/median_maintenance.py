@@ -48,7 +48,6 @@ def track_median(items_list, return_sum=False, only_last_4_digits=False):
         if only_last_4_digits:
             medians_sum %= 10000
         return medians_sum
-
     return medians_list
 
 
