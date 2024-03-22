@@ -7,8 +7,7 @@ def track_median(items_list, return_sum=False, only_last_4_digits=False):
     if len(items_list) <= 0:
         return None
 
-    items_list = deepcopy(items_list)  # Prevent popping from modifying original list.
-
+    items_list = deepcopy(items_list)  # Prevent popping from modifying original items list.
     medians_list = []
     min_heap, max_heap = MinHeap([]), MaxHeap([])  # Initialize both heaps with empty lists.
     while True:

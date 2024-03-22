@@ -1,4 +1,3 @@
-from copy import deepcopy
 
 
 class MinHeap:
@@ -61,7 +60,6 @@ class MinHeap:
         if len(self.items_list) <= 1:
             return self.items_list
 
-        copied_items_list = deepcopy(self.items_list)  # Deep copy self.items list for later restoration.
         sorted_list = []  # Carry sorted items.
         self.build_heap()
         while True:
@@ -72,8 +70,8 @@ class MinHeap:
                 break
             self.heapify()  # Otherwise, heapify for the next iteration.
 
-        self.items_list.extend(copied_items_list)  # Restoration.
-        return sorted_list
+        self.items_list.extend(sorted_list)
+        return self.items_list
 
 
 if __name__ == '__main__':
