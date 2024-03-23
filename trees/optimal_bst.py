@@ -6,11 +6,9 @@ class OptimalBST:
         if min(weights_dict.values()) <= 0:
             raise ValueError('All weights must be positive.')
 
-        self.weights_dict = weights_dict
-        self.weights_list = list(self.weights_dict.values())
-
-        self.costs_matrix = [[0] * len(self.weights_dict) for _ in range(len(self.weights_dict))]
-        for i in range(len(self.weights_dict)):  # Fill matrix diagonal.
+        self.items_list, self.weights_list = list(weights_dict.keys()), list(weights_dict.values())
+        self.costs_matrix = [[0] * len(self.weights_list) for _ in range(len(self.weights_list))]
+        for i in range(len(self.weights_list)):  # Fill matrix diagonal.
             self.costs_matrix[i][i] += self.weights_list[i]
 
         # In each subtree, track "candidate" costs and record min cost's root.
@@ -36,8 +34,8 @@ class OptimalBST:
             return min(self.candidates_dict.values()) + sum(self.weights_list[row_idx: col_idx + 1])
 
     def find_optimal_bst(self, cost_only=False):
-        for j in range(len(self.weights_dict)):  # Columns iteration from left to right.
-            for i in range(len(self.weights_dict), -1, -1):  # "Reversed (bottom-up)" rows iteration.
+        for j in range(len(self.weights_list)):  # Columns iteration from left to right.
+            for i in range(len(self.weights_list), -1, -1):  # "Reversed (bottom-up)" rows iteration.
                 if i < j:  # Only compute upper triangular parts.
                     self.costs_matrix[i][j] += self.find_subtree_cost(row_idx=i, col_idx=j)
 

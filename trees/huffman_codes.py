@@ -1,10 +1,10 @@
 from config import DATA_FOLDER_PATH
 import os
-from trees.min_heap import MinHeap
+from heaps.min_heap import MinHeap
 
 
 def read_alphabets():
-    alphabets_dict = dict()  # Skip the 1st line that isn't related to alphabet weight.
+    alphabets_dict = dict()  # 1st line isn't related to alphabet weight.
     alphabets = open(os.path.join(DATA_FOLDER_PATH, 'alphabets_1k.txt'), 'r').readlines()[1:]
     for alphabet in alphabets:
         weight = int(alphabet.replace('\n', ''))

@@ -1,5 +1,5 @@
-from trees.min_heap import MinHeap
-from trees.max_heap import MaxHeap
+from heaps.min_heap import MinHeap
+from heaps.max_heap import MaxHeap
 from copy import deepcopy
 
 
