@@ -1,5 +1,5 @@
 
-def find_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):
+def find_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # Leetcode Q.15.
     if len(references) < 3:
         raise IndexError('Three sum requires three numbers as references.')
 
