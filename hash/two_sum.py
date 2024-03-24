@@ -1,7 +1,7 @@
 from queue import Queue
 
 
-def find_distinct_numbers(references: list | tuple | set):  # Return list of "distinct" integers and floats.
+def find_distinct_numbers(references: list | tuple):  # Return list of "distinct" integers and floats.
     if len(references) <= 0:
         raise ValueError('References empty.')
     return list(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
@@ -15,7 +15,7 @@ def search_hash(target: int | float, references: list, hash_table: dict):
     return 0
 
 
-def find_two_sum(targets: int | float | list, references: list | tuple | set, queue_obj: Queue):
+def find_two_sum(targets: int | float | list, references: list | tuple, queue_obj: Queue):
     references = find_distinct_numbers(references)
     if len(references) <= 0:
         queue_obj.put(0)
