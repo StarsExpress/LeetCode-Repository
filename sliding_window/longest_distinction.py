@@ -1,5 +1,5 @@
 
-def find_longest_distinction(string: str):
+def find_longest_distinction(string: str):  # LeetCode Q.3.
     if len(string) <= 0:
         return 0
     if len(set(string)) == 1:
@@ -7,7 +7,7 @@ def find_longest_distinction(string: str):
 
     max_len, start_idx, end_idx = 1, 0, 1  # Iteration starts from 2nd char.
     while True:
-        if end_idx >= len(string):  # Reach input's.
+        if end_idx >= len(string):  # Reach input's end.
             return max(end_idx - start_idx, max_len)
 
         # Candidate char is in "somewhere" of window.

@@ -1,5 +1,4 @@
 
-
 class MinHeap:
     """Apply min heap to sort items."""
 

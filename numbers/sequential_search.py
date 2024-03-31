@@ -1,5 +1,5 @@
 
-def find_sequential_digits(floor: int, ceiling: int):  # Leetcode Q.1291.
+def find_sequential_digits(floor: int, ceiling: int):  # LeetCode Q.1291.
     if floor < 10:
         raise ValueError('Floor must >= 10.')
     if ceiling < floor:

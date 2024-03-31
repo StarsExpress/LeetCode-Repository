@@ -1,5 +1,5 @@
 
-def find_max_erasure(integers: list[int]):
+def find_max_erasure(integers: list[int]):  # LeetCode Q.1695.
     if len(integers) <= 0:
         return 0
     if len(set(integers)) == 1:

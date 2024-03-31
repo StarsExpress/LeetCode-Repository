@@ -1,5 +1,4 @@
 
-
 class MaxHeap:
     """Apply max heap to sort items."""
 

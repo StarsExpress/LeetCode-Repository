@@ -1,5 +1,5 @@
 
-def find_closest_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # Leetcode Q.16.
+def find_closest_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # LeetCode Q.16.
     if len(references) < 3:
         raise IndexError('Three sum requires three numbers as references.')
 
