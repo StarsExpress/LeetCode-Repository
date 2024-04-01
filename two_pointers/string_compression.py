@@ -8,21 +8,25 @@ def compress_string(chars: list[str]):  # LeetCode Q.443: required to "modify" (
         chars.clear()
         chars.append(char)
         if count > 1:
-            chars.extend(s for s in str(count))
+            for s in str(count):
+                chars.append(s)
         return len(''.join(chars))
 
     start_idx, end_idx = 0, 1  # Iteration starts from 2nd char.
-    past, present, future = [], [], []
     streak = chars[start_idx: end_idx]
+    past, present, future = [], [], []
     while True:
         if end_idx >= len(chars):
             present.append(chars[start_idx])
             if len(streak) > 1:
-                present.extend(s for s in str(len(streak)))
+                for s in str(len(streak)):
+                    present.append(s)
 
             past, future = chars[:start_idx], chars[end_idx:]
             chars.clear()
-            chars.extend(past + present + future)
+            chars.extend(past)
+            chars.extend(present)
+            chars.extend(future)
             return len(''.join(chars))
 
         if chars[end_idx] in streak:
@@ -32,11 +36,14 @@ def compress_string(chars: list[str]):  # LeetCode Q.443: required to "modify" (
 
         present.append(chars[start_idx])
         if len(streak) > 1:
-            present.extend(s for s in str(len(streak)))
+            for s in str(len(streak)):
+                present.append(s)
 
         past, future = chars[:start_idx], chars[end_idx:]
         chars.clear()
-        chars.extend(past + present + future)
+        chars.extend(past)
+        chars.extend(present)
+        chars.extend(future)
 
         start_idx += len(present)
         end_idx += start_idx + 1 - end_idx
@@ -47,8 +54,3 @@ def compress_string(chars: list[str]):  # LeetCode Q.443: required to "modify" (
 
         streak.clear()
         streak.append(chars[start_idx])
-
-
-if __name__ == '__main__':
-    characters = ["a", "a", "b", "b", "c", "c", "c"]
-    print(compress_string(characters))
