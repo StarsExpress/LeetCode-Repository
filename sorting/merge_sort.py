@@ -1,31 +1,31 @@
 
-def count_split_inversions(input_array_1: list | tuple | set, input_array_2: list | tuple | set):
-    merged_list, split_inversions, list_1_idx, list_2_idx = [], 0, 0, 0
+def merge_sort(array_1: list | tuple | set, array_2: list | tuple | set):
+    merged_list, inversions, array_1_idx, array_2_idx = [], 0, 0, 0
 
-    while list_1_idx < len(input_array_1) and list_2_idx < len(input_array_2):
-        if input_array_1[list_1_idx] <= input_array_2[list_2_idx]:
-            merged_list.append(input_array_1[list_1_idx])
-            list_1_idx += 1
+    while array_1_idx < len(array_1) and array_2_idx < len(array_2):
+        if array_1[array_1_idx] <= array_2[array_2_idx]:
+            merged_list.append(array_1[array_1_idx])
+            array_1_idx += 1
+            continue
 
-        else:
-            merged_list.append(input_array_2[list_2_idx])
-            split_inversions += len(input_array_1) - list_1_idx
-            list_2_idx += 1
+        merged_list.append(array_2[array_2_idx])
+        inversions += len(array_1) - array_1_idx
+        array_2_idx += 1
 
-    merged_list.extend(input_array_1[list_1_idx:] + input_array_2[list_2_idx:])
-    del input_array_1, input_array_2
-    return merged_list, split_inversions
+    merged_list.extend(array_1[array_1_idx:] + array_2[array_2_idx:])
+    del array_1, array_2
+    return merged_list, inversions
 
 
-def merge_sort_list(input_array: list | tuple | set):
+def sort_list(input_array: list | tuple | set):
     if len(input_array) <= 1:
         return input_array, 0
 
-    center_index = len(input_array) // 2
-    nums_list_part_1, left_inversions = merge_sort_list(input_array[:center_index])
-    nums_list_part_2, right_inversions = merge_sort_list(input_array[center_index:])
-    merged_list, split_inversions = count_split_inversions(nums_list_part_1, nums_list_part_2)
-    return merged_list, left_inversions + right_inversions + split_inversions
+    center_idx = len(input_array) // 2
+    sorted_list_1, left_inversions = sort_list(input_array[:center_idx])
+    sorted_list_2, right_inversions = sort_list(input_array[center_idx:])
+    merged_list, merged_inversions = merge_sort(sorted_list_1, sorted_list_2)
+    return merged_list, left_inversions + right_inversions + merged_inversions
 
 
 if __name__ == '__main__':
@@ -35,4 +35,4 @@ if __name__ == '__main__':
     integers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'int_100k.txt')
     lines = open(integers_array_path, 'r').readlines()
     integers_list = [int(line.strip()) for line in lines]
-    print(merge_sort_list(integers_list)[1])
+    print(sort_list(integers_list)[1])
