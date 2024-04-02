@@ -1,24 +1,44 @@
 
-str_to_digit = dict(zip([str(i) for i in range(10)], [i for i in range(10)]))
+digits = [str(i) for i in range(10)]
 
 
-def decode_string(string: str):  # LeetCode Q.394.
+def decode_string(string: str, recursive=False):  # LeetCode Q.394.
     if len(string) <= 1:
         return string
 
-    head = string[0]
-    if head in str_to_digit.keys():
-        decoded_str = decode_string(string[1:])
-        if '[' in decoded_str:
-            left_idx, right_idx = decoded_str.index('['), decoded_str.index(']')
-            output_str = decoded_str[:left_idx]
-            output_str += decoded_str[left_idx + 1: right_idx] * str_to_digit[head]
-            return f'{output_str}{decoded_str[right_idx + 1:]}'
+    decoded_right = decode_string(string[1:], recursive=True)  # Decode everything at 1st char's right side.
+    head = string[0]  # 1st char.
+    if head in digits:  # If head is digit.
+        if recursive:  # If input string is from "recursive call".
+            return f'{head}{decoded_right}'
 
-        return f'{decoded_str * str_to_digit[head]}'
+        bracket_end, decoded_digit = decoded_right.index(']'), ''
+        for s in decoded_right:  # Collect until no more digits.
+            if s not in digits:
+                break
+            decoded_digit += s
 
-    return f'{head}{decode_string(string[1:])}'
+        multiple = int(f'{head}{decoded_digit}')  # Head is also digit.
+        # Decoded digit's length = index of '['.
+        # Multiple works inside ("exclusive of") brackets.
+        decoded_bracket = decoded_right[len(decoded_digit) + 1: bracket_end] * multiple
 
+        decoded_bracket += decoded_right[bracket_end + 1:]
+        return decoded_bracket
 
-if __name__ == '__main__':
-    print(decode_string("100[leetcode]"))
+    if decoded_right[0] in digits:  # If right side starts with digit.
+        bracket_end, decoded_digit = decoded_right.index(']'), ''
+        for s in decoded_right:
+            if s not in digits:
+                break
+            decoded_digit += s
+
+        multiple = int(decoded_digit)  # Head isn't digit.
+        # Decoded digit's length = index of '['.
+        # Multiple works inside ("exclusive of") brackets.
+        decoded_bracket = decoded_right[len(decoded_digit) + 1: bracket_end] * multiple
+
+        decoded_bracket += decoded_right[bracket_end + 1:]
+        return f'{head}{decoded_bracket}'
+
+    return f'{head}{decoded_right}'
