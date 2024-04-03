@@ -62,4 +62,4 @@ if __name__ == '__main__':
     print(track_median(numbers_list, True))
 
     end_time = time.time()
-    print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.\n')
+    print(f'Total runtime: {round(end_time - start_time, 2)} seconds on {len(numbers_list)} items.\n')

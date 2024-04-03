@@ -1,5 +1,5 @@
 
-def find_closest_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # LeetCode Q.16.
+def find_closest_3_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # LeetCode Q.16.
     if len(references) < 3:
         raise IndexError('Three sum requires three numbers as references.')
 
@@ -24,8 +24,3 @@ def find_closest_three_sum(target: int | float, references: list[int | float] | 
             biggest_idx -= 1
 
     return answer
-
-
-if __name__ == '__main__':
-    numbers = [651, 3378, 634, 339, -907, 594, 95, -90, 367, 623, -264, 920]
-    print(find_closest_three_sum(4021, numbers))

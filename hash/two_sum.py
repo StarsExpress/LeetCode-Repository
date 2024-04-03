@@ -15,7 +15,7 @@ def search_hash(target: int | float, references: list, hash_table: dict):
     return 0
 
 
-def find_two_sum(targets: int | float | list, references: list | tuple, queue_obj: Queue):
+def find_2_sum(targets: int | float | list, references: list | tuple, queue_obj: Queue):
     references = find_distinct_numbers(references)
     if len(references) <= 0:
         queue_obj.put(0)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     queue_object = Queue()
     threading.stack_size(67108864)
-    thread = threading.Thread(target=find_two_sum, args=(targets_list, references_list, queue_object))
+    thread = threading.Thread(target=find_2_sum, args=(targets_list, references_list, queue_object))
     thread.start()
     thread.join()
     print(queue_object.get())

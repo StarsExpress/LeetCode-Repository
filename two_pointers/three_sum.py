@@ -1,9 +1,9 @@
 
-def find_three_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # LeetCode Q.15.
+def find_3_sum(target: int | float, references: list[int | float] | tuple[int | float]):  # LeetCode Q.15.
     if len(references) < 3:
         raise IndexError('Three sum requires three numbers as references.')
 
-    answers = []  # Each answer's format: (smallest_num, mid_num, biggest_num).
+    answers = []  # Each answer's format: (smallest num, mid num, biggest num).
     references.sort()  # From smallest to biggest.
 
     for smallest_idx in range(len(references) - 2):
@@ -36,8 +36,3 @@ def find_three_sum(target: int | float, references: list[int | float] | tuple[in
                 biggest_idx -= 1
 
     return answers
-
-
-if __name__ == '__main__':
-    numbers = [-1, 0, 1, 2, -1, -4, -2, -3, 3, 0, 4]
-    print(find_three_sum(0, numbers))

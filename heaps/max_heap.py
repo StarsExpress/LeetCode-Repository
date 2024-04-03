@@ -82,4 +82,4 @@ if __name__ == '__main__':
     start_time = time.time()
     print(f'Sorted list:\n{max_heap.sort()}\n')
     end_time = time.time()
-    print(f'Total runtime: {str(round(end_time - start_time, 2))} seconds on {len(numbers_list)} items.\n')
+    print(f'Total runtime: {round(end_time - start_time, 2)} seconds on {len(numbers_list)} items.\n')
