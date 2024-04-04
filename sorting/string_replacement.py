@@ -1,9 +1,9 @@
 
-def replace_strings(s: str, indices: list[int], sources: list[str], targets: list[str]):  # LeetCode Q.833.
+def replace_strings(string: str, indices: list[int], sources: list[str], targets: list[str]):  # LeetCode Q.833.
     if not len(indices) == len(sources) == len(targets):
         raise IndexError('Indices, sources and targets must have the same length.')
 
-    chars, assembly = list(s), []  # Decompose string into chars. Store chars of final assembly.
+    chars, assembly = list(string), []  # Decompose string into chars. Store chars of final assembly.
     chars_idx, source_idx = 0, 0
     while True:
         if chars_idx >= len(chars):
