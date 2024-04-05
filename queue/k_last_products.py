@@ -1,18 +1,18 @@
 
-class KLastProducts:
+class KLastProducts:  # LeetCode Q.1352.
     """Calculate product of last k integers."""
 
     def __init__(self):
-        self.integers, self.non_zero_products, self.last_zero_idx = [], [], -1
+        self.stream_len, self.non_zero_products, self.last_zero_idx = 0, [], -1
 
     def add_int(self, integer: int):
-        self.integers.append(integer)
+        self.stream_len += 1
         if integer == 1:
             self.non_zero_products.append(integer)
             return
 
         if integer == 0:
-            self.last_zero_idx += len(self.integers) - 1 - self.last_zero_idx
+            self.last_zero_idx += self.stream_len - 1 - self.last_zero_idx
             self.non_zero_products.clear()
             return
 
@@ -21,8 +21,8 @@ class KLastProducts:
         self.non_zero_products.append(integer)
 
     def find_product(self, k: int):
-        if k > len(self.integers):
+        if k > self.stream_len:
             raise IndexError('K must <= count of received integers.')
-        if self.last_zero_idx >= len(self.integers) - k:  # Last k integers have 0.
+        if self.last_zero_idx >= self.stream_len - k:  # Last k integers have 0.
             return 0
         return self.non_zero_products[-k]
