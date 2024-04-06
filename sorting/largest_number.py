@@ -1,21 +1,15 @@
 
 def judge_impact(candidate: int, pivot: int):
     # Return true if candidate's "impact" > pivot's "impact".
-    candidate_str, pivot_str = str(candidate), str(pivot)
-    if len(candidate_str) == len(pivot_str):
+    candidate, pivot = str(candidate), str(pivot)
+    if len(candidate) == len(pivot):
         return True if candidate > pivot else False  # Whenever a tie comes, set pivot as the winner.
 
-    common_range = min(len(candidate_str), len(pivot_str))
-    if candidate_str[:common_range] == pivot_str[:common_range]:  # Identical in common range.
-        if int(pivot_str + candidate_str) >= int(candidate_str + pivot_str):
-            return False
-        return True
+    common_range = min(len(candidate), len(pivot))
+    if candidate[:common_range] == pivot[:common_range]:  # Identical in common range.
+        return False if pivot + candidate >= candidate + pivot else True
 
-    for i in range(common_range):  # Difference in common range.
-        if candidate_str[i] > pivot_str[i]:
-            return True
-        if candidate_str[i] < pivot_str[i]:
-            return False
+    return True if candidate > pivot else False
 
 
 def find_largest_combined_integer(integers: list[int], recursive=False):  # LeetCode Q.179.
