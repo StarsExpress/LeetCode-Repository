@@ -13,7 +13,6 @@ def merge_sort(array_1: list | tuple | set, array_2: list | tuple | set):
         array_2_idx += 1
 
     merged_list.extend(array_1[array_1_idx:] + array_2[array_2_idx:])
-    del array_1, array_2
     return merged_list, inversions
 
 
