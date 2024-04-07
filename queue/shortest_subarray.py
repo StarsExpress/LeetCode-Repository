@@ -16,7 +16,3 @@ def find_shortest_subarray(integers: list[int], min_sum: int):  # LeetCode Q.862
         int_deque.append((current_sum, idx))
 
     return -1 if min_len > len(integers) else min_len
-
-
-if __name__ == '__main__':
-    print(find_shortest_subarray([1, 2, 2, 84], 89))
