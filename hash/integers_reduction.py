@@ -11,8 +11,8 @@ def reduce_half_integers(integers: list[int]):  # LeetCode Q.1338.
     for integer in integers:
         counts[integer] += 1
 
-    counts = list(counts.values())  # List of counts.
-    counts.sort(reverse=True)
+    counts = list(counts.values())
+    counts.sort(reverse=True)  # Start from bigger counts to minimize distinct ints used during reduction.
 
     target_size, cumulated_size, current_idx = len(integers) // 2, counts[0], 1
     if len(integers) % 2 == 1:
