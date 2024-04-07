@@ -62,15 +62,14 @@ class MinHeap:
         sorted_list = []  # Carry sorted items.
         self.build_heap()
         while True:
-            # At the start of each iteration, switch the last item with root (min item).
+            # At each iteration's start, switch last item with root.
             self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]
             sorted_list.append(self.items_list.pop(-1))  # Add min item to sorted list.
             if len(self.items_list) <= 0:  # Only break while if self.items list becomes empty.
-                break
-            self.heapify()  # Otherwise, heapify for the next iteration.
+                self.items_list += sorted_list
+                return self.items_list
 
-        self.items_list.extend(sorted_list)
-        return self.items_list
+            self.heapify()  # Otherwise, heapify for the next iteration.
 
 
 if __name__ == '__main__':
