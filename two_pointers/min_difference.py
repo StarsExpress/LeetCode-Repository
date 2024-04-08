@@ -1,5 +1,9 @@
 
 def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
+    original_len, time_points = len(time_points), list(set(time_points))  # Take unique time points.
+    if len(time_points) < original_len:  # Once identical time points are found.
+        return 0
+
     back_idx, front_idx = -1, len(time_points)
     back_minute, front_minute = 0, 0
     current_diff, min_diff = 0, 1439
@@ -17,15 +21,7 @@ def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
                 back_minute += int(char)
 
             front_idx += back_idx + 1 - front_idx
-            front_minute -= front_minute  # Reset front minute to 0 upon going to a new back minute.
-            continue
-
-        if time_points[back_idx] == time_points[front_idx]:  # Once identical timestamps are found.
-            return 0
-
-        if {time_points[back_idx], time_points[front_idx]} == {"23:59", "00:00"}:
-            min_diff += 1 - min_diff
-            front_idx += 1
+            front_minute -= front_minute
             continue
 
         for idx, char in enumerate(time_points[front_idx].split(':')):
@@ -34,7 +30,7 @@ def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
                 continue
             front_minute += int(char)
 
-        current_diff -= current_diff  # Reset current diff to 0 for each comparison.
+        current_diff -= current_diff  # Reset current diff to 0.
 
         # Both are A.M. or both are P.M.
         if (max(back_minute, front_minute) <= 720) | (720 < min(back_minute, front_minute)):
