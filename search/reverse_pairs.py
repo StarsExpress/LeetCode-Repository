@@ -1,9 +1,10 @@
 
-def count_smaller_rights(target: int, sorted_integers: list[int] | tuple[int]):
+def count_reverse(target: int, sorted_integers: list[int] | tuple[int]):
+    # Count how many integers < 0.5 * target.
     if len(sorted_integers) <= 0:
         return 0
 
-        # Insertion idx: target's idx into sorted integers to maintain order.
+    # Insertion idx: target's idx into sorted integers to maintain order.
     back_idx, front_idx, insertion_idx = 0, len(sorted_integers) - 1, 0
     while True:  # First while: search for insertion idx.
         if back_idx > front_idx:
@@ -34,12 +35,11 @@ def count_reverse_pairs(integers: list[int]):  # LeetCode Q.493.
 
     reverse_pairs = 0
     sorted_integers = [integers.pop(-1)]  # Start from rightmost int.
-
     while True:
         if len(integers) <= 0:
             return reverse_pairs
 
         popped_integer = integers.pop(-1)
-        smaller_right, insertion_idx = count_smaller_rights(popped_integer, sorted_integers)
-        reverse_pairs += smaller_right
+        reverse_count, insertion_idx = count_reverse(popped_integer, sorted_integers)
+        reverse_pairs += reverse_count
         sorted_integers.insert(insertion_idx, popped_integer)
