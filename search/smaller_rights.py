@@ -8,7 +8,7 @@ def binary_insert(target: int, sorted_integers: list[int] | tuple[int]):
         if back_idx > front_idx:
             return back_idx  # Number of ints < target, implying target's insertion idx.
 
-        mid_idx = back_idx + (front_idx - back_idx) // 2
+        mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
             back_idx = mid_idx + 1
             continue

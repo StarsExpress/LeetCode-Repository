@@ -8,7 +8,7 @@ def count_valid_3rd_edges(two_edges_sum, sorted_edges: list | tuple):
         if back_idx > front_idx:
             return back_idx  # Implies number of 3rd edges < sum of two input edges.
 
-        mid_idx = back_idx + (front_idx - back_idx) // 2
+        mid_idx = (back_idx + front_idx) // 2
         if sorted_edges[mid_idx] < two_edges_sum:
             back_idx = mid_idx + 1
             continue
