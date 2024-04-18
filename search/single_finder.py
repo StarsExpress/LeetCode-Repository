@@ -4,7 +4,3 @@ def find_single_item(items: list[int | float | str]):
     for item in items:
         xor_value ^= item
     return xor_value
-
-
-if __name__ == '__main__':
-    print(find_single_item([4, 1, 2, 1, 2]))

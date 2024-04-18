@@ -1,5 +1,5 @@
 
-def count_valid_3rd_edges(two_edges_sum, sorted_edges: list | tuple):
+def count_valid_3rd_edges(two_edges_sum: int, sorted_edges: list[int] | tuple[int]):
     if len(sorted_edges) <= 0:
         return 0
 
