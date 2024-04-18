@@ -18,7 +18,3 @@ def find_longest_distinction(string: str):  # LeetCode Q.3.
             start_idx += 1  # Now candidate char isn't in the newest window.
 
         end_idx += 1  # Go to next char.
-
-
-if __name__ == '__main__':
-    print(find_longest_distinction('abcabcbb'))

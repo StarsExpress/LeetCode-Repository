@@ -23,8 +23,3 @@ def find_max_erasure(integers: list[int]):  # LeetCode Q.1695.
 
         current_erasure += integers[end_idx]
         end_idx += 1  # Go to next int.
-
-
-if __name__ == '__main__':
-    numbers = [4, 2, 4, 5, 6]
-    print(find_max_erasure(numbers))
