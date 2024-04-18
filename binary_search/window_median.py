@@ -1,5 +1,5 @@
 
-def binary_insert(target: int, sorted_integers: list[int] | tuple[int]):
+def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
     if len(sorted_integers) <= 0:
         return 0
 
@@ -39,6 +39,7 @@ def find_sliding_window_median(integers: list[int], size: int):  # LeetCode Q.48
             return window_medians
 
         replaced, newcomer = integers[i - 1], integers[i - 1 + size]  # Other iterations have to replace ints.
-        sorted_window_ints.remove(replaced)
-        insertion_idx = binary_insert(newcomer, sorted_window_ints)
+        pop_idx = binary_search(replaced, sorted_window_ints)
+        sorted_window_ints.pop(pop_idx)
+        insertion_idx = binary_search(newcomer, sorted_window_ints)
         sorted_window_ints.insert(insertion_idx, newcomer)

@@ -1,4 +1,5 @@
-class StockPrice:
+
+class StockPriceTracker:  # LeetCode Q.2034.
 
     def __init__(self):
         # Records: timestamps are keys and prices are values.
@@ -6,7 +7,7 @@ class StockPrice:
         self.records, self.prices, self.latest_time = dict(), [], -1
 
     @staticmethod
-    def binary_insert(target: int, sorted_integers: list[int] | tuple[int]):
+    def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
         if len(sorted_integers) <= 0:
             return 0
 
@@ -23,13 +24,14 @@ class StockPrice:
 
     def update(self, timestamp: int, price: int):
         if timestamp in self.records.keys():
-            self.prices.remove(self.records[timestamp])
+            pop_idx = self.binary_search(self.records[timestamp], self.prices)
+            self.prices.pop(pop_idx)
         self.records.update({timestamp: price})
 
         if timestamp > self.latest_time:
             self.latest_time += timestamp - self.latest_time
 
-        insertion_idx = self.binary_insert(price, self.prices)
+        insertion_idx = self.binary_search(price, self.prices)
         self.prices.insert(insertion_idx, price)
 
     def current(self):
