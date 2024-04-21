@@ -1,26 +1,20 @@
 from heaps.min_heap import MinHeap
 from heaps.max_heap import MaxHeap
-from copy import deepcopy
 
 
-def track_median(items_list, return_sum=False, only_last_4_digits=False):
-    if len(items_list) <= 0:
-        return None
+def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=False, only_last_4_digits=False):
+    if len(numbers) <= 0:
+        return 0
 
-    items_list = deepcopy(items_list)  # Prevent popping from modifying original items list.
-    medians_list = []
-    min_heap, max_heap = MinHeap([]), MaxHeap([])  # Initialize both heaps with empty lists.
-    while True:
-        if len(items_list) <= 0:
-            break
-
-        current_item = items_list.pop(0)
-        if len(medians_list) <= 0:
+    medians, min_heap, max_heap = [], MinHeap([]), MaxHeap([])  # Initialize both heaps with empty lists.
+    while len(numbers) > 0:
+        current_item = numbers.pop(0)
+        if len(medians) <= 0:
             min_heap.add_items(current_item)
-            medians_list.append(current_item)
+            medians.append(current_item)
             continue
 
-        if current_item < medians_list[-1]:
+        if current_item < medians[-1]:
             max_heap.add_items(current_item)
 
         else:
@@ -36,18 +30,18 @@ def track_median(items_list, return_sum=False, only_last_4_digits=False):
 
         # Equal sign takes max heap's root: for even items count, median is defined as the (count / 2)th "smallest".
         if len(min_heap.items_list) <= len(max_heap.items_list):
-            medians_list.append(max_heap.find_max(remove=False))
+            medians.append(max_heap.find_max(remove=False))
             continue
-        medians_list.append(min_heap.find_min(remove=False))
+        medians.append(min_heap.find_min(remove=False))
 
-    assert len(min_heap.items_list) + len(max_heap.items_list) == len(medians_list)
+    assert len(min_heap.items_list) + len(max_heap.items_list) == len(medians)
 
     if return_sum:
-        medians_sum = sum(medians_list)
+        medians_sum = sum(medians)
         if only_last_4_digits:
             medians_sum %= 10000
         return medians_sum
-    return medians_list
+    return medians
 
 
 if __name__ == '__main__':
@@ -59,7 +53,7 @@ if __name__ == '__main__':
     numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'num_10k.txt')
     lines = open(numbers_array_path, 'r').readlines()
     numbers_list = [int(line.strip()) for line in lines]
-    print(track_median(numbers_list, True))
+    print(track_medians(numbers_list, True))
 
     end_time = time.time()
-    print(f'Total runtime: {round(end_time - start_time, 2)} seconds on {len(numbers_list)} items.\n')
+    print(f'Total runtime: {round(end_time - start_time, 2)} seconds on {len(numbers_list)} items.')

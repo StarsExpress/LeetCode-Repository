@@ -14,7 +14,7 @@ class StockPriceTracker:  # LeetCode Q.2034.
         back_idx, front_idx = 0, len(self.prices) - 1
         while True:
             if back_idx > front_idx:
-                return back_idx  # Number of ints < targets.
+                return back_idx  # Number of ints < target.
 
             mid_idx = (back_idx + front_idx) // 2
             if self.prices[mid_idx] < target:

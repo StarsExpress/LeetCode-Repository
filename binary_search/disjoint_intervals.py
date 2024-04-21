@@ -12,7 +12,7 @@ class RangesSummary:  # LeetCode Q.352.
         back_idx, front_idx = 0, len(self.intervals) - 1
         while True:
             if back_idx > front_idx:
-                return back_idx  # Number of intervals with start < target's int.
+                return back_idx  # Number of intervals with start < int inside target.
 
             mid_idx = (back_idx + front_idx) // 2
             if self.intervals[mid_idx] < target:

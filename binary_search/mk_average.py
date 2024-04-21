@@ -13,7 +13,7 @@ class MKAverage:
         back_idx, front_idx = 0, len(self.sorted_integers) - 1
         while True:
             if back_idx > front_idx:
-                return back_idx  # Number of ints < targets.
+                return back_idx  # Number of ints < target.
 
             mid_idx = (back_idx + front_idx) // 2
             if self.sorted_integers[mid_idx] < target:
