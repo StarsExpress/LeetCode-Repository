@@ -20,7 +20,7 @@ def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=Fa
         return 0
 
     medians, sorted_items, sorted_items_size = [], [], 0  # Track size of sorted items.
-    while len(numbers) > 0:
+    while numbers:
         newcomer = numbers.pop(0)
         insertion_idx = binary_search(newcomer, sorted_items)
         sorted_items.insert(insertion_idx, newcomer)

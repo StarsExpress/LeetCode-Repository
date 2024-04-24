@@ -12,12 +12,12 @@ def find_sliding_window_maximum(integers: list[int], window_size: int):  # LeetC
         if current_idx >= len(integers):
             return maximums
 
-        while len(idx_queue) > 0:  # Pop last idx as long as its corresponding int <= current int.
+        while idx_queue:  # Pop last idx as long as its corresponding int <= current int.
             if integers[current_idx] < integers[idx_queue[-1]]:
                 break
             idx_queue.pop(-1)
 
-        while len(idx_queue) > 0:  # Pop first idx as long as it isn't in current window.
+        while idx_queue:  # Pop first idx as long as it isn't in current window.
             if current_idx - window_size + 1 <= idx_queue[0]:
                 break
             idx_queue.pop(0)

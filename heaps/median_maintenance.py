@@ -7,7 +7,7 @@ def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=Fa
         return 0
 
     medians, min_heap, max_heap = [], MinHeap([]), MaxHeap([])  # Initialize both heaps with empty lists.
-    while len(numbers) > 0:
+    while numbers:
         current_item = numbers.pop(0)
         if len(medians) <= 0:
             min_heap.add_items(current_item)

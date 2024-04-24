@@ -23,7 +23,7 @@ def find_longest_subarray(integers: list[int], limit: int):  # LeetCode Q.1438.
             if len(subarray) - 1 > max_len:  # -1 excludes newcomer when updating max len.
                 max_len = len(subarray) - 1
 
-            while len(subarray) > 0:
+            while subarray:
                 if max(subarray) - min(subarray) > limit:
                     subarray.pop(0)
                 break

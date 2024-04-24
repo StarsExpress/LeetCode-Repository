@@ -1,7 +1,7 @@
 
 def find_top_k_words(words: list[str], k: int):  # LeetCode Q.692.
     hash_table, frequency_table = dict(), dict()
-    while len(words) > 0:
+    while words:
         word = words.pop(0)
         if word not in hash_table.keys():
             hash_table.update({word: 1})
