@@ -8,7 +8,7 @@ def compute_max_subarray_product(integers: list[int]):  # LeetCode Q.152.
     else:
         negative_prod, subarray_prod = integers.pop(0), 0  # 0: subarray product doesn't exist.
 
-    while len(integers) > 0:
+    while integers:
         newcomer = integers.pop(0)
         if newcomer == 0:  # Newcomer is 0: reset both products to initial values.
             subarray_prod, negative_prod = 0, None
