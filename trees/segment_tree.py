@@ -17,21 +17,21 @@ class RangeSum:  # LeetCode Q.307.
     def update(self, index: int, value: int):
         index += self.total_ints
         self.tree[index] = value
-        while index > 1:    # Move upward to update parents.
+        while index > 1:  # Move upward to update parents.
             self.tree[index >> 1] = self.tree[index] + self.tree[index ^ 1]
             index >>= 1
 
     def find_range_sum(self, left_idx: int, right_idx: int):
-        left_idx += self.total_ints
-        right_idx += self.total_ints + 1  # Right idx is required to be "inclusive".
         range_sum = 0
 
+        left_idx += self.total_ints
+        right_idx += self.total_ints + 1  # Right idx is required to be "inclusive".
         while left_idx < right_idx:
-            if left_idx & 1:
+            if left_idx & 1:  # Odd left idx: this idx is right child of its parent.
                 range_sum += self.tree[left_idx]
                 left_idx += 1
 
-            if right_idx & 1:
+            if right_idx & 1:  # Odd right idx: this idx is right child of its parent.
                 right_idx -= 1
                 range_sum += self.tree[right_idx]
 
