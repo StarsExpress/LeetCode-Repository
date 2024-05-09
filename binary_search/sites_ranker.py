@@ -3,10 +3,9 @@ class SitesRanker:  # LeetCode Q.2102.
     """Rank sites with descending scores. For ties, rank by ascending names."""
 
     def __init__(self):
-        self.names, self.scores = [], []
-        self.received_calls = 0  # Count of get method being called.
+        self.names, self.scores, self.received_calls = [], [], 0  # Count of get_site method being called.
 
-    def rank_score(self, score: int, inclusive=False):
+    def rank_score(self, score: int | float):
         if len(self.scores) <= 0:
             return 0
 
@@ -16,11 +15,6 @@ class SitesRanker:  # LeetCode Q.2102.
                 return back_idx
 
             mid_idx = (back_idx + front_idx) // 2
-            if inclusive:  # Add equal sign in comparison.
-                if self.scores[mid_idx] >= score:
-                    back_idx = mid_idx + 1
-                    continue
-
             if self.scores[mid_idx] > score:
                 back_idx = mid_idx + 1
                 continue
@@ -45,18 +39,19 @@ class SitesRanker:  # LeetCode Q.2102.
             front_idx = mid_idx - 1
 
     def add_site(self, name: str, score: int):
-        ordinary_idx = self.rank_score(score)
-        inclusive_idx = self.rank_score(score, True)
-        if ordinary_idx == inclusive_idx:  # No tie for incoming score.
-            self.names.insert(ordinary_idx, name)
-            self.scores.insert(ordinary_idx, score)
+        higher_count = self.rank_score(score)  # Count of past scores > new score.
+        # Count of past scores >= new score. Scores are ints with descending ranks, -0.1 help find ties.
+        higher_equal_count = self.rank_score(score - 0.1)
+        if higher_count == higher_equal_count:  # No tie for new score.
+            self.names.insert(higher_count, name)
+            self.scores.insert(higher_count, score)
             return
 
-        # Tie happens: get names with scores equal to incoming score.
-        tied_names = self.names[ordinary_idx: inclusive_idx]
-        name_idx = self.rank_name(name, tied_names)  # Incoming name's rank among tied names.
-        self.names.insert(ordinary_idx + name_idx, name)  # Name idx: adjustment term for both insertions.
-        self.scores.insert(ordinary_idx + name_idx, score)
+        tied_names = self.names[higher_count: higher_equal_count]  # Tie: find names with scores = new score.
+        # New name's rank among tied names = adjustment term for insertions.
+        higher_count += self.rank_name(name, tied_names)
+        self.names.insert(higher_count, name)
+        self.scores.insert(higher_count, score)
 
     def get_site(self):
         self.received_calls += 1
