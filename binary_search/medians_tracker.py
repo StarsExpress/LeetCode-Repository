@@ -43,12 +43,16 @@ def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=Fa
 
 
 if __name__ == '__main__':
-    from config import DATA_FOLDER_PATH
-    import os
     import time
+    import os
+    from config import DATA_FOLDER_PATH
 
     start_time = time.time()
-    numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'num_10k.txt')
+    numbers_array_path = os.path.join(
+        DATA_FOLDER_PATH,
+        'numbers',
+        'num_10k.txt',
+    )
     lines = open(numbers_array_path, 'r').readlines()
     numbers_list = [int(line.strip()) for line in lines]
     print(track_medians(numbers_list, True))

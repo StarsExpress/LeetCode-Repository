@@ -28,5 +28,6 @@ def count_smaller_rights(integers: list[int]):  # LeetCode Q.315.
 
         popped_integer = integers.pop(-1)
         smaller_right = binary_insert(popped_integer, sorted_integers)
-        smaller_rights.insert(0, smaller_right)  # Insert at 0 idx as iteration is rightmost to leftmost.
+        # Insert at 0 idx as iteration is from rightmost to leftmost.
+        smaller_rights.insert(0, smaller_right)
         sorted_integers.insert(smaller_right, popped_integer)

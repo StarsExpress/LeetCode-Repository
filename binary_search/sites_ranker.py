@@ -3,7 +3,8 @@ class SitesRanker:  # LeetCode Q.2102.
     """Rank sites with descending scores. For ties, rank by ascending names."""
 
     def __init__(self):
-        self.names, self.scores, self.received_calls = [], [], 0  # Count of get_site method being called.
+        self.names, self.scores = [], []
+        self.received_calls = 0  # Count of get_site method being called.
 
     def rank_score(self, score: int | float):
         if len(self.scores) <= 0:
@@ -15,7 +16,7 @@ class SitesRanker:  # LeetCode Q.2102.
                 return back_idx
 
             mid_idx = (back_idx + front_idx) // 2
-            if self.scores[mid_idx] > score:
+            if self.scores[mid_idx] > score:  # Scores have descendant ranks.
                 back_idx = mid_idx + 1
                 continue
 
@@ -32,7 +33,7 @@ class SitesRanker:  # LeetCode Q.2102.
                 return back_idx
 
             mid_idx = (back_idx + front_idx) // 2
-            if sorted_names[mid_idx] < name:
+            if sorted_names[mid_idx] < name:  # Tied scores: names have ascendant ranks.
                 back_idx = mid_idx + 1
                 continue
 
@@ -40,15 +41,18 @@ class SitesRanker:  # LeetCode Q.2102.
 
     def add_site(self, name: str, score: int):
         higher_count = self.rank_score(score)  # Count of past scores > new score.
-        # Count of past scores >= new score. Scores are ints with descending ranks, -0.1 help find ties.
-        higher_equal_count = self.rank_score(score - 0.1)
-        if higher_count == higher_equal_count:  # No tie for new score.
+
+        # Count of past scores >= new score. Scores are ints with descending ranks.
+        higher_or_equal_count = self.rank_score(score - 0.1)  # -0.1 help find ties.
+
+        if higher_count == higher_or_equal_count:  # No tie for new score.
             self.names.insert(higher_count, name)
             self.scores.insert(higher_count, score)
             return
 
-        tied_names = self.names[higher_count: higher_equal_count]  # Tie: find names with scores = new score.
-        # New name's rank among tied names = adjustment term for insertions.
+        # Tie: find existing names with scores = new score.
+        tied_names = self.names[higher_count: higher_or_equal_count]
+        # New name's rank among tied names = extra term for insertion idx.
         higher_count += self.rank_name(name, tied_names)
         self.names.insert(higher_count, name)
         self.scores.insert(higher_count, score)

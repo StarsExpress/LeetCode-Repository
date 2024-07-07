@@ -3,7 +3,7 @@ class StockPriceTracker:  # LeetCode Q.2034.
     """Track stock prices fluctuations."""
 
     def __init__(self):
-        # Records: timestamps are keys and prices are values.
+        # Records: timestamps as keys and prices as values.
         # Prices list is sorted from smallest to biggest.
         self.records, self.prices, self.latest_time = dict(), [], -1
 

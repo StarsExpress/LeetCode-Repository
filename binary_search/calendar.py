@@ -12,7 +12,7 @@ class Calendar:  # LeetCode Q.729.
         back_idx, front_idx = 0, self.booked_count - 1
         while True:
             if back_idx > front_idx:
-                return back_idx  # Number of booked times <= time, implying insertion idx.
+                return back_idx  # Number of booked times <= time is insertion idx.
 
             mid_idx = (back_idx + front_idx) // 2
             if self.booked_times[mid_idx] <= time:
@@ -22,7 +22,8 @@ class Calendar:  # LeetCode Q.729.
 
     def book(self, start: int, end: int):
         start_idx = self.binary_search(start)
-        if start_idx & 1:  # Start idx must be even: already booked times are pairs.
+        # Already booked times are pairs. Odd start idx means booking conflict.
+        if start_idx & 1:
             return False
 
         end_idx = self.binary_search(end)

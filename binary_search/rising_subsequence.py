@@ -16,13 +16,17 @@ def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
 
 
 def find_longest_rising_subsequence(numbers: list[int]):  # LeetCode Q.300.
-    subsequence = []
+    """
+    When newcomer doesn't beat everybody in subsequence, do two things:
+    Find out its insertion idx of subsequence. Let it replace the number at this idx.
+    """
+    rising_subsequence = []
     while numbers:
         newcomer = numbers.pop(0)
-        insertion_idx = binary_search(newcomer, subsequence)
-        if insertion_idx == len(subsequence):
-            subsequence.append(newcomer)
+        newcomer_idx = binary_search(newcomer, rising_subsequence)
+        if newcomer_idx == len(rising_subsequence):  # Newcomer > everybody in subsequence.
+            rising_subsequence.append(newcomer)
             continue
-        subsequence[insertion_idx] = newcomer
+        rising_subsequence[newcomer_idx] = newcomer
 
-    return len(subsequence)
+    return len(rising_subsequence)

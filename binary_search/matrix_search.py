@@ -22,7 +22,10 @@ def search_over_matrix(matrix: list[list[int]], target: int):  # LeetCode Q.74.
     _, row_idx = binary_search([target], matrix)
     if row_idx == 0:
         return binary_search(target, matrix[0])[0]
-    if binary_search(target, matrix[row_idx - 1])[0]:  # Target may be in (row_idx - 1)th or (row_idx)th rows.
+
+    # Row idx isn't 0: target in (row_idx - 1)th or (row_idx)th rows.
+    if binary_search(target, matrix[row_idx - 1])[0]:
         return True
-    # If row idx = last matrix row, "the next row" doesn't exist.
+
+    # row idx = last matrix row: "the next row" doesn't exist.
     return False if row_idx == len(matrix) else binary_search(target, matrix[row_idx])[0]

@@ -26,7 +26,9 @@ class RangesSummary:  # LeetCode Q.352.
             return
 
         idx = self.binary_insert([value])  # Where [value] is among intervals to maintain order.
-        if len(self.intervals) == 1:  # First finish cases of only one existing interval.
+
+        # First: check all cases of only one existing interval.
+        if len(self.intervals) == 1:
             if value == self.intervals[0][0] - 1:  # Value = interval start - 1.
                 self.intervals[0][0] -= 1  # Update interval start.
                 return
@@ -35,7 +37,8 @@ class RangesSummary:  # LeetCode Q.352.
                 self.intervals[0][1] += 1  # Update interval end.
                 return
 
-            if not (self.intervals[0][0] <= value <= self.intervals[0][1]):  # Value not within interval.
+            # Value not within interval.
+            if not (self.intervals[0][0] <= value <= self.intervals[0][1]):
                 self.intervals.insert(idx, [value, value])
             return
 
@@ -47,14 +50,18 @@ class RangesSummary:  # LeetCode Q.352.
                 self.intervals.insert(0, [value, value])
             return
 
-        if self.intervals[idx - 1][0] <= value <= self.intervals[idx - 1][1]:  # Value in previous interval.
+        # Value in previous interval.
+        if self.intervals[idx - 1][0] <= value <= self.intervals[idx - 1][1]:
             return
 
-        if idx < len(self.intervals):  # Value <= some intervals' start, implying "next" interval's existence.
-            if self.intervals[idx][0] <= value <= self.intervals[idx][1]:  # Value in next interval.
+        # Value <= some intervals' start, implying "next" interval's existence.
+        if idx < len(self.intervals):
+            # Value in next interval.
+            if self.intervals[idx][0] <= value <= self.intervals[idx][1]:
                 return
 
-            if self.intervals[idx - 1][1] + 1 == value == self.intervals[idx][0] - 1:  # Value "connects" two intervals.
+            # Value "connects" two intervals.
+            if self.intervals[idx - 1][1] + 1 == value == self.intervals[idx][0] - 1:
                 new_start = self.intervals.pop(idx - 1)[0]
                 new_end = self.intervals.pop(idx - 1)[1]
                 self.intervals.insert(idx - 1, [new_start, new_end])
