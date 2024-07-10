@@ -4,7 +4,7 @@ total_letters = 26  # 26 lower cases.
 
 class TrieNode:
     def __init__(self):
-        self.child_node = [None] * total_letters  # Child nodes of each node.
+        self.child_node: list[TrieNode | None] = [None] * total_letters
         self.word_end = False  # If any word stops at this node.
 
 
@@ -43,11 +43,12 @@ class BasicTrie:
         last_branch_node = None
         last_branch_char = "a"
 
+        total_child_nodes = 0  # Iterated char's total child nodes.
         for char in word:
             if not current_node.child_node[ord(char) - ord("a")]:
                 return  # Deleted word isn't among trie.
 
-            total_child_nodes = 0  # Current char's total child nodes.
+            total_child_nodes -= total_child_nodes  # Reset before calculation.
             for i in range(total_letters):
                 if current_node.child_node[i]:
                     total_child_nodes += 1

@@ -4,7 +4,7 @@ total_letters = 26  # 26 lower cases.
 
 class TrieNode:
     def __init__(self):
-        self.child_node = [None] * total_letters  # Child nodes of each node.
+        self.child_node: list[TrieNode | None] = [None] * total_letters
         self.word_end = False  # If any word stops at this node.
 
 
