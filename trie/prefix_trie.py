@@ -1,5 +1,6 @@
 
 total_letters = 26  # 26 lower cases.
+min_letter = "a"
 
 
 class TrieNode:
@@ -17,34 +18,37 @@ class PrefixTrie:  # LeetCode Q.208.
     def insert_word(self, word: str):
         current_node = self.root
         for char in word:
+            idx = ord(char) - ord(min_letter)
             # Iterated char hasn't had a node in trie.
-            if not current_node.child_node[ord(char) - ord("a")]:
+            if not current_node.child_node[idx]:
                 # Open a new node for this char.
-                current_node.child_node[ord(char) - ord("a")] = TrieNode()
+                current_node.child_node[idx] = TrieNode()
 
             # Move to iterated char's node.
-            current_node = current_node.child_node[ord(char) - ord("a")]
+            current_node = current_node.child_node[idx]
 
         current_node.word_end = True  # Last iterated node has a word ending here.
 
     def search_word(self, word: str):
         current_node = self.root
         for char in word:
+            idx = ord(char) - ord(min_letter)
             # Iterated char hasn't had a node in trie.
-            if not current_node.child_node[ord(char) - ord("a")]:
+            if not current_node.child_node[idx]:
                 return False  # Trie doesn't contain target word.
 
-            current_node = current_node.child_node[ord(char) - ord("a")]
+            current_node = current_node.child_node[idx]
 
         return current_node.word_end
 
     def starts_with(self, prefix: str):
         current_node = self.root
         for char in prefix:
+            idx = ord(char) - ord(min_letter)
             # Iterated char hasn't had a node in trie.
-            if not current_node.child_node[ord(char) - ord("a")]:
+            if not current_node.child_node[idx]:
                 return False  # Trie doesn't contain target prefix.
 
-            current_node = current_node.child_node[ord(char) - ord("a")]
+            current_node = current_node.child_node[idx]
 
         return True

@@ -1,5 +1,6 @@
 
 total_letters = 26  # 26 lower cases.
+min_letter = "a"
 
 
 class TrieNode:
@@ -9,54 +10,67 @@ class TrieNode:
 
 
 class SearchRecommender:  # LeetCode Q.1268.
-    """Recommend searches with top 3 lex order as long as search word is found in trie"""
+    """
+    During typing target word, recommend searches of top 3 lex order
+    if target word is found inside trie.
+    """
 
-    def __init__(self, products: list[str]):
+    def __init__(self, available_words: list[str]):
         self.root = TrieNode()
-        for product in sorted(products):
-            self._insert_word(product)
+        for word in sorted(available_words):
+            self._insert_word(word)
 
     def _insert_word(self, word: str):
         current_node = self.root
         for char in word:
-            if not current_node.child_node[ord(char) - ord("a")]:
-                current_node.child_node[ord(char) - ord("a")] = TrieNode()
-            current_node = current_node.child_node[ord(char) - ord("a")]
+            idx = ord(char) - ord(min_letter)
+            if not current_node.child_node[idx]:
+                current_node.child_node[idx] = TrieNode()
+
+            current_node = current_node.child_node[idx]
+
         current_node.word_end = True
 
-    def _search_node(self, word: str):
+    def _search_last_node(self, word: str):
+        """Given a word, find its last node among trie."""
         current_node = self.root
         for char in word:
-            if not current_node.child_node[ord(char) - ord("a")]:
-                return None  # Return None if target word isn't among trie.
+            idx = ord(char) - ord(min_letter)
+            if not current_node.child_node[idx]:
+                return None  # Return None if word isn't among trie.
 
-            current_node = current_node.child_node[ord(char) - ord("a")]
+            current_node = current_node.child_node[idx]
 
         return current_node
 
-    def _dfs_word(self, current_node: TrieNode, word_prefix: str, sorted_words: list[str]):
-        if current_node is None:
+    def _dfs_descendants(
+            self, starting_node: TrieNode, word_prefix: str, sorted_words: list[str]
+    ):
+        """Given a starting node, find descendants of top 3 lex order."""
+        if len(sorted_words) >= 3:  # Only need top 3 words.
             return
 
-        if len(sorted_words) >= 3:
-            return
-
-        if current_node.word_end:
+        if starting_node.word_end:
             sorted_words.append(word_prefix)
-            if len(sorted_words) >= 3:  # Only need top 3 lex order words
-                return
 
         for i in range(total_letters):
-            if current_node.child_node[i] is not None:
-                self._dfs_word(current_node.child_node[i], word_prefix + chr(i + ord("a")), sorted_words)
+            if starting_node.child_node[i] is not None:
+                self._dfs_descendants(
+                    starting_node.child_node[i],
+                    word_prefix + chr(i + ord(min_letter)),
+                    sorted_words
+                )
 
     def recommend_searches(self, search_word: str):
-        recommendations = []
-        sorted_suggestions = []
+        all_recommendations = []  # Suggestions during typing process.
+        iterated_suggestions = []  # Suggestions for each updated search word.
+
         for i in range(1, len(search_word) + 1):
-            last_node = self._search_node(search_word[:i])
-            if last_node:
-                self._dfs_word(last_node, search_word[:i], sorted_suggestions)
-            recommendations.append(sorted_suggestions.copy())
-            sorted_suggestions.clear()
-        return recommendations
+            last_node = self._search_last_node(search_word[:i])
+            if last_node:  # Potential matches exist.
+                self._dfs_descendants(last_node, search_word[:i], iterated_suggestions)
+
+            all_recommendations.append(iterated_suggestions.copy())
+            iterated_suggestions.clear()
+
+        return all_recommendations
