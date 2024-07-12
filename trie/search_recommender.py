@@ -17,8 +17,8 @@ class SearchRecommender:  # LeetCode Q.1268.
 
     def __init__(self, available_words: list[str]):
         self.root = TrieNode()
-        for word in sorted(available_words):
-            self._insert_word(word)
+        while available_words:
+            self._insert_word(available_words.pop())
 
     def _insert_word(self, word: str):
         current_node = self.root
@@ -44,7 +44,7 @@ class SearchRecommender:  # LeetCode Q.1268.
         return current_node
 
     def _dfs_descendants(
-            self, starting_node: TrieNode, word_prefix: str, sorted_words: list[str]
+        self, starting_node: TrieNode, word_prefix: str, sorted_words: list[str]
     ):
         """Given a starting node, find descendants of top 3 lex order."""
         if len(sorted_words) >= 3:  # Only need top 3 words.
@@ -54,7 +54,7 @@ class SearchRecommender:  # LeetCode Q.1268.
             sorted_words.append(word_prefix)
 
         for i in range(total_letters):
-            if starting_node.child_node[i] is not None:
+            if starting_node.child_node[i]:
                 self._dfs_descendants(
                     starting_node.child_node[i],
                     word_prefix + chr(i + ord(min_letter)),

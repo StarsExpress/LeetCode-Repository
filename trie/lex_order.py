@@ -19,12 +19,9 @@ class IntegerTrie:  # LeetCode Q.386.
         current_node, integer = self.root, str(integer)
         for digit in integer:
             idx = ord(digit) - ord(min_digit)
-            # Iterated digit hasn't had a node in trie.
             if not current_node.child_node[idx]:
-                # Open a new node for this digit.
                 current_node.child_node[idx] = TrieNode()
 
-            # Move to iterated digit's node.
             current_node = current_node.child_node[idx]
 
         current_node.integer_end = True  # Last iterated node has an int ending here.
@@ -36,7 +33,7 @@ class IntegerTrie:  # LeetCode Q.386.
             sorted_ints.append(int(digit_prefix))
 
         for i in range(total_digits):  # Recursively visit each child node in lex order.
-            if starting_node.child_node[i] is not None:
+            if starting_node.child_node[i]:
                 self._dfs_descendants(
                     starting_node.child_node[i],
                     digit_prefix + chr(i + ord(min_digit)),

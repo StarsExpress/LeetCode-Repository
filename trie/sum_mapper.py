@@ -18,16 +18,13 @@ class SumMapper:  # LeetCode Q.677.
         self.values_sum = 0
 
     def insert(self, key: str, val: int):
-        if key not in self.values_dict.keys():
+        if key not in self.values_dict.keys():  # New key must climb trie before updating dict.
             current_node = self.root
             for char in key:
                 idx = ord(char) - ord(min_letter)
-                # Iterated char hasn't had a node in trie.
                 if not current_node.child_node[idx]:
-                    # Open a new node for this char.
                     current_node.child_node[idx] = TrieNode()
 
-                # Move to iterated char's node.
                 current_node = current_node.child_node[idx]
 
             current_node.word_end = True  # Last iterated node has a word ending here.
@@ -50,7 +47,7 @@ class SumMapper:  # LeetCode Q.677.
             self.values_sum += self.values_dict[key_prefix]
 
         for i in range(total_letters):
-            if starting_node.child_node[i] is not None:
+            if starting_node.child_node[i]:
                 self._dfs_descendants_values(
                     starting_node.child_node[i], key_prefix + chr(i + ord(min_letter))
                 )

@@ -19,12 +19,9 @@ class WordDictionary:  # LeetCode Q.211.
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
-            # Iterated char hasn't had a node in trie.
             if not current_node.child_node[idx]:
-                # Open a new node for this char.
                 current_node.child_node[idx] = TrieNode()
 
-            # Move to iterated char's node.
             current_node = current_node.child_node[idx]
 
         current_node.word_end = True  # Last iterated node has a word ending here.
