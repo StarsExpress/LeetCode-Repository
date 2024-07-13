@@ -10,17 +10,17 @@ class TrieNode:
 
 
 class SumMapper:  # LeetCode Q.677.
-    """Sum all values of keys that start with a given prefix."""
+    """Sum all values of words that start with a given prefix."""
 
     def __init__(self):
         self.root = TrieNode()
         self.values_dict = dict()
         self.values_sum = 0
 
-    def insert(self, key: str, val: int):
-        if key not in self.values_dict.keys():  # New key must climb trie before updating dict.
+    def insert(self, word: str, val: int):
+        if word not in self.values_dict.keys():  # New word must climb trie before updating dict.
             current_node = self.root
-            for char in key:
+            for char in word:
                 idx = ord(char) - ord(min_letter)
                 if not current_node.child_node[idx]:
                     current_node.child_node[idx] = TrieNode()
@@ -29,27 +29,31 @@ class SumMapper:  # LeetCode Q.677.
 
             current_node.word_end = True  # Last iterated node has a word ending here.
 
-        self.values_dict.update({key: val})
+        self.values_dict.update({word: val})
 
-    def _search_last_node(self, key: str):
+    def _search_last_node(self, word: str):
+        """Given a word, find out its last stopping node in trie."""
         current_node = self.root
-        for char in key:
+        for char in word:
             idx = ord(char) - ord(min_letter)
             if not current_node.child_node[idx]:
-                return None  # Return None if key isn't among trie.
+                return None  # Return None if word isn't among trie.
 
             current_node = current_node.child_node[idx]
 
         return current_node
 
-    def _dfs_descendants_values(self, starting_node: TrieNode, key_prefix: str):
+    def _dfs_descendants_values(self, starting_node: TrieNode, word_prefix: str):
+        """
+        Given a starting node and its word prefix, sum descendants' values.
+        """
         if starting_node.word_end:
-            self.values_sum += self.values_dict[key_prefix]
+            self.values_sum += self.values_dict[word_prefix]
 
-        for i in range(total_letters):
+        for i in range(total_letters):  # Recursively visit each child node in lex order.
             if starting_node.child_node[i]:
                 self._dfs_descendants_values(
-                    starting_node.child_node[i], key_prefix + chr(i + ord(min_letter))
+                    starting_node.child_node[i], word_prefix + chr(i + ord(min_letter))
                 )
 
     def sum(self, prefix: str):

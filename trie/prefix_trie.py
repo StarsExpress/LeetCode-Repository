@@ -30,9 +30,8 @@ class PrefixTrie:  # LeetCode Q.208.
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
-            # Iterated char hasn't had a node in trie.
             if not current_node.child_node[idx]:
-                return False  # Trie doesn't contain target word.
+                return False
 
             current_node = current_node.child_node[idx]
 
@@ -42,9 +41,8 @@ class PrefixTrie:  # LeetCode Q.208.
         current_node = self.root
         for char in prefix:
             idx = ord(char) - ord(min_letter)
-            # Iterated char hasn't had a node in trie.
             if not current_node.child_node[idx]:
-                return False  # Trie doesn't contain target prefix.
+                return False
 
             current_node = current_node.child_node[idx]
 

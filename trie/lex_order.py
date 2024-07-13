@@ -29,6 +29,9 @@ class IntegerTrie:  # LeetCode Q.386.
     def _dfs_descendants(
         self, starting_node: TrieNode, digit_prefix: str, sorted_ints: list[int]
     ):
+        """
+        Given a starting node and its digit prefix, find descendants in lex order.
+        """
         if starting_node.integer_end:  # Node is end of an int, which is int(prefix).
             sorted_ints.append(int(digit_prefix))
 

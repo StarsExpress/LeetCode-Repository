@@ -39,6 +39,10 @@ class LongestWord:  # LeetCode Q.720.
     def _dfs_descendants(
         self, starting_node: TrieNode, word_prefix: str, longest_word: dict[str, str | int],
     ):
+        """
+        Given a starting node and its word prefix,
+        find the longest descendant that is also a word in words list.
+        """
         if starting_node.word_end:  # Node is end of word.
             if len(word_prefix) > longest_word["length"]:
                 longest_word.update(
