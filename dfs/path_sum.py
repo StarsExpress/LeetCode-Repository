@@ -18,21 +18,21 @@ class PathSum:  # LeetCode Q.113.
     def find_path_sum(self):
         if self.root is None:
             return []
-        self._dfs_descendants_values(self.root, [])
+        self._dfs_descendants_sum(self.root, [])
         return self.paths
 
-    def _dfs_descendants_values(self, current_node: TreeNode, path: list[int]):
+    def _dfs_descendants_sum(self, current_node: TreeNode, path: list[int]):
         path.append(current_node.val)
         if current_node.left:
-            self._dfs_descendants_values(current_node.left, path)
+            self._dfs_descendants_sum(current_node.left, path)
 
         if current_node.right:
-            self._dfs_descendants_values(current_node.right, path)
+            self._dfs_descendants_sum(current_node.right, path)
 
         # Leaf node: decide if current path qualifies.
         if not current_node.left and not current_node.right:
             if sum(path) == self.target_sum:
                 self.paths.append(path.copy())
 
-        path.pop(-1)  # Reset path to its state right before visiting current node.
+        path.pop(-1)  # Reset path to its state right before visiting leaf node.
         return
