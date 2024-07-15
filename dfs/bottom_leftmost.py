@@ -6,7 +6,7 @@ class TreeNode:
         self.right = right
 
 
-class LeftmostValue:  # LeetCode Q.513.
+class BottomLeftmostValue:  # LeetCode Q.513.
     def __init__(self, root: TreeNode | None):
         """Left streak: number of "consecutive" left edges from root in a path."""
         self.root = root
