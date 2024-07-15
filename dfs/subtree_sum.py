@@ -6,7 +6,7 @@ class TreeNode:
         self.right = right
 
 
-class SubtreeSum:
+class SubtreeSum:  # LeetCode Q.508.
     def __init__(self, root: TreeNode | None):
         self.root, self.sums = root, []
 
