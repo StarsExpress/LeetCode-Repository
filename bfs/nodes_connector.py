@@ -7,7 +7,7 @@ class Node:
         self.next = next_node
 
 
-class NodesConnector:  # LeetCode Q.117.
+class NodesConnector:  # LeetCode Q.116 & 117.
     """Connect nodes at same level in any binary tree."""
 
     def __init__(self):
