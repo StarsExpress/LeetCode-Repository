@@ -7,50 +7,41 @@ class TreeNode:
 
 
 class BottomLeftmostValue:  # LeetCode Q.513.
-    def __init__(self, root: TreeNode | None):
-        """Left streak: number of "consecutive" left edges from root in a path."""
-        self.root = root
-        self.leftmost = {"edges": 0, "value": root.val, "left_streak": 0}
+    def __init__(self):
+        self.leftmost = dict()
 
-    def find_bottom_leftmost(self):
-        self._dfs_descendants_values(self.root, [], 0, True, False)
-        leftmost_value = self.leftmost["value"]
-        self.leftmost.update(
-            {"edges": 0, "value": self.root.val, "left_streak": 0}
-        )  # Reset to initial state.
-        return leftmost_value
+    def find_bottom_leftmost(self, root: TreeNode | None):
+        # Left streak: number of "consecutive" left edges starting from root in a path.
+        self.leftmost.update({"edges": 0, "value": root.val, "left_streak": 0})
+        self._dfs_descendants_values(root, -1, -1, True, False)
+        return self.leftmost["value"]
 
     def _dfs_descendants_values(
         self,
         current_node: TreeNode,
-        path: list[int],
+        edges: int,
         left_streak: int,
         from_left: bool,
         streak_end: bool,
     ):
-        path.append(current_node.val)
-        if current_node != self.root and from_left and not streak_end:
+        edges += 1  # One more edge visited.
+        if from_left and not streak_end:
             left_streak += 1
 
         if current_node.left:
-            self._dfs_descendants_values(
-                current_node.left, path, left_streak, True, streak_end
-            )
+            self._dfs_descendants_values(current_node.left, edges, left_streak, True, streak_end)
 
         if current_node.right:
-            self._dfs_descendants_values(
-                current_node.right, path, left_streak, False, True
-            )
+            self._dfs_descendants_values(current_node.right, edges, left_streak, False, True)
 
         # Leaf node: decide if leftmost value needs updates.
         if not current_node.left and not current_node.right:
-            edges = len(path) - 1
             if edges > self.leftmost["edges"]:
                 self.leftmost.update(
                     {
                         "edges": edges,
                         "value": current_node.val,
-                        "left_streak": left_streak,
+                        "left_streak": left_streak
                     }
                 )
 
@@ -59,8 +50,3 @@ class BottomLeftmostValue:  # LeetCode Q.513.
                     self.leftmost.update(
                         {"value": current_node.val, "left_streak": left_streak}
                     )
-
-        path.pop(-1)  # Reset path and streak to the state right before visiting leaf node.
-        if from_left and not streak_end:
-            left_streak -= 1
-        return
