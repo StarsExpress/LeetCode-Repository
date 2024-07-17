@@ -32,7 +32,7 @@ class KruskalMST:
             # Edge key format: (smaller node, bigger node).
             edge_key = (min(nodes_list[0], nodes_list[1]), max(nodes_list[0], nodes_list[1]))
             if edge_key not in edges_dict.keys():
-                edges_dict.update({edge_key: int(nodes_list[-1])})  # 3rd item: distance but in str.
+                edges_dict.update({edge_key: int(nodes_list[-1])})  # 3rd item: distance (str format).
 
         del file, file_path, node, nodes, nodes_list, edge_key
         return edges_dict
