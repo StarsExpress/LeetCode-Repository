@@ -10,7 +10,7 @@ class MaxWidth:  # LeetCode Q.662.
     def __init__(self):
         self.max_width = 0
 
-    def widthOfBinaryTree(self, root: TreeNode | None):
+    def find_max_width(self, root: TreeNode | None):
         if root is None:
             return 0
 
@@ -23,18 +23,18 @@ class MaxWidth:  # LeetCode Q.662.
             self.max_width = 1
             return
 
-        # Format: parent idx at parent's level, left child, right child.
+        # Format: parent node's idx at parent's level, left child, right child.
         queue = [(0, root.left, root.right)]
         next_level_nodes = []
 
-        # Indices of leftmost & rightmost not None children at current level.
+        # Indices of leftmost & rightmost children at current level.
         left_end_idx, right_end_idx = None, None
         while queue:
             parent_idx, left_node, right_node = queue.pop(0)
             child_nodes = [left_node, right_node]
 
             for i in range(2):
-                if child_nodes[i]:  # Only consider not None children.
+                if child_nodes[i]:  # Child exists.
                     child_idx = parent_idx * 2
                     if i == 1:  # Right child idx needs to add 1.
                         child_idx += 1
