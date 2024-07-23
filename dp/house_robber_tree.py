@@ -17,20 +17,22 @@ class BinaryTreeHouseRobber:  # LeetCode Q.337.
 
     def _dfs_money(self, current_node: TreeNode | None):
         if current_node is None:  # Non-existent node.
-            return 0, 0
+            return 0, 0  # MIS two before set cum value & last set cum value.
 
+        # Track two before & last sets' cum values in both sides.
         left_two_before, left_last = self._dfs_money(current_node.left)
         right_two_before, right_last = self._dfs_money(current_node.right)
 
-        total_two_before = left_two_before + right_two_before
+        total_two_before = left_two_before + right_two_before  # Merge both sides.
         total_last = left_last + right_last
 
-        if total_two_before + current_node.val > total_last:
+        if total_two_before + current_node.val > total_last:  # Two before set wins.
             total_last = max(total_two_before, total_last)
             total_two_before += current_node.val
+            # Swap two sets before returning to parent node.
             total_two_before, total_last = total_last, total_two_before
 
-        else:
+        else:  # Last set wins.
             total_two_before = total_last
 
         max_robbery = max(total_two_before, total_last)

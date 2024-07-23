@@ -32,7 +32,7 @@ def find_max_independent_set(nodes_dict: dict, query_nodes: list | tuple = None)
 
     if len(nodes_list) >= 3:
         while iter_idx != len(nodes_list):
-            # Update MIS and its weight if two-before set retakes lead over last set.
+            # Two-before set retakes lead over last set.
             if mis_dict["two_before"]["weight"] + nodes_dict[nodes_list[iter_idx]] > mis_dict["last"]["weight"]:
                 mis_dict["two_before"]["set"].append(nodes_list[iter_idx])
                 mis_dict["two_before"]["weight"] += nodes_dict[nodes_list[iter_idx]]
@@ -40,7 +40,7 @@ def find_max_independent_set(nodes_dict: dict, query_nodes: list | tuple = None)
                 # Swap two sets for next iteration round.
                 mis_dict["two_before"], mis_dict["last"] = mis_dict["last"], mis_dict["two_before"]
 
-            else:  # If two-before set doesn't retake lead, use "deep copy" to update dict.
+            else:  # Two-before set doesn't retake lead: use "deep copy" to update dict.
                 mis_dict.update({"two_before": deepcopy(mis_dict["last"])})
 
             iter_idx += 1
