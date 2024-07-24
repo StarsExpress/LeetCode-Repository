@@ -1,5 +1,5 @@
 
-def binary_search(target: tuple[int, int], sorted_val_idx: list[tuple[int, int]]):
+def _binary_sort(target: tuple[int, int], sorted_val_idx: list[tuple[int, int]]):
     if len(sorted_val_idx) <= 0:
         return 0
 
@@ -41,7 +41,7 @@ def find_unlimited_falling_sum(grid: list[list[int]]):  # LeetCode Q.1289.
                     path_sum[row_idx][entry_idx] += last_row_mins[0][0]
 
             # Update each row's two (if exist) mins.
-            insertion_idx = binary_search(
+            insertion_idx = _binary_sort(
                 (path_sum[row_idx][entry_idx], entry_idx), current_row_mins
             )
             if insertion_idx < 2:  # Only need two min.
