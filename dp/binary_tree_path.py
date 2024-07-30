@@ -34,5 +34,5 @@ class BinaryTreeMaxPathSum:  # LeetCode Q.124.
         if not current_node.left and not current_node.right:
             return max(current_node.val, 0)  # Leaf node only needs to consider itself.
 
-        # max(left_path_sum, right_path_sum): can't take both sides.
+        # max(left_path_sum, right_path_sum): non-leaf node can't return both sides to parent.
         return max(current_node.val, current_node.val + max(left_path_sum, right_path_sum), 0)

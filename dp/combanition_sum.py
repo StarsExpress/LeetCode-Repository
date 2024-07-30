@@ -4,7 +4,7 @@ def find_combination_sum(nums: list[int], target: int):  # LeetCode Q.377.
     permutations = [1] + [0] * target
     for iter_target in range(1, target + 1):
         for num in nums:
-            if iter_target - num < 0:  # Current num can't build up target.
+            if iter_target < num:  # Current num can't build up target.
                 continue
 
             # Directly sum up to reflect all "permutations".

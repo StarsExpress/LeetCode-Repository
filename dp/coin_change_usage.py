@@ -4,7 +4,7 @@ def find_min_coins_usage(coins: list[int], amount: int):  # LeetCode Q.322.
     min_denomination = [0] + [-1] * amount
     for target_amount in range(1, amount + 1):
         for coin in coins:
-            if target_amount - coin < 0:  # Current coin can't build up target amount.
+            if target_amount < coin:  # Current coin can't build up target amount.
                 continue
 
             used_coins_count = min_denomination[target_amount - coin]

@@ -6,7 +6,7 @@ def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
     back_idx, front_idx = 0, len(sorted_integers) - 1
     while True:
         if back_idx > front_idx:
-            return back_idx  # Number of ints < target, implying target's insertion idx.
+            return back_idx  # Number of ints < target, implying insertion idx.
 
         mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
