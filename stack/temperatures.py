@@ -1,21 +1,21 @@
 
-def count_awaiting_days(temperatures: list[int]):  # LeetCode Q.739: count days until warmer temperature.
-    # Monotonic-decreasing stack: (idx, temperature).
-    awaiting_days, stack = [0] * len(temperatures), [(0, temperatures[0])]
+def count_awaiting_days(temperatures: list[int]):  # LeetCode Q.739.
+    """Count days until warmer temperature."""
+    awaiting_days = [0] * len(temperatures)
+    stack = [(0, temperatures[0])]  # Decreasing monotonic stack: (idx, temperature).
 
-    for today_temp_idx in range(1, len(temperatures)):
+    for today_idx in range(1, len(temperatures)):
         if stack:
-            idx_temp_tuple = stack.pop(-1)
-            # Past temp < today temp: past temp finds a warmer future.
-            while idx_temp_tuple[1] < temperatures[today_temp_idx]:
-                awaiting_days[idx_temp_tuple[0]] += today_temp_idx - idx_temp_tuple[0]
+            past_idx, past_temp = stack.pop(-1)
+            while past_temp < temperatures[today_idx]:  # Past temp finds a warmer future.
+                awaiting_days[past_idx] += today_idx - past_idx
                 if len(stack) <= 0:
                     break
-                idx_temp_tuple = stack.pop(-1)
+                past_idx, past_temp = stack.pop(-1)
 
-            if idx_temp_tuple[1] >= temperatures[today_temp_idx]:  # Past temp >= today temp: back to stack.
-                stack.append(idx_temp_tuple)
+            if past_temp >= temperatures[today_idx]:  # Past temp >= today temp: back to stack.
+                stack.append((past_idx, past_temp))
 
-        stack.append((today_temp_idx, temperatures[today_temp_idx]))
+        stack.append((today_idx, temperatures[today_idx]))
 
     return awaiting_days

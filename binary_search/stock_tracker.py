@@ -8,19 +8,18 @@ class StockPriceTracker:  # LeetCode Q.2034.
         self.records, self.prices, self.latest_time = dict(), [], -1
 
     def binary_search(self, target: int):
-        if len(self.prices) <= 0:
+        if not self.prices:
             return 0
 
         back_idx, front_idx = 0, len(self.prices) - 1
-        while True:
-            if back_idx > front_idx:
-                return back_idx  # Number of ints < target.
-
+        while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2
             if self.prices[mid_idx] < target:
                 back_idx = mid_idx + 1
                 continue
             front_idx = mid_idx - 1
+
+        return back_idx  # Number of ints < target.
 
     def update(self, timestamp: int, price: int):
         if timestamp in self.records.keys():

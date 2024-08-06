@@ -7,19 +7,18 @@ class MKAverage:  # LeetCode Q.1825.
         self.integers, self.sorted_integers = [], []
 
     def binary_search(self, target: int):
-        if len(self.sorted_integers) <= 0:
+        if not self.sorted_integers:
             return 0
 
         back_idx, front_idx = 0, len(self.sorted_integers) - 1
-        while True:
-            if back_idx > front_idx:
-                return back_idx  # Number of ints < target.
-
+        while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2
             if self.sorted_integers[mid_idx] < target:
                 back_idx = mid_idx + 1
                 continue
             front_idx = mid_idx - 1
+
+        return back_idx  # Number of ints < target.
 
     def add_integer(self, integer: int):
         while len(self.integers) >= self.m:

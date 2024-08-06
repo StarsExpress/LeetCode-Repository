@@ -1,6 +1,5 @@
 
 class StockSpanner:  # LeetCode Q.901.
-
     def __init__(self):
         self.stock_stack = []
 

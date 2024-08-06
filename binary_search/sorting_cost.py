@@ -1,19 +1,19 @@
 
 def count_smaller(target: int, sorted_integers: list[int] | tuple[int]):
     """Count number of integers smaller than target."""
-    if len(sorted_integers) <= 0:
+    if not sorted_integers:
         return 0
 
     back_idx, front_idx = 0, len(sorted_integers) - 1
-    while True:
-        if back_idx > front_idx:
-            return back_idx  # Number of ints < target.
-
+    while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
             back_idx = mid_idx + 1
             continue
         front_idx = mid_idx - 1
+
+    return back_idx  # Number of ints < target.
+
 
 def compute_sorting_cost(numbers: list[int] | tuple[int]):  # LeetCode Q.1649.
     sorted_nums, hash_table = [], dict()

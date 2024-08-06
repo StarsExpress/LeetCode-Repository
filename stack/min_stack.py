@@ -1,7 +1,6 @@
 
 class MinStack:  # LeetCode Q.155.
     """Add & remove integers and find minimum within stack."""
-
     def __init__(self):
         self.stack, self.min_stack = [], []
 

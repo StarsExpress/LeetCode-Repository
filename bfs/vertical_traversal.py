@@ -6,7 +6,7 @@ class TreeNode:
         self.right = right
 
 
-class Solution:  # LeetCode Q.987.
+class VerticalTraversal:  # LeetCode Q.987.
     def __init__(self):
         self.visited_nodes = []
 
@@ -15,7 +15,7 @@ class Solution:  # LeetCode Q.987.
         if root is not None:
             self.visited_nodes.clear()  # Reset before BFS.
             self.visited_nodes = [(0, 0, root.val)]  # Format: (col idx, row idx, node value).
-            self._bfs_nodes(root)
+            self._bfs_visit_nodes(root)
 
             columns_table = dict()
             while self.visited_nodes:
@@ -36,7 +36,7 @@ class Solution:  # LeetCode Q.987.
 
         return vertical_traversal
 
-    def _bfs_nodes(self, root: TreeNode | None):
+    def _bfs_visit_nodes(self, root: TreeNode | None):
         queue = []  # Format: (col idx, row idx, node).
         if root.left:
             queue.append((-1, 1, root.left))

@@ -2,7 +2,7 @@
 def find_132_pattern(integers: list[int]):  # LeetCode Q.456.
     stack = []  # Format: (interval min, interval max).
     for integer in integers:
-        if not stack or integer < stack[-1][0]:  # When stack is empty or current int < interval min.
+        if not stack or integer < stack[-1][0]:  # Stack is empty or current int < interval min.
             stack.append([integer, integer])
             continue
 

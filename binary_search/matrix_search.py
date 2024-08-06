@@ -1,13 +1,10 @@
 
-def binary_search(target, sorted_list: list):
-    if len(sorted_list) <= 0:
+def binary_search(target: int | list[int], sorted_list: list[int] | list[list[int]]):
+    if not sorted_list:
         return False, 0
 
     back_idx, front_idx = 0, len(sorted_list) - 1
-    while True:
-        if back_idx > front_idx:
-            return False, back_idx  # Back idx implies number of items < target.
-
+    while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_list[mid_idx] == target:
             return True, mid_idx
@@ -16,6 +13,8 @@ def binary_search(target, sorted_list: list):
             back_idx = mid_idx + 1
             continue
         front_idx = mid_idx - 1
+
+    return False, back_idx  # Back idx implies number of items < target.
 
 
 def search_over_matrix(matrix: list[list[int]], target: int):  # LeetCode Q.74.

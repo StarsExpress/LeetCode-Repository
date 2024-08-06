@@ -1,18 +1,17 @@
 
 def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
-    if len(sorted_integers) <= 0:
+    if not sorted_integers:
         return 0
 
     back_idx, front_idx = 0, len(sorted_integers) - 1
-    while True:
-        if back_idx > front_idx:
-            return back_idx  # Number of ints < target, implying insertion idx.
-
+    while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
             back_idx = mid_idx + 1
             continue
         front_idx = mid_idx - 1
+
+    return back_idx  # Number of ints < target, implying insertion idx.
 
 
 def count_almost_duplicates(integers: list[int], idx_diff: int, val_diff: int):  # LeetCode Q.220.

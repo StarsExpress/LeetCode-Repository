@@ -6,19 +6,18 @@ class RangesSummary:  # LeetCode Q.352.
         self.intervals = []  # List of lists representing intervals.
 
     def binary_insert(self, target: list[int]):
-        if len(self.intervals) <= 0:
+        if not self.intervals:
             return 0
 
         back_idx, front_idx = 0, len(self.intervals) - 1
-        while True:
-            if back_idx > front_idx:
-                return back_idx  # Number of intervals with start < int inside target.
-
+        while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2
             if self.intervals[mid_idx] < target:
                 back_idx = mid_idx + 1
                 continue
             front_idx = mid_idx - 1
+
+        return back_idx  # Number of intervals with start < int inside target.
 
     def add_value(self, value: int):
         if len(self.intervals) == 0:

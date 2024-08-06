@@ -1,18 +1,17 @@
 
 def binary_search(target: int | float, sorted_numbers: list[int | float] | tuple[int | float]):
-    if len(sorted_numbers) <= 0:
+    if not sorted_numbers:
         return 0
 
     back_idx, front_idx = 0, len(sorted_numbers) - 1
-    while True:
-        if back_idx > front_idx:
-            return back_idx  # Number of ints < target.
-
+    while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_numbers[mid_idx] < target:
             back_idx = mid_idx + 1
             continue
         front_idx = mid_idx - 1
+
+    return back_idx  # Number of ints < target.
 
 
 def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=False, only_last_4_digits=False):
@@ -49,9 +48,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
     numbers_array_path = os.path.join(
-        DATA_FOLDER_PATH,
-        'numbers',
-        'num_10k.txt',
+        DATA_FOLDER_PATH, 'numbers', 'num_10k.txt',
     )
     lines = open(numbers_array_path, 'r').readlines()
     numbers_list = [int(line.strip()) for line in lines]
