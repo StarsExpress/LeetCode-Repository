@@ -1,5 +1,5 @@
-from config import DATA_FOLDER_PATH
 import os
+from config import DATA_FOLDER_PATH
 from heaps.min_heap import MinHeap
 
 

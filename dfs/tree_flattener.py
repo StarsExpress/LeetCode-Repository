@@ -17,7 +17,7 @@ class TreeFlattener:  # LeetCode Q.114.
             return
 
         visited_values = []
-        self._dfs_descendants_values(self.tree, visited_values)
+        self._dfs_visit_values(self.tree, visited_values)
 
         # In-place modification: 1st value is already root.val. Doesn't need changes.
         visited_values.pop(0)
@@ -27,12 +27,12 @@ class TreeFlattener:  # LeetCode Q.114.
             tree_node.right = TreeNode(visited_values.pop(0), None, None)
             tree_node = tree_node.right
 
-    def _dfs_descendants_values(self, current_node: TreeNode, visited_values: list[int]):
+    def _dfs_visit_values(self, current_node: TreeNode, visited_values: list[int]):
         visited_values.append(current_node.val)
         if current_node.left:
-            self._dfs_descendants_values(current_node.left, visited_values)
+            self._dfs_visit_values(current_node.left, visited_values)
 
         if current_node.right:
-            self._dfs_descendants_values(current_node.right, visited_values)
+            self._dfs_visit_values(current_node.right, visited_values)
 
         return  # Both left & right paths are None.

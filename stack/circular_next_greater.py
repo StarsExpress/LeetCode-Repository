@@ -3,7 +3,8 @@ def find_circular_next_greater(numbers: list[int] | tuple[int]):  # LeetCode Q.5
     next_greater = [-1] * len(numbers)
     stack = [(0, numbers[0])]  # Decreasing monotonic stack: (idx, num).
 
-    total_nums = len(numbers)  # Circular search: double iterations and let remainder adjust iteration idx.
+    total_nums = len(numbers)
+    # Circular search: double iterations and let remainder adjust iteration idx.
     for current_num_idx in range(1, 2 * total_nums):
         if stack:
             past_idx, past_num = stack.pop(-1)
