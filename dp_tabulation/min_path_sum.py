@@ -2,7 +2,7 @@
 def find_min_path_sum(grid: list[list[int]]):  # LeetCode Q.64.
     rows, cols = len(grid), len(grid[0])
     paths_sum = [[0] * cols for _ in range(rows)]
-    paths_sum[0][0] = grid[0][0]
+    paths_sum[0][0] = grid[0][0]  # Base case: triangle's top-left.
 
     for j in range(1, cols):
         paths_sum[0][j] += paths_sum[0][j - 1] + grid[0][j]

@@ -1,5 +1,5 @@
 
-class VowelsPermutaions:  # LeetCode Q.1220.
+class VowelsPermutations:  # LeetCode Q.1220.
     def __init__(self):
         self.vowels_counts = {}
 
@@ -7,7 +7,7 @@ class VowelsPermutaions:  # LeetCode Q.1220.
         self.vowels_counts.clear()  # Reset before counting.
         self.vowels_counts.update({"a": 1, "e": 1, "i": 1, "o": 1, "u": 1})
 
-    def count_permutations(self, n: int, recursion: bool = False) -> int:
+    def count_permutations(self, n: int, recursion: bool = False):
         if not recursion:
             self._store_counts()
         if n == 1:  # Base case.

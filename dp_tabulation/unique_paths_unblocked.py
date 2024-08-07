@@ -16,8 +16,8 @@ def count_unique_unblocked_paths(obstacles_grid: list[list[int]]):  # LeetCode Q
         unblocked_1st_col_count = obstacles_grid[0].index(1)
 
     unique_paths = []
-    for row_idx in range(rows):  # Base case: fill in 1st row and 1st column entries.
-        if row_idx == 0:
+    for row_idx in range(rows):
+        if row_idx == 0:  # Base case: fill in 1st row and 1st column entries.
             unique_paths.append(
                 [1] * unblocked_1st_col_count + [0] * (columns - unblocked_1st_col_count)
             )
