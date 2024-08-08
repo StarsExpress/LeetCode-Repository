@@ -1,11 +1,11 @@
 
 class RangesSummary:  # LeetCode Q.352.
-    """Given a stream of integers, summarize all numbers seen so far as list of disjoint intervals."""
+    """Given integers stream, summarize all numbers seen so far as list of disjoint intervals."""
 
     def __init__(self):
         self.intervals = []  # List of lists representing intervals.
 
-    def binary_insert(self, target: list[int]):
+    def _binary_search(self, target: list[int]):
         if not self.intervals:
             return 0
 
@@ -20,11 +20,11 @@ class RangesSummary:  # LeetCode Q.352.
         return back_idx  # Number of intervals with start < int inside target.
 
     def add_value(self, value: int):
-        if len(self.intervals) == 0:
+        if not self.intervals:
             self.intervals.insert(0, [value, value])
             return
 
-        idx = self.binary_insert([value])  # Where [value] is among intervals to maintain order.
+        idx = self._binary_search([value])  # Where [value] is among intervals to maintain order.
 
         # First: check all cases of only one existing interval.
         if len(self.intervals) == 1:
