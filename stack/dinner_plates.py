@@ -14,10 +14,7 @@ class DinnerPlates:  # LeetCode Q.1172.
             return
 
         stack_idx = self.leftmost_openings.pop(0)  # Go to leftmost open stack.
-        if stack_idx < len(self.stacks):  # Ensure idx is insertable.
-            self.stacks[stack_idx].insert(0, val)
-            return
-        self.stacks.append([val])
+        self.stacks[stack_idx].insert(0, val)
 
     def pop(self):
         if not self.stacks:
@@ -35,6 +32,9 @@ class DinnerPlates:  # LeetCode Q.1172.
                 self.leftmost_openings.pop(-1)
 
             self.stacks.pop(-1)
+
+        if len(self.stacks) <= 1:  # Leftmost openings only exist when num of stacks >= 2.
+            self.leftmost_openings.clear()
 
         return plate
 
