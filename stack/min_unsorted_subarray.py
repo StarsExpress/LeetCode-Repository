@@ -9,7 +9,7 @@ def find_min_unsorted_subarray(integers: list[int] | tuple[int]):  # LeetCode Q.
             past_idx, past_num = stack.pop(-1)
             while past_num > integers[current_num_idx]:  # Next smaller found.
                 next_smaller_indices[past_idx] = current_num_idx
-                if len(stack) <= 0:
+                if not stack:
                     break
                 past_idx, past_num = stack.pop(-1)
 

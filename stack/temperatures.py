@@ -9,11 +9,11 @@ def count_awaiting_days(temperatures: list[int]):  # LeetCode Q.739.
             past_idx, past_temp = stack.pop(-1)
             while past_temp < temperatures[today_idx]:  # Past temp finds a warmer future.
                 awaiting_days[past_idx] += today_idx - past_idx
-                if len(stack) <= 0:
+                if not stack:
                     break
                 past_idx, past_temp = stack.pop(-1)
 
-            if past_temp >= temperatures[today_idx]:  # Past temp >= today temp: back to stack.
+            if past_temp >= temperatures[today_idx]:  # Back to stack.
                 stack.append((past_idx, past_temp))
 
         stack.append((today_idx, temperatures[today_idx]))

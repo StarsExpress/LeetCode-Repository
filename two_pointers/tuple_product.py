@@ -1,9 +1,6 @@
 
 def count_same_product_tuples(integers: list[int]):  # LeetCode Q.1726.
     integers = list(set(integers))  # Only consider unique ints.
-    if len(integers) <= 0:
-        raise ValueError('Empty integers list.')
-
     if len(integers) < 4:
         return 0
 

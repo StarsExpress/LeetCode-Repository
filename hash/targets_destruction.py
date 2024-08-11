@@ -3,7 +3,7 @@ def destroy_targets(integers: list[int], space: int):  # LeetCode Q.2453.
     if len(integers) == 1:
         return integers[0]
 
-    mods_table, current_mod, current_seed = dict(), 0, float('inf')
+    mods_table, current_mod, current_seed = dict(), 0, float("inf")
     for integer in integers:  # Group by each int's modulo over space.
         current_mod += (integer % space) - current_mod
 

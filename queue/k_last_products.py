@@ -1,7 +1,6 @@
 
 class KLastProducts:  # LeetCode Q.1352.
     """Calculate product of last k integers."""
-
     def __init__(self):
         self.stream_len, self.non_zero_products, self.last_zero_idx = 0, [], -1
 

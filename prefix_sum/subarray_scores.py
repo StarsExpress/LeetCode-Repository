@@ -5,11 +5,11 @@ def count_subarray_scores(integers: list[int], target: int):  # LeetCode Q.2302.
     Key: integers are all positive, making prefix sums monotonically increasing.
     """
     prefix_sums = []
-    while integers:
-        if len(prefix_sums) <= 0:  # 1st int.
-            prefix_sums.append(integers.pop(0))
+    for integer in integers:
+        if not prefix_sums:  # 1st int.
+            prefix_sums.append(integer)
             continue
-        prefix_sums.append(prefix_sums[-1] + integers.pop(0))
+        prefix_sums.append(prefix_sums[-1] + integer)
 
     count, queue = 0, []  # (Prefix sum end idx) increasing monotonic queue.
     for end_idx, prefix_sum in enumerate(prefix_sums):

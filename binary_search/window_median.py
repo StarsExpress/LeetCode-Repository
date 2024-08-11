@@ -15,17 +15,13 @@ def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
 
 
 def find_sliding_window_median(integers: list[int], size: int):  # LeetCode Q.480.
-    if size < 1:
-        raise ValueError("Window size must >= 1.")
-    if len(integers) < size:
-        raise ValueError("Integers count must >= window size.")
-
+    total_ints = len(integers)
     if size == 1:
         return integers
 
     odd_size = True if size % 2 == 1 else False
     sorted_window, window_medians = sorted(integers[:size]), []
-    for i in range(1, len(integers) - size + 2):
+    for i in range(1, total_ints - size + 2):
         if odd_size:
             last_median = sorted_window[size // 2]
 
@@ -33,12 +29,13 @@ def find_sliding_window_median(integers: list[int], size: int):  # LeetCode Q.48
             last_median = (sorted_window[(size // 2) - 1] + sorted_window[size // 2]) / 2
 
         window_medians.append(last_median)
-        if i == len(integers) - size + 1:
+        if i == total_ints - size + 1:
             return window_medians  # Last iteration only needs to calculate median.
 
         # Other iterations have to replace ints.
         replaced, newcomer = integers[i - 1], integers[i - 1 + size]
         replaced_idx = binary_search(replaced, sorted_window)
         sorted_window.pop(replaced_idx)
+
         newcomer_idx = binary_search(newcomer, sorted_window)
         sorted_window.insert(newcomer_idx, newcomer)

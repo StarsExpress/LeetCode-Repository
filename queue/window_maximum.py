@@ -1,9 +1,5 @@
 
 def find_sliding_window_maximum(integers: list[int], window_size: int):  # LeetCode Q.239.
-    if window_size < 1:
-        raise ValueError('Window size must >= 1.')
-    if len(integers) < window_size:
-        raise ValueError('Numbers count must >= window size.')
     if window_size == 1:
         return integers
 

@@ -3,11 +3,6 @@ str_1_to_9 = ''.join(str(i) for i in range(1, 10))  # 123456789 in string.
 
 
 def find_sequential_digits(floor: int, ceiling: int):  # LeetCode Q.1291.
-    if floor < 10:
-        raise ValueError('Floor must >= 10.')
-    if ceiling < floor:
-        raise ValueError('Ceiling must >= floor.')
-
     seqs, min_len, max_len = [], len(str(floor)), len(str(ceiling))
 
     start_idx = 0  # The start of string slice.
@@ -23,7 +18,3 @@ def find_sequential_digits(floor: int, ceiling: int):  # LeetCode Q.1291.
             start_idx += 1  # Increment for next iteration of while loop.
 
     return seqs
-
-
-if __name__ == '__main__':
-    print(find_sequential_digits(10, 201))

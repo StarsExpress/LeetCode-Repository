@@ -20,7 +20,7 @@ class FrequencyStack:  # LeetCode Q.895.
 
     def pop(self):
         """
-        Find the value with highest frequency. If there is a tie,
+        Find the value with the highest frequency. If there is a tie,
         remove and return the value closest to stack's top.
         """
         pool_idx = -1

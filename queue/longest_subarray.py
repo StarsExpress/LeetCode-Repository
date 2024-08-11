@@ -3,8 +3,6 @@ def find_longest_subarray(integers: list[int], limit: int):  # LeetCode Q.1438.
     total_len = len(integers)
     if total_len <= 1:
         return total_len
-    if limit < 0:
-        raise ValueError('Limit must >= 0.')
 
     current_idx, subarray, max_len = 1, [integers[0]], 1
     last_min, last_max = integers[0], integers[0]

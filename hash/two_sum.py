@@ -2,7 +2,7 @@ from queue import Queue
 
 
 def find_distinct_numbers(references: list | tuple):  # Return list of "distinct" integers and floats.
-    if len(references) <= 0:
+    if not references:
         raise ValueError('References empty.')
     return list(filter(lambda x: isinstance(x, int) | isinstance(x, float), references))
 
@@ -17,7 +17,7 @@ def search_hash(target: int | float, references: list, hash_table: dict):
 
 def find_2_sum(targets: int | float | list, references: list | tuple, queue_obj: Queue):
     references = find_distinct_numbers(references)
-    if len(references) <= 0:
+    if not references:
         queue_obj.put(0)
         return
 
@@ -29,7 +29,7 @@ def find_2_sum(targets: int | float | list, references: list | tuple, queue_obj:
         queue_obj.put(search_hash(targets, references, hash_table))
         return
 
-    if len(targets) <= 0:
+    if not targets:
         queue_obj.put(0)
         return
 
@@ -46,7 +46,7 @@ def find_2_sum(targets: int | float | list, references: list | tuple, queue_obj:
             count += search_hash(-current_target, references, hash_table)
             targets.remove(-current_target)
 
-        if len(targets) <= 0:
+        if not targets:
             break
         current_target = targets[0]
 
@@ -54,12 +54,10 @@ def find_2_sum(targets: int | float | list, references: list | tuple, queue_obj:
 
 
 if __name__ == '__main__':
-    from config import DATA_FOLDER_PATH
     import os
     import threading
-    import time
+    from config import DATA_FOLDER_PATH
 
-    start_time = time.time()
     numbers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'int_1m.txt')
     lines = open(numbers_array_path, 'r').readlines()
     references_list = [int(line.strip()) for line in lines]
@@ -71,6 +69,3 @@ if __name__ == '__main__':
     thread.start()
     thread.join()
     print(queue_object.get())
-
-    end_time = time.time()
-    print(f'Total runtime: {str(round(end_time - start_time, 2))}.')

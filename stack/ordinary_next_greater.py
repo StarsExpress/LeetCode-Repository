@@ -8,7 +8,7 @@ def find_next_greater(numbers: list[int | float] | tuple[int | float]):
             past_idx, past_num = stack.pop(-1)
             while past_num < numbers[current_idx]:  # Past num < current num: next greater found.
                 next_greater[past_idx] = numbers[current_idx]
-                if len(stack) <= 0:
+                if not stack:
                     break
                 past_idx, past_num = stack.pop(-1)
 

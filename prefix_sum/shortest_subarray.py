@@ -6,12 +6,13 @@ def find_shortest_subarray(integers: list[int], target: int):  # LeetCode Q.862.
         if integer >= target:  # Answer of 1 directly found.
             return 1
 
-        if len(prefix_sums) <= 0:  # 1st int.
+        if not prefix_sums:  # 1st int.
             prefix_sums.append(integer)
             continue
         prefix_sums.append(prefix_sums[-1] + integer)
 
-    min_len, queue = float("inf"), []  # (Prefix sum end idx) increasing monotonic queue.
+    min_len = float("inf")
+    queue = []  # (Prefix sum end idx) increasing monotonic queue.
     for end_idx, prefix_sum in enumerate(prefix_sums):
         # Subarrays from (queue[0] + 1)th idx to (end_idx)th idx.
         while queue and prefix_sum - prefix_sums[queue[0]] >= target:

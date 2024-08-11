@@ -27,6 +27,7 @@ def count_suitable_requests(ages: list[int]):  # LeetCode Q.825.
         if receivers_idx >= len(distinct_ages):
             if senders_idx >= receivers_idx - 1:
                 return requests_count
+
             senders_idx += 1
             receivers_idx += senders_idx + 1 - receivers_idx
             continue
@@ -37,5 +38,6 @@ def count_suitable_requests(ages: list[int]):  # LeetCode Q.825.
             receivers_idx += 1
             continue
 
-        senders_idx += 1  # Go to younger senders as no more receivers meet 1st condition for current senders' age.
+        # Go to younger senders as no more receivers meet 1st condition for current senders' age.
+        senders_idx += 1
         receivers_idx += senders_idx + 1 - receivers_idx

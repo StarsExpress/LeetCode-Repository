@@ -1,7 +1,6 @@
 
 class DataStream:  # LeetCode Q.2526.
     """Check if last k integers all equal certain value."""
-
     def __init__(self, value: int, k: int):
         self.value, self.k = value, k
         self.stream_len, self.last_missed_idx = 0, -1

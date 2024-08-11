@@ -11,11 +11,11 @@ def find_circular_next_greater(numbers: list[int] | tuple[int]):  # LeetCode Q.5
             while past_num < numbers[current_num_idx % total_nums]:  # Next greater found.
                 if next_greater[past_idx] == -1:  # Only update those not updated yet.
                     next_greater[past_idx] = numbers[current_num_idx % total_nums]
-                if len(stack) <= 0:
+                if not stack:
                     break
                 past_idx, past_num = stack.pop(-1)
 
-            if past_num >= numbers[current_num_idx % total_nums]:  # Past num >= current num: back to stack.
+            if past_num >= numbers[current_num_idx % total_nums]:  # Back to stack.
                 stack.append((past_idx, past_num))
 
         stack.append((current_num_idx % total_nums, numbers[current_num_idx % total_nums]))
