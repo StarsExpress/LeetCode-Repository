@@ -1,21 +1,13 @@
 
-def find_next_smallers(integers: list[int]):
+def _find_next_smallers(integers: list[int]):
     total_ints = len(integers)
     next_smaller = [(-1, -1)] * total_ints
     stack = [(0, integers[0])]  # Increasing monotonic stack: (idx, num).
 
     for current_idx in range(1, total_ints):
-        if stack:
-            past_idx, past_num = stack.pop(-1)
-
-            while past_num > integers[current_idx]:  # Next smaller found.
-                next_smaller[past_idx] = (current_idx, integers[current_idx])
-                if not stack:
-                    break
-                past_idx, past_num = stack.pop(-1)
-
-            if past_num <= integers[current_idx]:  # Past num <= current num: back to stack.
-                stack.append((past_idx, past_num))
+        while stack and stack[-1][1] > integers[current_idx]:  # Next smaller found.
+            past_idx, _ = stack.pop(-1)
+            next_smaller[past_idx] = (current_idx, integers[current_idx])
 
         stack.append((current_idx, integers[current_idx]))
 
@@ -26,7 +18,7 @@ def sum_subarray_mins(integers: list[int]):  # LeetCode Q.907.
     total_ints = len(integers)
     subarray_mins = [0] * total_ints
 
-    next_smallers = find_next_smallers(integers)
+    next_smallers = _find_next_smallers(integers)
     for reverse_idx, current_num in enumerate(reversed(integers)):
         current_idx = total_ints - 1 - reverse_idx  # Index mapping.
 

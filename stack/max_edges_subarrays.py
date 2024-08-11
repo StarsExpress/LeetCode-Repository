@@ -23,16 +23,9 @@ def count_subarrays(numbers: list[int]):  # LeetCode Q.3113.
     stack = [(-1, numbers[-1])]  # Decreasing monotonic stack: (idx, num).
 
     for current_idx in range(len(numbers) - 2, -1, -1):
-        if stack:
-            future_idx, future_num = stack.pop(-1)
-            while future_num < numbers[current_idx]:  # Latest found.
-                latest_greater_indices[future_idx] = current_idx
-                if not stack:
-                    break
-                future_idx, future_num = stack.pop(-1)
-
-            if future_num >= numbers[current_idx]:  # Back to stack.
-                stack.append((future_idx, future_num))
+        while stack and stack[-1][1] < numbers[current_idx]:  # Latest found.
+            future_idx, _ = stack.pop(-1)
+            latest_greater_indices[future_idx] = current_idx
 
         stack.append((current_idx, numbers[current_idx]))
 

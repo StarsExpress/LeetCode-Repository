@@ -10,7 +10,7 @@ class TreeRecovery:  # LeetCode Q.1028.
     def __init__(self):
         self.nodes_and_levels = []
 
-    def recoverFromPreorder(self, traversal: str):
+    def recover(self, traversal: str):
         self.nodes_and_levels.clear()  # Reset before recovery.
         self.nodes_and_levels.extend(list(traversal))
 

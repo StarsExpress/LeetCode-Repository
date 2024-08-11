@@ -15,33 +15,20 @@ def _binary_search(target: tuple[int, int], monotonic_stack: list[tuple[int, int
 
 
 def find_second_greater(numbers: list[int]):  # LeetCode Q.2454.
-    second_greater = [-1] * len(numbers)
-    stack_1, stack_2 = [(numbers[0], 0)], []  # Decreasing monotonic stacks: (num, idx).
+    total_nums = len(numbers)
+    second_greater = [-1] * total_nums
+    stack_1 = [(numbers[0], 0)]  # Decreasing monotonic stack: (num, idx).
+    stack_2 = []  # Decreasing monotonic stack: (num, idx).
 
-    for current_idx in range(1, len(numbers)):
-        if stack_2:
-            past_num, past_idx = stack_2.pop(-1)
-            while past_num < numbers[current_idx]:
-                second_greater[past_idx] = numbers[current_idx]
-                if not stack_2:
-                    break
-                past_num, past_idx = stack_2.pop(-1)
+    for current_idx in range(1, total_nums):
+        while stack_2 and stack_2[-1][0] < numbers[current_idx]:
+            _, past_idx = stack_2.pop(-1)
+            second_greater[past_idx] = numbers[current_idx]
 
-            if past_num >= numbers[current_idx]:
-                stack_2.append((past_num, past_idx))
-
-        if stack_1:
-            past_num, past_idx = stack_1.pop(-1)
-            while past_num < numbers[current_idx]:
-                # Use binary sort to ensure 2nd stack is decreasing.
-                insertion_idx = _binary_search((past_num, past_idx), stack_2)
-                stack_2.insert(insertion_idx, (past_num, past_idx))
-                if not stack_1:
-                    break
-                past_num, past_idx = stack_1.pop(-1)
-
-            if past_num >= numbers[current_idx]:
-                stack_1.append((past_num, past_idx))
+        while stack_1 and stack_1[-1][0] < numbers[current_idx]:
+            # Use binary sort to ensure 2nd stack is decreasing.
+            insertion_idx = _binary_search(stack_1[-1], stack_2)
+            stack_2.insert(insertion_idx, stack_1.pop(-1))
 
         stack_1.append((numbers[current_idx], current_idx))
 

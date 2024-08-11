@@ -4,19 +4,12 @@ def find_min_unsorted_subarray(integers: list[int] | tuple[int]):  # LeetCode Q.
     next_smaller_indices = [-1] * total_ints  # Indices of next smaller num.
     stack = [(0, integers[0])]  # Monotonic-increasing stack: (idx, num).
 
-    for current_num_idx in range(1, total_ints):
-        if stack:
-            past_idx, past_num = stack.pop(-1)
-            while past_num > integers[current_num_idx]:  # Next smaller found.
-                next_smaller_indices[past_idx] = current_num_idx
-                if not stack:
-                    break
-                past_idx, past_num = stack.pop(-1)
+    for current_idx in range(1, total_ints):
+        while stack and stack[-1][1] > integers[current_idx]:  # Next smaller found.
+            past_idx, _ = stack.pop(-1)
+            next_smaller_indices[past_idx] = current_idx
 
-            if past_num <= integers[current_num_idx]:  # Past num <= current num: back to stack.
-                stack.append((past_idx, past_num))
-
-        stack.append((current_num_idx, integers[current_num_idx]))
+        stack.append((current_idx, integers[current_idx]))
 
     if sum(next_smaller_indices) == -total_ints:  # Integers are perfectly sorted.
         return 0

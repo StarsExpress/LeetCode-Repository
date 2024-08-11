@@ -1,20 +1,14 @@
 
 def count_awaiting_days(temperatures: list[int]):  # LeetCode Q.739.
-    """Count days until warmer temperature."""
-    awaiting_days = [0] * len(temperatures)
-    stack = [(0, temperatures[0])]  # Decreasing monotonic stack: (idx, temperature).
+    total_temp = len(temperatures)
+    # Decreasing monotonic stack: (idx, temperature).
+    awaiting_days, stack = [0] * total_temp, [(0, temperatures[0])]
 
-    for today_idx in range(1, len(temperatures)):
-        if stack:
-            past_idx, past_temp = stack.pop(-1)
-            while past_temp < temperatures[today_idx]:  # Past temp finds a warmer future.
-                awaiting_days[past_idx] += today_idx - past_idx
-                if not stack:
-                    break
-                past_idx, past_temp = stack.pop(-1)
-
-            if past_temp >= temperatures[today_idx]:  # Back to stack.
-                stack.append((past_idx, past_temp))
+    for today_idx in range(1, total_temp):
+        # Past temp finds a warmer future.
+        while stack and stack[-1][1] < temperatures[today_idx]:
+            past_idx, _ = stack.pop(-1)
+            awaiting_days[past_idx] += today_idx - past_idx
 
         stack.append((today_idx, temperatures[today_idx]))
 
