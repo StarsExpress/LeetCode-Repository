@@ -52,8 +52,8 @@ def count_almost_duplicates(integers: list[int], idx_diff: int, val_diff: int): 
 
         else:
             if min(
-                    newcomer - window_ints[newcomer_idx - 1],
-                    window_ints[newcomer_idx] - newcomer,
+                newcomer - window_ints[newcomer_idx - 1],
+                window_ints[newcomer_idx] - newcomer
             ) <= val_diff:
                 return True
 

@@ -1,13 +1,15 @@
 
 def count_same_product_tuples(integers: list[int]):  # LeetCode Q.1726.
     integers = list(set(integers))  # Only consider unique ints.
-    if len(integers) < 4:
+    ints_count = len(integers)
+    if ints_count < 4:
         return 0
 
-    products, current_product = dict(), 0  # For each unique product, track all tuples achieving it.
+    # For each unique product, track all tuples achieving it.
+    products, current_product = dict(), 0
     start_idx, end_idx = 0, 1
     while True:
-        if end_idx >= len(integers):
+        if end_idx >= ints_count:
             if start_idx >= end_idx - 1:
                 break
 
@@ -24,13 +26,14 @@ def count_same_product_tuples(integers: list[int]):  # LeetCode Q.1726.
 
     count = 0
     for product in products.values():
-        if len(product) == 2:
+        product_len = len(product)
+        if product_len == 2:
             count += 8  # For two tuples each having 2 ints, permutation = 2 * 2 * 2 = 8.
             continue
 
-        if len(product) > 2:
+        if product_len > 2:
             # Combination of 2 out of n is n * (n - 1) / 2.
             # Each combination has multiple of 8. So outer multiple is 8 / 2 = 4
-            count += (len(product) - 1) * len(product) * 4
+            count += (product_len - 1) * product_len * 4
 
     return count

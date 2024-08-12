@@ -1,7 +1,6 @@
 
 class SitesRanker:  # LeetCode Q.2102.
     """Rank sites with descending scores. For ties, rank by ascending names."""
-
     def __init__(self):
         self.names, self.scores = [], []
         self.received_calls = 0  # Count of get_site method being called.

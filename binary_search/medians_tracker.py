@@ -1,5 +1,5 @@
 
-def binary_search(target: int | float, sorted_numbers: list[int | float] | tuple[int | float]):
+def binary_search(target: int | float, sorted_numbers: list[int | float]):
     if not sorted_numbers:
         return 0
 
@@ -14,8 +14,12 @@ def binary_search(target: int | float, sorted_numbers: list[int | float] | tuple
     return back_idx  # Number of ints < target.
 
 
-def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=False, only_last_4_digits=False):
-    if len(numbers) <= 0:
+def track_medians(
+    numbers: list[int | float],
+    return_sum=False,
+    only_last_4_digits=False
+):
+    if not numbers:
         return 0
 
     medians, sorted_items, sorted_items_size = [], [], 0  # Track size of sorted items.
@@ -39,20 +43,3 @@ def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=Fa
             medians_sum %= 10000
         return medians_sum
     return medians
-
-
-if __name__ == '__main__':
-    import time
-    import os
-    from config import DATA_FOLDER_PATH
-
-    start_time = time.time()
-    numbers_array_path = os.path.join(
-        DATA_FOLDER_PATH, 'numbers', 'num_10k.txt',
-    )
-    lines = open(numbers_array_path, 'r').readlines()
-    numbers_list = [int(line.strip()) for line in lines]
-    print(track_medians(numbers_list, True))
-
-    end_time = time.time()
-    print(f'Total runtime: {round(end_time - start_time, 2)} seconds on {len(numbers_list)} items.')

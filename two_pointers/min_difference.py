@@ -1,15 +1,17 @@
 
 def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
-    original_len, time_points = len(time_points), list(set(time_points))  # Take unique time points.
-    if len(time_points) < original_len:  # Once identical time points are found.
+    original_len = len(time_points)
+    time_points = list(set(time_points))  # Take unique time points.
+    new_len = len(time_points)
+    if new_len < original_len:  # Identical time points are found.
         return 0
 
-    back_idx, front_idx = -1, len(time_points)
+    back_idx, front_idx = -1, new_len
     back_minute, front_minute = 0, 0
     current_diff, min_diff = 0, 1439
 
     while True:
-        if front_idx >= len(time_points):
+        if front_idx >= new_len:
             if back_idx >= front_idx - 1:
                 return min_diff
 
@@ -45,4 +47,5 @@ def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
 
         if current_diff < min_diff:
             min_diff += current_diff - min_diff
+
         front_idx += 1

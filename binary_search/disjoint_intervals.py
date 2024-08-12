@@ -1,7 +1,6 @@
 
 class RangesSummary:  # LeetCode Q.352.
     """Given integers stream, summarize all numbers seen so far as list of disjoint intervals."""
-
     def __init__(self):
         self.intervals = []  # List of lists representing intervals.
 

@@ -1,7 +1,6 @@
 
 class Calendar:  # LeetCode Q.729.
     """Book schedules without conflicts."""
-
     def __init__(self):
         self.booked_times, self.booked_count = [], 0
 

@@ -1,5 +1,6 @@
 
-def compress_string(chars: list[str]):  # LeetCode Q.443: required to "modify" (not copies) chars list.
+def compress_string(chars: list[str]):  # LeetCode Q.443.
+    """Required to "modify" (no copies) chars list."""
     if len(chars) <= 0:
         return 0
 
@@ -10,7 +11,7 @@ def compress_string(chars: list[str]):  # LeetCode Q.443: required to "modify" (
         if count > 1:
             for s in str(count):
                 chars.append(s)
-        return len(''.join(chars))
+        return len("".join(chars))
 
     start_idx, end_idx = 0, 1  # Iteration starts from 2nd char.
     streak = chars[start_idx: end_idx]

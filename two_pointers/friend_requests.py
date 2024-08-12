@@ -1,6 +1,7 @@
 
 def count_suitable_requests(ages: list[int]):  # LeetCode Q.825.
-    if len(ages) <= 1:
+    ages_count = len(ages)
+    if ages_count <= 1:
         return 0
 
     # Special rule: a person x doesn't send request to person y if either condition is met.
@@ -9,7 +10,7 @@ def count_suitable_requests(ages: list[int]):  # LeetCode Q.825.
     if len(distinct_ages) == 1:
         if distinct_ages[0] <= 14:  # 2nd condition's threshold.
             return 0
-        return len(ages) * (len(ages) - 1)  # Permutation.
+        return ages_count * (ages_count - 1)  # Permutation.
 
     distinct_ages.sort(reverse=True)  # Sort reversely because of 1st condition.
     distribution = dict(zip(distinct_ages, [0] * len(distinct_ages)))
