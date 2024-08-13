@@ -31,13 +31,3 @@ def merge_sort(array: list | tuple, array_only=False, inversions_only=False):
 
     merged_array, merged_inversions = merge_arrays(array_1, array_2)
     return merged_array, left_inversions + right_inversions + merged_inversions
-
-
-if __name__ == '__main__':
-    from config import DATA_FOLDER_PATH
-    import os
-
-    integers_array_path = os.path.join(DATA_FOLDER_PATH, 'numbers', 'int_100k.txt')
-    lines = open(integers_array_path, 'r').readlines()
-    integers_list = [int(line.strip()) for line in lines]
-    print(merge_sort(integers_list, inversions_only=True))

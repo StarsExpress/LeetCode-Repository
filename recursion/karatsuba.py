@@ -26,11 +26,3 @@ def multiply_big_int(int_1: int, int_2: int):
     final_product += (abcd_product - ac_product - bd_product) * 10**smaller_digit_len
     final_product += bd_product
     return final_product
-
-
-if __name__ == "__main__":
-    integer_1 = 3141592653589793238462643383279502884197169399375105820974944592
-    integer_2 = 2718281828459045235360287471352662497757247093699959574966967627
-    product = multiply_big_int(integer_1, integer_2)
-    assert product == integer_1 * integer_2
-    print(product)

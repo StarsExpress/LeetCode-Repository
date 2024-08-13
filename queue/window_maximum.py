@@ -3,22 +3,23 @@ def find_sliding_window_maximum(integers: list[int], window_size: int):  # LeetC
     if window_size == 1:
         return integers
 
-    maximums, idx_queue, current_idx = [], [0], 1  # 1st item's idx is automatically into queue.
-    while True:
-        if current_idx >= len(integers):
-            return maximums
+    window_maximums = []
+    # Queue contains indices of ints under current sliding window.
+    idx_queue = [0]  # Queue's 1st idx always points to window maximum.
+    for idx, integer in enumerate(integers):
+        if idx == 0:  # 1st int's idx is automatically into queue.
+            continue
 
-        while idx_queue:  # Pop last idx as long as its corresponding int <= current int.
-            if integers[current_idx] < integers[idx_queue[-1]]:
-                break
+        # Ensure last idx's corresponding int > current int.
+        while idx_queue and integers[idx_queue[-1]] <= integer:
             idx_queue.pop(-1)
 
-        while idx_queue:  # Pop first idx as long as it isn't in current window.
-            if current_idx - window_size + 1 <= idx_queue[0]:
-                break
+        # Ensure 1st idx is in current window.
+        while idx_queue and idx - window_size + 1 > idx_queue[0]:
             idx_queue.pop(0)
 
-        idx_queue.append(current_idx)
-        if current_idx >= window_size - 1:  # When 1st (window size) ints have all been "seen" by iteration.
-            maximums.append(integers[idx_queue[0]])  # Queue's 1st idx always points to window maximum.
-        current_idx += 1
+        idx_queue.append(idx)
+        if idx >= window_size - 1:  # When 1st (window size) ints have all been "seen".
+            window_maximums.append(integers[idx_queue[0]])
+
+    return window_maximums

@@ -10,4 +10,4 @@ class DataStream:  # LeetCode Q.2526.
         if integer != self.value:
             self.last_missed_idx += self.stream_len - 1 - self.last_missed_idx
             return False
-        return True if self.last_missed_idx < self.stream_len - self.k else False
+        return self.last_missed_idx < self.stream_len - self.k

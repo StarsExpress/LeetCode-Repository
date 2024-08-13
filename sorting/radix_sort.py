@@ -1,7 +1,6 @@
 
 class RadixSort:
     """Apply radix sort to sort integers."""
-
     def __init__(self, integers: list[int] | tuple[int]):
         self.integers = integers
 
