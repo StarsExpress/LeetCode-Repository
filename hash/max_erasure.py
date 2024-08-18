@@ -7,7 +7,7 @@ def find_max_erasure(integers: list[int]):  # LeetCode Q.1695.
     subarray_ints2indices, indices_pool = dict(), []
 
     for idx, integer in enumerate(integers):
-        if integer in subarray_ints2indices.keys():  # New int is already inside window.
+        if integer in subarray_ints2indices.keys():  # New int is already inside subarray.
             if current_erasure > max_erasure:
                 max_erasure = current_erasure
 

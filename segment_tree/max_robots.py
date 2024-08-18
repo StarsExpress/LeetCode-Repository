@@ -34,35 +34,39 @@ class SegmentTree:
 
 
 def count_max_robots(charge_times: list[int], running_costs: list[int], budget: int):  # LeetCode Q.2398.
-    prefix_sums = []
+    # Base case: only 1st robot.
+    max_len = 1 if budget >= charge_times[0] + running_costs[0] else 0
+    if len(charge_times) == len(running_costs) == 1:
+        return max_len
+
+    cost_prefix_sums = []
     for cost in running_costs:
-        if not prefix_sums:  # 1st cost.
-            prefix_sums.append(cost)
+        if not cost_prefix_sums:  # 1st cost.
+            cost_prefix_sums.append(cost)
             continue
-        prefix_sums.append(prefix_sums[-1] + cost)
+        cost_prefix_sums.append(cost_prefix_sums[-1] + cost)
 
     segment_tree = SegmentTree(charge_times)
 
-    max_len = 0
-    queue = []  # (Prefix sum end idx) increasing monotonic queue.
-    for end_idx, prefix_sum in enumerate(prefix_sums):
+    queue = []  # (Cost prefix sum end idx) increasing monotonic queue.
+    for end_idx, prefix_sum in enumerate(cost_prefix_sums):
         while queue:
             # Subarrays from (queue[0] + 1)th idx to (end_idx)th idx.
             subarray_max = segment_tree.find_range_max(queue[0] + 1, end_idx + 1)
-            if subarray_max + (prefix_sum - prefix_sums[queue[0]]) * (end_idx - queue[0]) <= budget:
+            if subarray_max + (end_idx - queue[0]) * (prefix_sum - cost_prefix_sums[queue[0]]) <= budget:
                 break
 
             # If a start idx & current end idx exceed budget, so will a bigger end idx with this start idx.
             queue.pop(0)
 
-        if queue and end_idx - queue[0] > max_len:  # Check the longest subarray in queue.
-            max_len = end_idx - queue[0]
+        if queue:
+            if end_idx - queue[0] > max_len:  # Check the longest subarray in queue.
+                max_len = end_idx - queue[0]
 
-        # Also check subarray from 0th idx to (end_idx)th idx.
-        subarray_max = segment_tree.find_range_max(0, end_idx + 1)
-        if subarray_max + prefix_sum * (end_idx + 1) <= budget:
-            if end_idx + 1 > max_len:
-                max_len = end_idx + 1
+            if queue[0] == 0:  # Also check subarray from 0th idx to (end_idx)th idx.
+                subarray_max = max(charge_times[queue[0]], charge_times[0])
+                if subarray_max + (end_idx + 1) * prefix_sum <= budget:
+                    max_len = end_idx + 1
 
         queue.append(end_idx)
 

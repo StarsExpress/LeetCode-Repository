@@ -1,9 +1,14 @@
 
-def break_max_product(
-    integer: int, max_broken_products: dict[int, int], return_dict: bool = False
-):  # LeetCode Q.343.
-    if not max_broken_products:
-        max_broken_products = dict()
+max_broken_products = dict()
+
+
+def _build_table():
+    max_broken_products.clear()  # Reset before breaking max product.
+
+
+def break_max_product(integer: int, recursion: bool = False):  # LeetCode Q.343.
+    if not recursion:  # Called by outside.
+        _build_table()
 
     max_product = integer - 1  # Base case: 1 * integer - 1.
     half_point = integer // 2
@@ -12,18 +17,13 @@ def break_max_product(
             max_broken_products[integer - i]
 
         except KeyError:
-            max_broken_products = break_max_product(integer - i, max_broken_products, True)
+            break_max_product(integer - i, True)
 
-        # Pick the best of max broken product of integer - i or integer - i itself.
+        # Pick better value: max broken product of integer - i or integer - i itself.
         new_product = i * max(max_broken_products[integer - i], integer - i)
-
-        # Key: once new product stops rising, answer is found.
-        if new_product <= max_product:
+        if new_product <= max_product:  # Key: once new product stops rising, answer is found.
             break
         max_product = new_product  # Keep updating max product.
 
     max_broken_products.update({integer: max_product})
-
-    if return_dict:
-        return max_broken_products
     return max_product
