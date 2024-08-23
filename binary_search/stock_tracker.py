@@ -7,7 +7,7 @@ class StockPriceTracker:  # LeetCode Q.2034.
         # Prices list is sorted from smallest to biggest.
         self.records, self.prices, self.latest_time = dict(), [], -1
 
-    def binary_search(self, target: int):
+    def _binary_search(self, target: int):
         if not self.prices:
             return 0
 
@@ -23,14 +23,14 @@ class StockPriceTracker:  # LeetCode Q.2034.
 
     def update(self, timestamp: int, price: int):
         if timestamp in self.records.keys():
-            pop_idx = self.binary_search(self.records[timestamp])
+            pop_idx = self._binary_search(self.records[timestamp])
             self.prices.pop(pop_idx)
         self.records.update({timestamp: price})
 
         if timestamp > self.latest_time:
             self.latest_time += timestamp - self.latest_time
 
-        insertion_idx = self.binary_search(price)
+        insertion_idx = self._binary_search(price)
         self.prices.insert(insertion_idx, price)
 
     def current(self):

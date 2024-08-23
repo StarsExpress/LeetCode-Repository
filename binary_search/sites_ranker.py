@@ -5,7 +5,7 @@ class SitesRanker:  # LeetCode Q.2102.
         self.names, self.scores = [], []
         self.received_calls = 0  # Count of get_site method being called.
 
-    def rank_score(self, score: int | float):
+    def _rank_score(self, score: int | float):
         if not self.scores:
             return 0
 
@@ -20,7 +20,7 @@ class SitesRanker:  # LeetCode Q.2102.
         return back_idx
 
     @staticmethod
-    def rank_name(name: str, sorted_names: list[str]):
+    def _rank_name(name: str, sorted_names: list[str]):
         if not sorted_names:
             return 0
 
@@ -35,10 +35,10 @@ class SitesRanker:  # LeetCode Q.2102.
         return back_idx
 
     def add_site(self, name: str, score: int):
-        higher_count = self.rank_score(score)  # Count of past scores > new score.
+        higher_count = self._rank_score(score)  # Count of past scores > new score.
 
         # Count of past scores >= new score. Scores are ints with descending ranks.
-        higher_or_equal_count = self.rank_score(score - 0.1)  # -0.1 help find ties.
+        higher_or_equal_count = self._rank_score(score - 0.1)  # -0.1 help find ties.
 
         if higher_count == higher_or_equal_count:  # No tie for new score.
             self.names.insert(higher_count, name)
@@ -48,7 +48,7 @@ class SitesRanker:  # LeetCode Q.2102.
         # Tie: find existing names with scores = new score.
         tied_names = self.names[higher_count: higher_or_equal_count]
         # New name's rank among tied names = extra term for insertion idx.
-        higher_count += self.rank_name(name, tied_names)
+        higher_count += self._rank_name(name, tied_names)
         self.names.insert(higher_count, name)
         self.scores.insert(higher_count, score)
 

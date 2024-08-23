@@ -1,12 +1,11 @@
 
 class MinHeap:
     """Apply min heap to sort items."""
-
     def __init__(self, items: list | tuple):
         self.items_list = []
         self.items_list.extend(items)
 
-    def build_heap(self):  # Ensure the min item is at root.
+    def _build_heap(self):  # Ensure the min item is at root.
         total_subtrees = len(self.items_list) // 2
         for i in range(total_subtrees - 1, -1, -1):  # Subtrees iterate from bottom to top.
             self.heapify(root_idx=i)
@@ -50,7 +49,7 @@ class MinHeap:
             self.items_list.append(items)
 
     def find_min(self, remove=False):
-        self.build_heap()  # Ensure the min item is still at root.
+        self._build_heap()  # Ensure the min item is still at root.
         if remove:
             return self.items_list.pop(0)
         return self.items_list[0]
@@ -60,7 +59,7 @@ class MinHeap:
             return self.items_list
 
         sorted_list = []  # Carry sorted items.
-        self.build_heap()
+        self._build_heap()
         while True:
             # At each iteration's start, switch last item with root.
             self.items_list[0], self.items_list[-1] = self.items_list[-1], self.items_list[0]

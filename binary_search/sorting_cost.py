@@ -1,5 +1,5 @@
 
-def count_smaller(target: int, sorted_integers: list[int] | tuple[int]):
+def _count_smaller(target: int, sorted_integers: list[int] | tuple[int]):
     """Count number of integers smaller than target."""
     if not sorted_integers:
         return 0
@@ -22,7 +22,7 @@ def compute_sorting_cost(numbers: list[int] | tuple[int]):  # LeetCode Q.1649.
         if number not in hash_table.keys():
             hash_table.update({number: 0})
 
-        smaller_count = count_smaller(number, sorted_nums)
+        smaller_count = _count_smaller(number, sorted_nums)
         # Smaller or equal count: smaller count + past occurrence.
         bigger_count = len(sorted_nums) - (smaller_count + hash_table[number])
         total_cost += min(smaller_count, bigger_count)

@@ -1,5 +1,5 @@
 
-def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
+def _binary_search(target: int, sorted_integers: list[int] | tuple[int]):
     if not sorted_integers:
         return 0
 
@@ -22,7 +22,7 @@ def find_longest_rising_subsequence(numbers: list[int]):  # LeetCode Q.300.
     rising_subsequence = []
     while numbers:
         newcomer = numbers.pop(0)
-        newcomer_idx = binary_search(newcomer, rising_subsequence)
+        newcomer_idx = _binary_search(newcomer, rising_subsequence)
         if newcomer_idx == len(rising_subsequence):  # Newcomer > everybody in subsequence.
             rising_subsequence.append(newcomer)
             continue

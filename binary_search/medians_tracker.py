@@ -1,5 +1,5 @@
 
-def binary_search(target: int | float, sorted_numbers: list[int | float]):
+def _binary_search(target: int | float, sorted_numbers: list[int | float]):
     if not sorted_numbers:
         return 0
 
@@ -25,7 +25,7 @@ def track_medians(
     medians, sorted_items, sorted_items_size = [], [], 0  # Track size of sorted items.
     while numbers:
         newcomer = numbers.pop(0)
-        insertion_idx = binary_search(newcomer, sorted_items)
+        insertion_idx = _binary_search(newcomer, sorted_items)
         sorted_items.insert(insertion_idx, newcomer)
         sorted_items_size += 1  # Update size.
         if sorted_items_size % 2 == 1:

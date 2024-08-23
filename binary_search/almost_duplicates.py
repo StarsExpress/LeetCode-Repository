@@ -1,5 +1,5 @@
 
-def binary_search(target: int, sorted_integers: list[int] | tuple[int]):
+def _binary_search(target: int, sorted_integers: list[int] | tuple[int]):
     if not sorted_integers:
         return 0
 
@@ -36,11 +36,11 @@ def count_almost_duplicates(integers: list[int], idx_diff: int, val_diff: int): 
         if front_idx >= len(integers):  # Search reaches the end.
             return False
 
-        pop_idx = binary_search(integers[back_idx - 1], window_ints)
+        pop_idx = _binary_search(integers[back_idx - 1], window_ints)
         window_ints.pop(pop_idx)  # Window's 1st int is out.
 
         newcomer = integers[front_idx]  # The int that is joining window.
-        newcomer_idx = binary_search(newcomer, window_ints)
+        newcomer_idx = _binary_search(newcomer, window_ints)
 
         if newcomer_idx == 0:  # Newcomer < all window ints.
             if window_ints[0] - newcomer <= val_diff:

@@ -6,8 +6,11 @@ def find_kth_smallest_number(m: int, n: int, k: int):  # LeetCode Q.668.
         mid_answer = (min_answer + max_answer) // 2
         
         count -= count  # Reset before calculation.
-        for num in range(1, m + 1):
-            count += min(mid_answer // num, n)  # Take min of quotient and n.
+        for number in range(1, m + 1):  # Iterate along rows.
+            if number * n <= mid_answer:  # This row's rightmost number <= middle answer.
+                count += n
+                continue
+            count += mid_answer // number
 
         if count < k:
             min_answer = mid_answer + 1

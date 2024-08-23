@@ -5,7 +5,7 @@ class MKAverage:  # LeetCode Q.1825.
         self.m, self.k = m, k
         self.integers, self.sorted_integers = [], []
 
-    def binary_search(self, target: int):
+    def _binary_search(self, target: int):
         if not self.sorted_integers:
             return 0
 
@@ -21,12 +21,12 @@ class MKAverage:  # LeetCode Q.1825.
 
     def add_integer(self, integer: int):
         while len(self.integers) >= self.m:
-            pop_idx = self.binary_search(self.integers[0])
+            pop_idx = self._binary_search(self.integers[0])
             self.sorted_integers.pop(pop_idx)
             self.integers.pop(0)
 
         self.integers.append(integer)
-        insertion_idx = self.binary_search(integer)
+        insertion_idx = self._binary_search(integer)
         self.sorted_integers.insert(insertion_idx, integer)
 
     def calculate_avg(self):

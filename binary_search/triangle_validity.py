@@ -1,5 +1,5 @@
 
-def count_valid_3rd_edges(two_edges_sum: int, sorted_edges: list[int] | tuple[int]):
+def _count_valid_3rd_edges(two_edges_sum: int, sorted_edges: list[int] | tuple[int]):
     if not sorted_edges:
         return 0
 
@@ -31,5 +31,5 @@ def count_valid_triangles(edges: list[int]):  # LeetCode Q.611.
 
         two_edges_sum = edges[back_idx] + edges[front_idx]
         if two_edges_sum > edges[front_idx + 1]:
-            count += count_valid_3rd_edges(two_edges_sum, edges[front_idx + 1:])
+            count += _count_valid_3rd_edges(two_edges_sum, edges[front_idx + 1:])
         front_idx += 1
