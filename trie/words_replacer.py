@@ -14,7 +14,6 @@ class WordsReplacer:  # LeetCode Q.648.
     Given a sentence, replace each word with its ancestor (sharing shortest prefix) among trie.
     If ancestor isn't found, keep the word as it is. Return modified sentence.
     """
-
     def __init__(self, dictionary: list[str]):
         self.root = TrieNode()
         for word in dictionary:

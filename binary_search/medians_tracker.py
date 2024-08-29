@@ -1,9 +1,9 @@
 
-def _binary_search(target: int | float, sorted_numbers: list[int | float]):
-    if not sorted_numbers:
+def _binary_search(target: int | float, sorted_numbers: list[int | float], size: int):
+    if size == 0:
         return 0
 
-    back_idx, front_idx = 0, len(sorted_numbers) - 1
+    back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_numbers[mid_idx] < target:
@@ -22,20 +22,18 @@ def track_medians(
     if not numbers:
         return 0
 
-    medians, sorted_items, sorted_items_size = [], [], 0  # Track size of sorted items.
+    medians, sorted_numbers, count = [], [], 0  # Track count of sorted numbers.
     while numbers:
         newcomer = numbers.pop(0)
-        insertion_idx = _binary_search(newcomer, sorted_items)
-        sorted_items.insert(insertion_idx, newcomer)
-        sorted_items_size += 1  # Update size.
-        if sorted_items_size % 2 == 1:
-            medians.append(sorted_items[sorted_items_size // 2])
+        insertion_idx = _binary_search(newcomer, sorted_numbers, count)
+        sorted_numbers.insert(insertion_idx, newcomer)
+        count += 1  # Update size.
+        if count % 2 == 1:
+            medians.append(sorted_numbers[count // 2])
             continue
 
-        # For even items count, median is defined as the (count / 2)th "smallest".
-        medians.append(sorted_items[(sorted_items_size // 2) - 1])
-
-    assert len(numbers) + len(sorted_items) == len(medians)
+        # For even count, median is defined as the (count / 2)th "smallest".
+        medians.append(sorted_numbers[(count // 2) - 1])
 
     if return_sum:
         medians_sum = sum(medians)

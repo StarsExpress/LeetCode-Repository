@@ -9,7 +9,6 @@ class Node:
 
 class NodesConnector:  # LeetCode Q.116 & 117.
     """Connect nodes at same level in any binary tree."""
-
     def __init__(self):
         pass
 

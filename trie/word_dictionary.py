@@ -11,7 +11,6 @@ class TrieNode:
 
 class WordDictionary:  # LeetCode Q.211.
     """Fuzzy word search."""
-
     def __init__(self):
         self.root = TrieNode()
 

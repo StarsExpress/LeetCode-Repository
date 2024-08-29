@@ -11,7 +11,6 @@ class TrieNode:
 
 class IntegerTrie:  # LeetCode Q.386.
     """Integer insertion & lex sorting."""
-
     def __init__(self):
         self.root = TrieNode()
 

@@ -1,17 +1,17 @@
 
 class StockPriceTracker:  # LeetCode Q.2034.
     """Track stock prices fluctuations."""
-
     def __init__(self):
-        # Records: timestamps as keys and prices as values.
-        # Prices list is sorted from smallest to biggest.
-        self.records, self.prices, self.latest_time = dict(), [], -1
+        # Records: timestamps are keys and prices are values.
+        self.records, self.latest_time = dict(), -1
+        # Prices are sorted from smallest to biggest.
+        self.prices, self.prices_count = [], 0
 
     def _binary_search(self, target: int):
         if not self.prices:
             return 0
 
-        back_idx, front_idx = 0, len(self.prices) - 1
+        back_idx, front_idx = 0, self.prices_count - 1
         while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2
             if self.prices[mid_idx] < target:
@@ -22,16 +22,18 @@ class StockPriceTracker:  # LeetCode Q.2034.
         return back_idx  # Number of ints < target.
 
     def update(self, timestamp: int, price: int):
-        if timestamp in self.records.keys():
-            pop_idx = self._binary_search(self.records[timestamp])
-            self.prices.pop(pop_idx)
-        self.records.update({timestamp: price})
-
         if timestamp > self.latest_time:
             self.latest_time += timestamp - self.latest_time
 
+        if timestamp in self.records.keys():
+            pop_idx = self._binary_search(self.records[timestamp])
+            self.prices.pop(pop_idx)
+            self.prices_count -= 1
+
+        self.records.update({timestamp: price})
         insertion_idx = self._binary_search(price)
         self.prices.insert(insertion_idx, price)
+        self.prices_count += 1
 
     def current(self):
         return self.records[self.latest_time]

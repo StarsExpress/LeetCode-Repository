@@ -1,9 +1,9 @@
 
-def _count_smaller_right(target: int, sorted_integers: list[int] | tuple[int]):
-    if not sorted_integers:
+def _count_smaller_right(target: int, sorted_integers: list[int] | tuple[int], size: int):
+    if size == 0:
         return 0
 
-    back_idx, front_idx = 0, len(sorted_integers) - 1
+    back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
@@ -15,17 +15,13 @@ def _count_smaller_right(target: int, sorted_integers: list[int] | tuple[int]):
 
 
 def count_smaller_rights(integers: list[int]):  # LeetCode Q.315.
-    if not integers:
-        return 0
+    smaller_rights, sorted_integers = [], []
+    count = 0  # Count of sorted integers.
 
-    smaller_rights = [0]  # Rightmost int has no smaller rights.
-    sorted_integers = [integers.pop(-1)]  # Start from rightmost int.
+    for integer in integers[::-1]:  # Iteration: from rightmost to leftmost.
+        smaller_right = _count_smaller_right(integer, sorted_integers, count)
+        smaller_rights.append(smaller_right)
+        sorted_integers.insert(smaller_right, integer)
+        count += 1
 
-    while integers:
-        popped_integer = integers.pop(-1)
-        smaller_right = _count_smaller_right(popped_integer, sorted_integers)
-        # Insert at 0 idx: iteration is from rightmost to leftmost.
-        smaller_rights.insert(0, smaller_right)
-        sorted_integers.insert(smaller_right, popped_integer)
-
-    return smaller_rights
+    return smaller_rights[::-1]  # Reverse to make order from leftmost to rightmost.

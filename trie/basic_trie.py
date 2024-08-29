@@ -11,7 +11,6 @@ class TrieNode:
 
 class BasicTrie:
     """Word insertion, search & deletion."""
-
     def __init__(self):
         self.root = TrieNode()
 

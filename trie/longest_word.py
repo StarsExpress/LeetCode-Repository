@@ -14,7 +14,6 @@ class LongestWord:  # LeetCode Q.720.
 
     If there is more than one possible answer, return longest word with the smallest lex order.
     If there is no answer, return empty string."""
-
     def __init__(self, words: list[str]):
         self.root = TrieNode()
         while words:

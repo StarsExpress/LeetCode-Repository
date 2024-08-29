@@ -11,7 +11,6 @@ class TrieNode:
 
 class SumMapper:  # LeetCode Q.677.
     """Sum all values of words that start with a given prefix."""
-
     def __init__(self):
         self.root = TrieNode()
         self.values_dict = dict()

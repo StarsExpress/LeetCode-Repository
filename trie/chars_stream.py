@@ -11,7 +11,6 @@ class TrieNode:
 
 class SuffixTrie:
     """Words insertion & suffix search."""
-
     def __init__(self, words: list[str]):
         self.root = TrieNode()
         self.letters_pool = set()  # Occurred letters in words list.

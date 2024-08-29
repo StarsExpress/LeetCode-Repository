@@ -14,7 +14,6 @@ class SearchRecommender:  # LeetCode Q.1268.
     During typing target word, recommend searches of top 3 lex order
     if target word is found inside trie.
     """
-
     def __init__(self, available_words: list[str]):
         self.root = TrieNode()
         while available_words:

@@ -14,7 +14,6 @@ class PrefixScores:  # LeetCode Q.2416.
     Given list of non-empty words, the score of words[i] is number of other words[j],
     where j != i, with words[i] as prefix.
     """
-
     def __init__(self):
         self.root = TrieNode()
 

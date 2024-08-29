@@ -11,7 +11,6 @@ class TrieNode:
 
 class PrefixTrie:  # LeetCode Q.208.
     """Word & prefix insertion & search."""
-
     def __init__(self):
         self.root = TrieNode()
 
