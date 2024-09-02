@@ -1,6 +1,6 @@
 
 def _binary_search(target: int, sorted_integers: list[int] | tuple[int], size: int):
-    if not sorted_integers:
+    if size == 0:
         return 0
 
     back_idx, front_idx = 0, size - 1

@@ -1,9 +1,9 @@
 
-def _binary_search(target: int | list[int], sorted_list: list[int] | list[list[int]]):
-    if not sorted_list:
+def _binary_search(target: int | list[int], sorted_list: list[int] | list[list[int]], size: int):
+    if size == 0:
         return False, 0
 
-    back_idx, front_idx = 0, len(sorted_list) - 1
+    back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_list[mid_idx] == target:
@@ -18,13 +18,15 @@ def _binary_search(target: int | list[int], sorted_list: list[int] | list[list[i
 
 
 def search_over_matrix(matrix: list[list[int]], target: int):  # LeetCode Q.74.
-    _, row_idx = _binary_search([target], matrix)
+    total_rows, total_cols = len(matrix), len(matrix[0])
+    _, row_idx = _binary_search([target], matrix, total_rows)
     if row_idx == 0:
-        return _binary_search(target, matrix[0])[0]
+        return _binary_search(target, matrix[0], total_cols)[0]
 
     # Row idx isn't 0: target in (row_idx - 1)th or (row_idx)th rows.
-    if _binary_search(target, matrix[row_idx - 1])[0]:
+    if _binary_search(target, matrix[row_idx - 1], total_cols)[0]:
         return True
 
-    # row idx = last matrix row: "the next row" doesn't exist.
-    return False if row_idx == len(matrix) else _binary_search(target, matrix[row_idx])[0]
+    if row_idx == total_rows:  # "The next row" doesn't exist.
+        return False
+    return _binary_search(target, matrix[row_idx], total_cols)[0]
