@@ -1,10 +1,11 @@
 
-def _detect_duplicate(string: str, window_size: int, base: int = 31, mod: int = 2 ** 34 - 1):
-    str_len = len(string)
-    powers = [1] + [0] * str_len  # 1st power starts from 1.
+def _detect_duplicate(
+    string: str, length: int, window_size: int, base: int = 31, mod: int = 2 ** 34 - 1
+):
+    powers = [1] + [0] * length  # 1st power starts from 1.
     hash_values = set()
 
-    for i in range(1, str_len + 1):  # Precompute powers of base, and modulo over mod.
+    for i in range(1, length + 1):  # Precompute powers of base, and modulo over mod.
         powers[i] += (powers[i - 1] * base) % mod
 
     window_hash = 0
@@ -14,7 +15,7 @@ def _detect_duplicate(string: str, window_size: int, base: int = 31, mod: int = 
         window_hash %= mod
     hash_values.add(window_hash)
 
-    for i in range(1, str_len - window_size + 1):  # Hash values of the rest windows.
+    for i in range(1, length - window_size + 1):  # Hash values of the rest windows.
         # Remove contribution of window's 1st char.
         window_hash -= powers[window_size - 1] * ord(string[i - 1])
         window_hash %= mod
@@ -32,15 +33,16 @@ def _detect_duplicate(string: str, window_size: int, base: int = 31, mod: int = 
 
 def find_longest_duplicate(string: str):  # LeetCode Q.1044.
     longest_duplicate_substring = ""
-    min_len, max_len = 1, len(string) - 1  # Min & max possible lengths if duplicate exists.
-    while min_len <= max_len:  # While must include the case min len = max len.
-        mid_len = (min_len + max_len) // 2
+    string_len = len(string)
 
-        duplicate_substring = _detect_duplicate(string, mid_len)
-        if duplicate_substring:  # Can try a longer length.
+    min_window, max_window = 1, string_len - 1  # Search space.
+    while min_window <= max_window:  # Must include the case min window = max window.
+        mid_window = (min_window + max_window) // 2
+        duplicate_substring = _detect_duplicate(string, string_len, mid_window)
+        if duplicate_substring:  # Can try a bigger window.
             longest_duplicate_substring = duplicate_substring
-            min_len = mid_len + 1
+            min_window = mid_window + 1
             continue
-        max_len = mid_len - 1  # Must try a shorter length.
+        max_window = mid_window - 1  # Must try a smaller window.
 
     return longest_duplicate_substring

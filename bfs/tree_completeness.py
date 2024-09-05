@@ -1,77 +1,58 @@
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val=0, left=None, right=None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
 
-class TreeCompleteness:  # LeetCode Q.958.
-    def __init__(self):
-        pass
+def check_completeness(root: TreeNode | None) -> bool:  # LeetCode Q.958.
+    if root is None:
+        return False
 
-    def check_completeness(self, root: TreeNode | None):
-        if root is None:
+    queue = []  # Format: (child idx at child's level, child).
+    if root.left:
+        queue.append((0, root.left))
+    if root.right:
+        queue.append((1, root.right))
+    if not queue:  # Only root node.
+        return True
+
+    next_level_nodes = []
+    current_level_capacity = 2  # Max nodes that current level can carry.
+    current_level_count = 0  # Occurred nodes in current level.
+    last_idx = None  # Last occurred node idx in current level.
+
+    while queue:
+        node_idx, node = queue.pop(0)
+        current_level_count += 1
+
+        if last_idx is not None and last_idx + 1 < node_idx:  # Gap happens.
             return False
 
-        return self._bfs_completeness(root)
+        if last_idx is None and node_idx != 0:  # 1st occurrence not at 0th idx.
+            return False
 
-    @staticmethod
-    def _bfs_completeness(root: TreeNode | None):
-        if not root.left and not root.right:  # Only root node.
-            return True
+        last_idx = node_idx
 
-        # Format: parent node's idx at parent's level, left child, right child.
-        queue = [(0, root.left, root.right)]
-        next_level_nodes = []
+        if node.left:
+            next_level_nodes.append(
+                (node_idx * 2, node.left)
+            )
+        if node.right:
+            next_level_nodes.append(  # Right child idx needs to add 1.
+                (node_idx * 2 + 1, node.right)
+            )
 
-        current_level_idx = 1  # Root is at level 0. BFS starts from level 1.
-        # Indices of leftmost & rightmost children at current level.
-        left_end_idx, right_end_idx = None, None
-        children_count = 0
+        if not queue:  # Current level BFS is done. Detect incompleteness.
+            if current_level_count < current_level_capacity and next_level_nodes:
+                return False
 
-        while queue:
-            parent_idx, left_node, right_node = queue.pop(0)
-            child_nodes = [left_node, right_node]
+            queue.extend(next_level_nodes)  # Put next level into queue.
+            next_level_nodes.clear()
 
-            for i in range(2):
-                if child_nodes[i]:
-                    children_count += 1
+            current_level_capacity *= 2  # Update for next level BFS.
+            current_level_count -= current_level_count  # Reset for next level BFS.
+            last_idx = None
 
-                    child_idx = parent_idx * 2
-                    if i == 1:  # Right child idx needs to add 1.
-                        child_idx += 1
-
-                    if left_end_idx is None:
-                        left_end_idx = child_idx
-
-                    else:  # Once left end is set, not None child updates right end.
-                        right_end_idx = child_idx
-
-                    if child_nodes[i].left or child_nodes[i].right:
-                        next_level_nodes.append(
-                            (child_idx, child_nodes[i].left, child_nodes[i].right)
-                        )
-
-            if not queue:  # Current level BFS is done. Detect incompleteness.
-                # Left end ix won't be None, implying child(ren) existence.
-                if left_end_idx != 0:  # Leftmost child doesn't sit at left end.
-                    return False
-
-                if right_end_idx is None:  # Only one child: treat right end idx as 0.
-                    right_end_idx = 0
-                if 1 + right_end_idx - left_end_idx != children_count:
-                    return False  # A middle child doesn't sit as far left as possible.
-
-                if children_count < 2 ** current_level_idx:  # Current level not full.
-                    if next_level_nodes:  # Next level has nodes.
-                        return False  # Another incompleteness.
-
-                queue.extend(next_level_nodes)  # Put next level into queue.
-                next_level_nodes.clear()
-
-                current_level_idx += 1  # Update for next level BFS.
-                left_end_idx, right_end_idx = None, None  # Reset for next level BFS.
-                children_count -= children_count
-
-        return True  # All BFS passed. Binary tree is complete.
+    return True  # All BFS passed. Binary tree is complete.

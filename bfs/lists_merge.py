@@ -2,17 +2,17 @@ import heapq
 
 
 class ListNode:
-    def __init__(self, val=0, next_node=None):
+    def __init__(self, val=0, next_node=None) -> None:
         self.val = val
         self.next = next_node
 
 
 class SortedLinkedListsMerge:  # LeetCode Q.23.
-    def __init__(self):
+    def __init__(self) -> None:
         # List of digits lists and list of digits, respectively.
         self.digits_lists, self.digits, self.list_node = [], [], None
 
-    def merge_sorted_lists(self, lists: list[ListNode | None]):
+    def merge_sorted_lists(self, lists: list[ListNode | None]) -> ListNode | None:
         self.digits_lists.clear()  # Reset before BFS.
         for linked_list in lists:
             self._bfs_collect_digits(linked_list, True)
@@ -26,7 +26,7 @@ class SortedLinkedListsMerge:  # LeetCode Q.23.
         self._bfs_build_nodes(self.list_node)
         return self.list_node
 
-    def _bfs_collect_digits(self, node: ListNode, list_start: bool = False):
+    def _bfs_collect_digits(self, node: ListNode, list_start: bool = False) -> None:
         if node is not None:
             if list_start:  # A new linked-list.
                 self.digits_lists.append([])
@@ -36,13 +36,13 @@ class SortedLinkedListsMerge:  # LeetCode Q.23.
                 self._bfs_collect_digits(node.next)
         return
 
-    def _bfs_build_nodes(self, list_node: ListNode):
+    def _bfs_build_nodes(self, list_node: ListNode) -> None:
         if self.digits:  # Still unmerged digits.
             list_node.next = ListNode(self.digits.pop(0))
             self._bfs_build_nodes(list_node.next)
         return
 
-    def _heap_sort_digits(self):
+    def _heap_sort_digits(self) -> None:
         min_heap = []  # Keep track of smallest digits across all digits lists.
 
         for list_idx, digits_list in enumerate(self.digits_lists):

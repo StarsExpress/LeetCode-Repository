@@ -1,9 +1,9 @@
 
-def generate_parentheses(pairs: int):  # LeetCode Q.22.
+def generate_parentheses(pairs: int) -> list[str]:  # LeetCode Q.22.
     parentheses = []
 
     # Track counts of left side and right side parenthesis.
-    def recursion(left_count, right_count, parenthesis):
+    def recursion(left_count: int, right_count: int, parenthesis: str):
         if left_count == right_count == pairs:  # Base case: reach max number of parentheses pairs.
             parentheses.append(parenthesis)
             return

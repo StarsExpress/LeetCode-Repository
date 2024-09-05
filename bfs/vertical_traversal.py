@@ -1,13 +1,13 @@
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val=0, left=None, right=None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
 
 class VerticalTraversal:  # LeetCode Q.987.
-    def __init__(self):
+    def __init__(self) -> None:
         self.visited_nodes = []
 
     def find_vertical_traversal(self, root: TreeNode | None) -> list[list[int]]:
@@ -36,7 +36,7 @@ class VerticalTraversal:  # LeetCode Q.987.
 
         return vertical_traversal
 
-    def _bfs_visit_nodes(self, root: TreeNode | None):
+    def _bfs_visit_nodes(self, root: TreeNode | None) -> None:
         queue = []  # Format: (col idx, row idx, node).
         if root.left:
             queue.append((-1, 1, root.left))

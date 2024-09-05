@@ -1,65 +1,55 @@
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val=0, left=None, right=None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
 
-class MaxWidth:  # LeetCode Q.662.
-    def __init__(self):
-        self.max_width = 0
+def find_max_width(root: TreeNode | None) -> int:  # LeetCode Q.662.
+    if root is None:
+        return 0
+    if not root.left and not root.right:  # Only root node.
+        return 1
 
-    def find_max_width(self, root: TreeNode | None):
-        if root is None:
-            return 0
+    max_width = 0
+    # Format: parent idx at parent's level, left child, right child.
+    queue = [(0, root.left, root.right)]
+    next_level_nodes = []
 
-        self.max_width -= self.max_width  # Reset before BFS.
-        self._bfs_width(root)
-        return self.max_width
+    left_end_idx, right_end_idx = None, None
+    while queue:
+        parent_idx, left_node, right_node = queue.pop(0)
+        child_nodes = [left_node, right_node]
 
-    def _bfs_width(self, root: TreeNode):
-        if not root.left and not root.right:  # Only root node.
-            self.max_width = 1
-            return
+        for i in range(2):
+            if child_nodes[i]:
+                child_idx = parent_idx * 2
+                if i == 1:  # Right child idx needs to add 1.
+                    child_idx += 1
 
-        # Format: parent node's idx at parent's level, left child, right child.
-        queue = [(0, root.left, root.right)]
-        next_level_nodes = []
+                if left_end_idx is None:
+                    left_end_idx = child_idx
 
-        # Indices of leftmost & rightmost children at current level.
-        left_end_idx, right_end_idx = None, None
-        while queue:
-            parent_idx, left_node, right_node = queue.pop(0)
-            child_nodes = [left_node, right_node]
+                else:  # Once left end is set, not None child updates right end.
+                    right_end_idx = child_idx
 
-            for i in range(2):
-                if child_nodes[i]:  # Child exists.
-                    child_idx = parent_idx * 2
-                    if i == 1:  # Right child idx needs to add 1.
-                        child_idx += 1
+                if child_nodes[i].left or child_nodes[i].right:
+                    next_level_nodes.append(
+                        (child_idx, child_nodes[i].left, child_nodes[i].right)
+                    )
 
-                    if left_end_idx is None:  # Go to left end if left end isn't set.
-                        left_end_idx = child_idx
+        if not queue:  # Current level BFS is done.
+            if left_end_idx is not None:  # Update max width if needed.
+                width = 1  # Left end exists: width >= 1.
+                if right_end_idx is not None:
+                    width += right_end_idx - left_end_idx
 
-                    else:  # Once left end is set, update right end.
-                        right_end_idx = child_idx
+                if width > max_width:
+                    max_width = width
 
-                    # If current node has next level child(ren), update list.
-                    if child_nodes[i].left or child_nodes[i].right:
-                        next_level_nodes.append(
-                            (child_idx, child_nodes[i].left, child_nodes[i].right)
-                        )
+            queue.extend(next_level_nodes)  # Put next level into queue.
+            next_level_nodes.clear()
+            left_end_idx, right_end_idx = None, None  # Reset for next level BFS.
 
-            if not queue:  # Current level BFS is done.
-                if left_end_idx is not None:  # Update max width if needed.
-                    width = 1  # Left end exists: width >= 1.
-                    if right_end_idx is not None:
-                        width += right_end_idx - left_end_idx
-
-                    if width > self.max_width:
-                        self.max_width = width
-
-                queue.extend(next_level_nodes)  # Put next level into queue.
-                next_level_nodes.clear()
-                left_end_idx, right_end_idx = None, None  # Reset for next level BFS.
+    return max_width
