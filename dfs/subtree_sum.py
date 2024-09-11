@@ -1,43 +1,38 @@
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val=0, left=None, right=None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
 
 class SubtreeSum:  # LeetCode Q.508.
-    def __init__(self, root: TreeNode | None):
-        self.root, self.sums = root, []
+    def __init__(self) -> None:
+        self.occurrences_table, self.max_occurrences = dict(), 0
 
-    def find_most_frequent_sum(self):
-        if self.root is None:
+    def find_most_frequent_sum(self, root: TreeNode | None) -> list[int]:
+        if root is None:
             return []
 
-        self._dfs_subtree_sum(self.root)
+        self.occurrences_table.clear()  # Reset before DFS.
+        self.max_occurrences -= self.max_occurrences
+        self._dfs_subtree_sum(root)
+        return [key for key, value in self.occurrences_table.items() if value == self.max_occurrences]
 
-        occurrences_table, max_occurrences = dict(), 0
-        while self.sums:
-            popped_sum = self.sums.pop()
-            if popped_sum not in occurrences_table.keys():
-                occurrences_table.update({popped_sum: 0})
-
-            occurrences_table[popped_sum] += 1
-            if occurrences_table[popped_sum] > max_occurrences:
-                max_occurrences += 1
-
-        return [key for key, value in occurrences_table.items() if value == max_occurrences]
-
-    def _dfs_subtree_sum(self, current_node: TreeNode):
+    def _dfs_subtree_sum(self, node: TreeNode) -> int:
         left_subtree_sum = 0
-        if current_node.left:
-            left_subtree_sum += self._dfs_subtree_sum(current_node.left)
+        if node.left:
+            left_subtree_sum += self._dfs_subtree_sum(node.left)
 
         right_subtree_sum = 0
-        if current_node.right:
-            right_subtree_sum += self._dfs_subtree_sum(current_node.right)
+        if node.right:
+            right_subtree_sum += self._dfs_subtree_sum(node.right)
 
-        # Current subtree: subtree centered at current node.
-        current_subtree_sum = current_node.val + left_subtree_sum + right_subtree_sum
-        self.sums.append(current_subtree_sum)
-        return current_subtree_sum
+        subtree_sum = node.val + left_subtree_sum + right_subtree_sum
+        if subtree_sum not in self.occurrences_table.keys():
+            self.occurrences_table.update({subtree_sum: 0})
+
+        self.occurrences_table[subtree_sum] += 1
+        if self.occurrences_table[subtree_sum] > self.max_occurrences:
+            self.max_occurrences += 1
+        return subtree_sum
