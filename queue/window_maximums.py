@@ -1,5 +1,5 @@
 
-def find_sliding_window_maximum(integers: list[int], window_size: int):  # LeetCode Q.239.
+def find_window_maximums(integers: list[int], window_size: int) -> list[int]:  # LeetCode Q.239.
     if window_size == 1:
         return integers
 

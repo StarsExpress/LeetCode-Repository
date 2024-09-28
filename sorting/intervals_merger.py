@@ -1,5 +1,5 @@
 
-def sort_intervals(list_of_list: list[list[int]]):
+def _sort_intervals(list_of_list: list[list[int]]) -> list[list[int]]:
     if len(list_of_list) <= 1:
         return list_of_list
 
@@ -15,16 +15,16 @@ def sort_intervals(list_of_list: list[list[int]]):
     # Switch pivot with item at back idx - 1.
     list_of_list[0], list_of_list[back_idx - 1] = list_of_list[back_idx - 1], list_of_list[0]
 
-    list_of_list[:back_idx - 1] = sort_intervals(list_of_list[:back_idx - 1])
-    list_of_list[back_idx:] = sort_intervals(list_of_list[back_idx:])
+    list_of_list[:back_idx - 1] = _sort_intervals(list_of_list[:back_idx - 1])
+    list_of_list[back_idx:] = _sort_intervals(list_of_list[back_idx:])
     return list_of_list
 
 
-def merge_intervals(intervals: list[list[int]]):  # LeetCode Q.56.
+def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:  # LeetCode Q.56.
     if len(intervals) == 1:
         return intervals
 
-    intervals, left_idx, right_idx = sort_intervals(intervals), 0, 1
+    intervals, left_idx, right_idx = _sort_intervals(intervals), 0, 1
     while True:
         if right_idx >= len(intervals):
             return intervals

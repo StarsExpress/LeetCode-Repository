@@ -1,5 +1,5 @@
 
-def _binary_search(target: int, sorted_integers: list[int] | tuple[int], size: int):
+def _binary_search(target: int, sorted_integers: list[int], size: int):
     if size == 0:
         return 0
 

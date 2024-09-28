@@ -1,5 +1,5 @@
 
-def find_longest_rising_subsequence(numbers: list[int]) -> int:  # LeetCode Q.300.
+def find_rising_triplet(numbers: list[int]) -> bool:  # LeetCode Q.334.
     rising_subsequence, subsequence_len = [], 0
     for number in numbers:
         # After binary search is over, back idx is insertion idx.
@@ -14,8 +14,10 @@ def find_longest_rising_subsequence(numbers: list[int]) -> int:  # LeetCode Q.30
         if back_idx == subsequence_len:
             rising_subsequence.append(number)
             subsequence_len += 1
+            if subsequence_len == 3:  # Triplet is found.
+                return True
 
         else:
             rising_subsequence[back_idx] = number
 
-    return subsequence_len
+    return False

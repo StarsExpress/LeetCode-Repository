@@ -1,7 +1,7 @@
 import string
 
 
-def shift_letters(letters: str, shifts: list[int]):  # LeetCode Q.848.
+def shift_letters(letters: str, shifts: list[int]) -> str:  # LeetCode Q.848.
     lower_cases = list(string.ascii_lowercase)
     chars2ints = dict(zip(lower_cases, [i for i in range(26)]))
 

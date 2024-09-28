@@ -1,5 +1,5 @@
 
-def calculate_floored_pairs_sum(nums: list[int]):  # LeetCode Q.1862.
+def calculate_floored_pairs_sum(nums: list[int]) -> int:  # LeetCode Q.1862.
     max_num = max(nums)
     frequencies = [0] * (max_num + 1)
     for num in nums:

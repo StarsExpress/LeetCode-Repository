@@ -1,5 +1,5 @@
 
-def count_secret_awareness(days: int, delay: int, forget: int):  # LeetCode Q.2327.
+def count_secret_awareness(days: int, delay: int, forget: int) -> int:  # LeetCode Q.2327.
     current_day = 2  # Iteration starts at "day 2's beginning".
     delay_queue = [0] * (delay - 1)
     delay_queue.append(1)  # Already 1 person knows secret at day 2's start.

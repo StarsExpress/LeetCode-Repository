@@ -1,5 +1,5 @@
 
-def find_shortest_subarray(integers: list[int], target: int):  # LeetCode Q.862.
+def find_shortest_subarray(integers: list[int], target: int) -> int:  # LeetCode Q.862.
     """Find the shortest subarray with sum >= target."""
     prefix_sum, min_len = 0, float("inf")
     queue = []  # Prefix sum end idx increasing monotonic queue.

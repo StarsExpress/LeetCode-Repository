@@ -1,6 +1,6 @@
 
 class Matrix:  # LeetCode Q.304.
-    def __init__(self, matrix: list[list[int]]):
+    def __init__(self, matrix: list[list[int]]) -> None:
         self.matrix = matrix
         for row_idx, row in enumerate(self.matrix):
             for col_idx, entry in enumerate(row):
@@ -11,7 +11,7 @@ class Matrix:  # LeetCode Q.304.
                 for col_idx, entry in enumerate(row):
                     self.matrix[row_idx][col_idx] += self.matrix[row_idx - 1][col_idx]
 
-    def query_sum(self, row_idx_1: int, col_idx_1: int, row_idx_2: int, col_idx_2: int):
+    def query_sum(self, row_idx_1: int, col_idx_1: int, row_idx_2: int, col_idx_2: int) -> int:
         prefix_sum = self.matrix[row_idx_2][col_idx_2]
         if row_idx_1 > 0:  # Upper deduction.
             prefix_sum -= self.matrix[row_idx_1 - 1][col_idx_2]

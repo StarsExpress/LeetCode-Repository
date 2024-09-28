@@ -1,9 +1,9 @@
 
 class SubarraySplit:  # LeetCode Q.410.
-    def __init__(self):
+    def __init__(self) -> None:
         self.prefix_sums, self.numbers = [], []
 
-    def _build_prefix_sum(self, nums: list[int]):
+    def _build_prefix_sum(self, nums: list[int]) -> None:
         self.prefix_sums.clear()  # Reset before building prefix sum.
         for idx, number in enumerate(nums):
             if idx == 0:
@@ -11,7 +11,7 @@ class SubarraySplit:  # LeetCode Q.410.
                 continue
             self.prefix_sums.append(self.prefix_sums[-1] + number)
 
-    def _check_splittable(self, k, max_sum):
+    def _check_splittable(self, k, max_sum) -> bool:
         """
         Greedy algo: check if it's possible to split into k (k >= 1)
         subarrays such that no subarray has a sum greater than max_sum.
@@ -31,7 +31,7 @@ class SubarraySplit:  # LeetCode Q.410.
 
         return True
 
-    def split_array(self, numbers: list[int], k: int):
+    def split_array(self, numbers: list[int], k: int) -> int:
         """Split into k subarrays such that max subarray sum is minimized."""
         if len(numbers) < k:  # Base case.
             return -1

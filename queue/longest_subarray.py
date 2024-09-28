@@ -1,5 +1,5 @@
 
-def find_longest_subarray(integers: list[int], limit: int):  # LeetCode Q.1438.
+def find_longest_subarray(integers: list[int], limit: int) -> int:  # LeetCode Q.1438.
     current_len, max_len = 1, 1  # Base case: subarray of only 1st number.
     min_idx_queue, max_idx_queue = [0], [0]
 

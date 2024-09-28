@@ -1,7 +1,7 @@
 import heapq
 
 
-def find_k_min_pairs(integers_1: list[int], integers_2: list[int], k: int):  # LeetCode Q.373.
+def find_k_min_pairs(integers_1: list[int], integers_2: list[int], k: int) -> list[list[int]]:  # LeetCode Q.373.
     integers_1_len, integers_2_len = len(integers_1), len(integers_2)
     pairs = []
     queue = [(integers_1[0] + integers_2[0], 0, 0)]  # (Sum, int 1's list idx, int 2's list idx).

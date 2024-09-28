@@ -8,8 +8,7 @@ def distribute_candies(ratings: list[int]) -> int:  # LeetCode Q.135.
             ratings2indices.update({rating: []})
         ratings2indices[rating].append(idx)
 
-    distinct_ratings = list(ratings2indices.keys())
-    distinct_ratings.sort()
+    distinct_ratings = sorted(ratings2indices.keys())
     # Lowest ratings all have one candy.
     total_candies += len(ratings2indices[distinct_ratings.pop(0)])
     for distinct_rating in distinct_ratings:

@@ -1,5 +1,5 @@
 
-def find_longest_interval(hours: list[int]):  # LeetCode Q.1124.
+def find_longest_interval(hours: list[int]) -> int:  # LeetCode Q.1124.
     max_interval_len = 0
     prefix_sum, sums2indices_table = 0, dict()
     for idx, hour in enumerate(hours):

@@ -1,5 +1,5 @@
 
-def _count_smaller_right(target: int, sorted_integers: list[int] | tuple[int], size: int):
+def _count_smaller_right(target: int, sorted_integers: list[int], size: int) -> int:
     if size == 0:
         return 0
 
@@ -14,7 +14,7 @@ def _count_smaller_right(target: int, sorted_integers: list[int] | tuple[int], s
     return back_idx  # Number of ints < target, implying insertion idx.
 
 
-def count_smaller_rights(integers: list[int]):  # LeetCode Q.315.
+def count_smaller_rights(integers: list[int]) -> list[int]:  # LeetCode Q.315.
     smaller_rights, sorted_integers = [], []
     count = 0  # Count of sorted integers.
 

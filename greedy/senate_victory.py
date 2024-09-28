@@ -12,7 +12,7 @@ def find_winning_senate(senate: str) -> str:  # LeetCode Q.649.
             radiant_party.append(idx)
             radiant_count += 1
 
-    senator_idx, total_senators = 0, len(senate)
+    senator_idx = 0  # Which senator is exercising now.
     while min(dire_count, radiant_count) > 1:
         if dire_party[0] == senator_idx:
             dire_party.append(dire_party.pop(0))  # Go to the back: wait for next round.
@@ -24,8 +24,13 @@ def find_winning_senate(senate: str) -> str:  # LeetCode Q.649.
             dire_count -= 1
             dire_party.pop(0)
 
-        senator_idx += 1
-        senator_idx %= total_senators  # Use mod to find current round's latest order.
+        smaller_idx = min(dire_party[0], radiant_party[0])
+        bigger_idx = max(dire_party[0], radiant_party[0])
+        if smaller_idx > senator_idx or bigger_idx < senator_idx:
+            senator_idx = smaller_idx
+            continue
+
+        senator_idx = bigger_idx
 
     if dire_count == radiant_count:  # Both party have 1 senator.
         return "Dire" if senate[0] == "D" else "Radiant"

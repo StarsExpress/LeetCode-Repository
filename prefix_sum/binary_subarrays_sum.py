@@ -1,5 +1,5 @@
 
-def count_sum(numbers: list[int], goal: int):  # LeetCode Q.930.
+def count_sum(numbers: list[int], goal: int) -> int:  # LeetCode Q.930.
     queue = []  # Prefix sum increasing monotonic queue.
     count, prefix_sum = 0, 0
     for idx, num in enumerate(numbers):

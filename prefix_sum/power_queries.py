@@ -1,5 +1,5 @@
 
-def query_products(positive_integer: int, queries: list[list[int]]):  # LeetCode Q.2438.
+def query_products(positive_integer: int, queries: list[list[int]]) -> list[int]:  # LeetCode Q.2438.
     bin_n = bin(positive_integer)[2:][::-1]  # Throw away 0b substring. Reverse entire string.
     powers = [int(digit) * 2 ** idx for idx, digit in enumerate(bin_n) if digit != "0"]
 
