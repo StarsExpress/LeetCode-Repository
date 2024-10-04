@@ -1,5 +1,5 @@
 
-def find_peak_index(mountain_array: list | tuple):  # LeetCode Q.1095.
+def find_peak_index(mountain_array: list | tuple) -> int:  # LeetCode Q.1095.
     """Given mountain array, find its peak index."""
     back_idx, front_idx = 0, len(mountain_array) - 1
     while back_idx < front_idx:

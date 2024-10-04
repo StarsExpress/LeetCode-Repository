@@ -1,5 +1,5 @@
 
-def _binary_search(target: int | float, sorted_numbers: list[int | float], size: int):
+def _binary_search(target: int | float, sorted_numbers: list[int | float], size: int) -> int:
     if size == 0:
         return 0
 
@@ -15,10 +15,8 @@ def _binary_search(target: int | float, sorted_numbers: list[int | float], size:
 
 
 def track_medians(
-    numbers: list[int | float],
-    return_sum=False,
-    only_last_4_digits=False
-):
+    numbers: list[int | float], return_sum=False, only_last_4_digits=False
+) -> int | list[int | float]:
     if not numbers:
         return 0
 

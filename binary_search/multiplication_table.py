@@ -1,5 +1,5 @@
 
-def find_kth_smallest_number(m: int, n: int, k: int):  # LeetCode Q.668.
+def find_kth_smallest_number(m: int, n: int, k: int) -> int:  # LeetCode Q.668.
     count = 0  # To be used during while loop.
     min_answer, max_answer = 1, m * n
     while min_answer < max_answer:  # Don't include equal sign!

@@ -1,5 +1,5 @@
 
-def search_positions(numbers: list[int], target: int):  # LeetCode Q.34.
+def search_positions(numbers: list[int], target: int) -> list[int]:  # LeetCode Q.34.
     """Find 1st and last indices of a target in sorted array."""
     total_nums = len(numbers)
     back_idx, front_idx = 0, total_nums - 1

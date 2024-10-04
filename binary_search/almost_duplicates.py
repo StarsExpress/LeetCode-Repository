@@ -1,9 +1,9 @@
 
-def _binary_search(target: int, sorted_integers: list[int] | tuple[int]):
-    if not sorted_integers:
+def _binary_search(target: int, sorted_integers: list[int], size: int) -> int:
+    if size == 0:
         return 0
 
-    back_idx, front_idx = 0, len(sorted_integers) - 1
+    back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2
         if sorted_integers[mid_idx] < target:
@@ -14,49 +14,40 @@ def _binary_search(target: int, sorted_integers: list[int] | tuple[int]):
     return back_idx  # Number of ints < target, implying insertion idx.
 
 
-def count_almost_duplicates(integers: list[int], idx_diff: int, val_diff: int):  # LeetCode Q.220.
+def count_almost_duplicates(integers: list[int], idx_diff: int, val_diff: int) -> bool:  # LeetCode Q.220.
     """Find if any pair of ints within idx diff and value diff."""
+    total_nums = len(integers)
+    window_size = min(total_nums, idx_diff + 1)
+    window_ints = integers[: window_size]  # Window of ints within idx difference.
+    window_ints.sort()  # Sort for binary search.
 
-    if not (1 <= idx_diff <= len(integers)):
-        raise IndexError("Index difference must >= 1 and <= length of integers.")
-    if val_diff < 0:
-        raise ValueError("Value difference must >= 0.")
-    if len(integers) < 2:
-        return False
-
-    window_ints = integers[: idx_diff + 1]  # Window of ints within idx diff.
-    window_ints.sort()  # Sort for binary insertion.
-
-    for i in range(len(window_ints) - 1):
+    for i in range(window_size - 1):
         if window_ints[i + 1] - window_ints[i] <= val_diff:
             return True
 
-    back_idx, front_idx = 1, 1 + idx_diff
-    while True:
-        if front_idx >= len(integers):  # Search reaches the end.
-            return False
-
-        pop_idx = _binary_search(integers[back_idx - 1], window_ints)
+    current_idx = 1
+    while current_idx + idx_diff < total_nums:
+        pop_idx = _binary_search(integers[current_idx - 1], window_ints, window_size)
         window_ints.pop(pop_idx)  # Window's 1st int is out.
+        window_size -= 1
 
-        newcomer = integers[front_idx]  # The int that is joining window.
-        newcomer_idx = _binary_search(newcomer, window_ints)
+        newcomer = integers[current_idx + idx_diff]  # The int that is joining window.
+        insertion_idx = _binary_search(newcomer, window_ints, window_size)
 
-        if newcomer_idx == 0:  # Newcomer < all window ints.
+        if insertion_idx == 0:  # Newcomer < all window ints.
             if window_ints[0] - newcomer <= val_diff:
                 return True
 
-        elif newcomer_idx == len(window_ints):  # Newcomer > all window ints.
+        if insertion_idx == window_size:  # Newcomer > all window ints.
             if newcomer - window_ints[-1] <= val_diff:
                 return True
 
-        else:
-            if min(
-                newcomer - window_ints[newcomer_idx - 1],
-                window_ints[newcomer_idx] - newcomer
-            ) <= val_diff:
+        if 0 < insertion_idx < window_size:
+            if min(newcomer - window_ints[insertion_idx - 1], window_ints[insertion_idx] - newcomer) <= val_diff:
                 return True
 
-        window_ints.insert(newcomer_idx, newcomer)
-        back_idx += 1
-        front_idx += 1
+        window_ints.insert(insertion_idx, newcomer)
+        window_size += 1
+        current_idx += 1
+
+    return False
