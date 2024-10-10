@@ -1,74 +1,75 @@
 
 def find_largest_3_multiple(digits: list[int]) -> str:  # LeetCode Q.1363.
-    digits_0369_table, digits_258_table = dict(), dict()
-    digits_147_table, digits_sum = dict(), 0
+    table_0369, table_258 = dict(), dict()
+    table_147, digits_sum = dict(), 0
 
     for digit in digits:
         digits_sum += digit
         if digit in {0, 3, 6, 9}:
-            if digit not in digits_0369_table.keys():
-                digits_0369_table.update({digit: 0})
-            digits_0369_table[digit] += 1
+            if digit not in table_0369.keys():
+                table_0369.update({digit: 0})
+            table_0369[digit] += 1
 
         if digit in {2, 5, 8}:
-            if digit not in digits_258_table.keys():
-                digits_258_table.update({digit: 0})
-            digits_258_table[digit] += 1
+            if digit not in table_258.keys():
+                table_258.update({digit: 0})
+            table_258[digit] += 1
 
         if digit in {1, 4, 7}:
-            if digit not in digits_147_table.keys():
-                digits_147_table.update({digit: 0})
-            digits_147_table[digit] += 1
+            if digit not in table_147.keys():
+                table_147.update({digit: 0})
+            table_147[digit] += 1
 
     sum_modulo = digits_sum % 3
-    while sum_modulo != 0:
-        if sum_modulo == 1 and sum(digits_147_table.values()) == 0:
-            sum_modulo = 2  # If 1 isn't available, replace with 2.
-
-        if sum_modulo == 2 and sum(digits_258_table.values()) == 0:
-            sum_modulo = 1  # If 2 isn't available, replace with 1.
-
-        if sum_modulo == 1:
+    # True: seek digits of mod 1; False: seek digits of mod 1.
+    mod_1_search = True if sum_modulo == 1 else False
+    while sum_modulo > 0:
+        if mod_1_search:
             for digit in (1, 4, 7):
-                if digit in digits_147_table.keys():
-                    digits_sum -= digit
-                    sum_modulo = digits_sum % 3
+                if digit in table_147.keys():
+                    sum_modulo -= 1  # Mod sums 1 & 2 become 0 & 1, respectively.
 
-                    digits_147_table[digit] -= 1
-                    if digits_147_table[digit] == 0:
-                        del digits_147_table[digit]
+                    table_147[digit] -= 1
+                    if table_147[digit] == 0:
+                        del table_147[digit]
 
-                    break  # Break for loop once found.
+                    break  # Break for loop.
 
-            continue
+            if sum_modulo == 0:
+                break  # Break while loop.
+            mod_1_search = False  # No digits of mod 1: seek digits of mod 2.
 
-        for digit in (2, 5, 8):
-            if digit in digits_258_table.keys():
-                digits_sum -= digit
-                sum_modulo = digits_sum % 3
+        if not mod_1_search:
+            for digit in (2, 5, 8):
+                if digit in table_258.keys():
+                    if sum_modulo == 2:  # Mod sum 2: now becomes mod sum 0.
+                        sum_modulo = 0
+                    if sum_modulo == 1:  # Mod sum 1: now becomes mod sum 2.
+                        sum_modulo = 2
 
-                digits_258_table[digit] -= 1
-                if digits_258_table[digit] == 0:
-                    del digits_258_table[digit]
+                    table_258[digit] -= 1
+                    if table_258[digit] == 0:
+                        del table_258[digit]
 
-                break  # Break for loop once found.
+                    break  # Break for loop.
+
+            mod_1_search = True  # No digits of mod 2: seek digits of mod 1.
+
+    if not table_147 and not table_258 and set(table_0369.keys()) == {0}:
+        return "0"  # Case: leading zeros.
 
     largest_3_multiple = ""
     for digit in range(9, -1, -1):
-        modulo = digit % 3
+        if digit in {0, 3, 6, 9}:
+            if digit in table_0369.keys():
+                largest_3_multiple += str(digit) * table_0369[digit]
 
-        if modulo == 0:
-            if digit in digits_0369_table.keys():
-                if largest_3_multiple == "" and digit == 0:  # Case: leading zeros.
-                    return "0"
-                largest_3_multiple += str(digit) * digits_0369_table[digit]
+        if digit in {2, 5, 8}:
+            if digit in table_258.keys():
+                largest_3_multiple += str(digit) * table_258[digit]
 
-        if modulo == 2:
-            if digit in digits_258_table.keys():
-                largest_3_multiple += str(digit) * digits_258_table[digit]
-
-        if modulo == 1:
-            if digit in digits_147_table.keys():
-                largest_3_multiple += str(digit) * digits_147_table[digit]
+        if digit in {1, 4, 7}:
+            if digit in table_147.keys():
+                largest_3_multiple += str(digit) * table_147[digit]
 
     return largest_3_multiple
