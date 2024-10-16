@@ -1,5 +1,5 @@
 
-def _binary_search(target: tuple[int, int], monotonic_stack: list[tuple[int, int]]):
+def _binary_search(target: tuple[int, int], monotonic_stack: list[tuple[int, int]]) -> int:
     if not monotonic_stack:
         return 0
 
@@ -14,11 +14,11 @@ def _binary_search(target: tuple[int, int], monotonic_stack: list[tuple[int, int
     return back_idx  # Number of stack tuples > target, implying insertion idx.
 
 
-def find_second_greater(numbers: list[int]):  # LeetCode Q.2454.
+def find_second_greater(numbers: list[int]) -> list[int]:  # LeetCode Q.2454.
     total_nums = len(numbers)
     second_greater = [-1] * total_nums
-    stack_1 = [(numbers[0], 0)]  # Decreasing monotonic stack: (num, idx).
-    stack_2 = []  # Decreasing monotonic stack: (num, idx).
+    stack_1: list[tuple[int, int]] = [(numbers[0], 0)]  # Decreasing monotonic stack: (num, idx).
+    stack_2: list[tuple[int, int]] = []  # Decreasing monotonic stack: (num, idx).
 
     for current_idx in range(1, total_nums):
         while stack_2 and stack_2[-1][0] < numbers[current_idx]:

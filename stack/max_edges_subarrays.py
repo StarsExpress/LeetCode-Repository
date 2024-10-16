@@ -1,5 +1,5 @@
 
-def _binary_search(index: int, sorted_indices: list[int] | tuple[int]):
+def _binary_search(index: int, sorted_indices: list[int] | tuple[int]) -> int:
     if not sorted_indices:
         return 0
 
@@ -14,15 +14,16 @@ def _binary_search(index: int, sorted_indices: list[int] | tuple[int]):
     return back_idx  # Number of indices < target idx, implying insertion idx.
 
 
-def count_subarrays(numbers: list[int]):  # LeetCode Q.3113.
+def count_subarrays(numbers: list[int]) -> int:  # LeetCode Q.3113.
     """
     Count subarrays where subarrays' max number is on both boundaries.
     Key is to find each number's "latest left side" bigger num. Iteration goes in reverse.
     """
-    latest_greater_indices = [-1] * len(numbers)
+    total_numbers = len(numbers)
+    latest_greater_indices = [-1] * total_numbers
     stack = [(-1, numbers[-1])]  # Decreasing monotonic stack: (idx, num).
 
-    for current_idx in range(len(numbers) - 2, -1, -1):
+    for current_idx in range(total_numbers - 2, -1, -1):
         while stack and stack[-1][1] < numbers[current_idx]:  # Latest found.
             future_idx, _ = stack.pop(-1)
             latest_greater_indices[future_idx] = current_idx

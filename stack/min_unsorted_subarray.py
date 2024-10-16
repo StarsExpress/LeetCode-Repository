@@ -1,5 +1,5 @@
 
-def find_min_unsorted_subarray(integers: list[int] | tuple[int]):  # LeetCode Q.581.
+def find_min_unsorted_subarray(integers: list[int] | tuple[int]) -> int:  # LeetCode Q.581.
     total_ints = len(integers)
     next_smaller_indices = [-1] * total_ints  # Indices of next smaller num.
     stack = [(0, integers[0])]  # Monotonic-increasing stack: (idx, num).

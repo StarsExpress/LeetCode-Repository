@@ -1,5 +1,5 @@
 
-def count_awaiting_days(temperatures: list[int]):  # LeetCode Q.739.
+def count_awaiting_days(temperatures: list[int]) -> list[int]:  # LeetCode Q.739.
     total_temp = len(temperatures)
     # Decreasing monotonic stack: (idx, temperature).
     awaiting_days, stack = [0] * total_temp, [(0, temperatures[0])]
