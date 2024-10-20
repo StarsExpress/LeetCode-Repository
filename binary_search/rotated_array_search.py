@@ -1,9 +1,9 @@
 
 class RotatedArraySearch:  # LeetCode Q.33 & 81.
-    def __init__(self):
+    def __init__(self) -> None:
         self.nums = []
 
-    def _search_rotated_idx(self, start_idx: int, end_idx: int):
+    def _search_rotated_idx(self, start_idx: int, end_idx: int) -> int | None:
         if end_idx - start_idx == 2:  # Base case: 3 numbers.
             if self.nums[start_idx] <= self.nums[start_idx + 1] <= self.nums[end_idx]:
                 return None
@@ -18,7 +18,7 @@ class RotatedArraySearch:  # LeetCode Q.33 & 81.
 
         return self._search_rotated_idx(mid_idx, end_idx)
 
-    def search(self, nums: list[int], target: int):
+    def search(self, nums: list[int], target: int) -> bool:
         total_nums = len(nums)
         if total_nums <= 2:
             return True if target in nums else False

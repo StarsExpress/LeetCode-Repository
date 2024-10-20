@@ -51,7 +51,7 @@ def find_shortest_path(adjacency_matrix, source_node):
     if source_node < 1 or source_node > len(adjacency_matrix):  # Source node isn't in adjacency matrix.
         raise ValueError("Source node not found in adjacency matrix.")
 
-    shortest_paths = dict()  # Shortest paths from source node to all nodes.
+    shortest_paths: dict[int, int] = dict()  # Shortest paths from source node to all nodes.
     for i in range(len(adjacency_matrix)):
         shortest_paths.update({i + 1: adjacency_matrix[source_node - 1][i]})
 

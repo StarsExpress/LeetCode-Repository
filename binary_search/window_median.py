@@ -1,5 +1,5 @@
 
-def _binary_search(target: int, sorted_integers: list[int], size: int):
+def _binary_search(target: int, sorted_integers: list[int], size: int) -> int:
     if size == 0:
         return 0
 
@@ -14,7 +14,7 @@ def _binary_search(target: int, sorted_integers: list[int], size: int):
     return back_idx  # Number of ints < target.
 
 
-def find_sliding_window_median(integers: list[int], size: int):  # LeetCode Q.480.
+def find_sliding_window_median(integers: list[int], size: int) -> list[int]:  # LeetCode Q.480.
     if size == 1:
         return integers
 

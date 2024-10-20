@@ -28,13 +28,12 @@ def find_max_min_product(numbers: list[int]) -> int:  # LeetCode Q.1856.
 
     for reverse_idx, number in enumerate(numbers[::-1]):  # Backward iteration.
         if reverse_idx > 0:  # Not the last number.
-            current_idx = total_numbers - 1 - reverse_idx
             # Future number > current number: last smaller found.
             while stack and stack[-1][1] > number:
-                future_idx, _ = stack.pop(-1)
-                last_smaller_indices[future_idx] = current_idx
+                future_idx, _ = stack.pop(-1)  # Current idx = -1 - reverse idx.
+                last_smaller_indices[future_idx] = -1 - reverse_idx
 
-            stack.append((current_idx, number))
+            stack.append((-1 - reverse_idx, number))
 
     max_min_product = -float("inf")
     for idx, number in enumerate(numbers):

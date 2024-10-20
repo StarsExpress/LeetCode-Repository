@@ -1,5 +1,5 @@
 
-def _binary_search(index: int, sorted_indices: list[int] | tuple[int]) -> int:
+def _binary_search(index: int, sorted_indices: list[int]) -> int:
     if not sorted_indices:
         return 0
 

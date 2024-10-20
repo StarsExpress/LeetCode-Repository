@@ -1,13 +1,13 @@
 
 class StockPriceTracker:  # LeetCode Q.2034.
     """Track stock prices fluctuations."""
-    def __init__(self):
+    def __init__(self) -> None:
         # Records: timestamps are keys and prices are values.
         self.records, self.latest_time = dict(), -1
         # Prices are sorted from smallest to biggest.
         self.prices, self.prices_count = [], 0
 
-    def _binary_search(self, target: int):
+    def _binary_search(self, target: int) -> int:
         if not self.prices:
             return 0
 
@@ -21,7 +21,7 @@ class StockPriceTracker:  # LeetCode Q.2034.
 
         return back_idx  # Number of ints < target.
 
-    def update(self, timestamp: int, price: int):
+    def update(self, timestamp: int, price: int) -> None:
         if timestamp > self.latest_time:
             self.latest_time += timestamp - self.latest_time
 
@@ -35,11 +35,11 @@ class StockPriceTracker:  # LeetCode Q.2034.
         self.prices.insert(insertion_idx, price)
         self.prices_count += 1
 
-    def current(self):
+    def current(self) -> int:
         return self.records[self.latest_time]
 
-    def maximum(self):
+    def maximum(self) -> int:
         return self.prices[-1]
 
-    def minimum(self):
+    def minimum(self) -> int:
         return self.prices[0]

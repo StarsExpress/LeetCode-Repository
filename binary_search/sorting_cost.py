@@ -1,5 +1,5 @@
 
-def _count_smaller(target: int, sorted_integers: list[int] | tuple[int], size: int):
+def _count_smaller(target: int, sorted_integers: list[int], size: int) -> int:
     """Count number of integers smaller than target."""
     if size == 0:
         return 0
@@ -15,20 +15,20 @@ def _count_smaller(target: int, sorted_integers: list[int] | tuple[int], size: i
     return back_idx  # Number of ints < target.
 
 
-def compute_sorting_cost(numbers: list[int] | tuple[int]):  # LeetCode Q.1649.
+def compute_sorting_cost(numbers: list[int]) -> int:  # LeetCode Q.1649.
     occurrences_table = dict()
-    sorted_nums, count = [], 0  # Track count of sorted numbers.
+    sorted_nums, total_nums = [], 0
     total_cost = 0
-    for number in numbers:  # Don't use pop due to slower speed.
+    for number in numbers:
         if number not in occurrences_table.keys():
             occurrences_table.update({number: 0})
 
-        smaller_count = _count_smaller(number, sorted_nums, count)
-        bigger_count = count - smaller_count - occurrences_table[number]
+        smaller_count = _count_smaller(number, sorted_nums, total_nums)
+        bigger_count = total_nums - smaller_count - occurrences_table[number]
         total_cost += min(smaller_count, bigger_count)
 
         sorted_nums.insert(smaller_count, number)
-        count += 1
+        total_nums += 1
         occurrences_table[number] += 1
 
     return total_cost % (10 ** 9 + 7)

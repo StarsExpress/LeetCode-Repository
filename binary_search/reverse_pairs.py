@@ -1,5 +1,5 @@
 
-def _count_reverse(target: int, sorted_integers: list[int] | tuple[int], size: int):
+def _count_reverse(target: int, sorted_integers: list[int], size: int) -> tuple[int, int]:
     """Count how many integers < 0.5 * target. Beware of negative integers."""
     if size == 0:
         return 0, 0
@@ -25,7 +25,7 @@ def _count_reverse(target: int, sorted_integers: list[int] | tuple[int], size: i
     return back_idx, insertion_idx  # Back idx implies number of ints < 0.5 * target.
 
 
-def count_reverse_pairs(integers: list[int]):  # LeetCode Q.493.
+def count_reverse_pairs(integers: list[int]) -> int:  # LeetCode Q.493.
     reverse_pairs, sorted_integers = 0, []
     count = 0  # Count of sorted integers.
     for integer in integers[::-1]:  # Iteration: from rightmost to leftmost.

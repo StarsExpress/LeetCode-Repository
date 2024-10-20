@@ -1,23 +1,23 @@
 
 class SegmentTree:
-    def __init__(self, data: list[int] | tuple[int]):
-        self.length = len(data)
-        self.tree = [0] * (2 * self.length)
-        self._build(data)
+    def __init__(self, integers: list[int]):
+        self.total_integers = len(integers)
+        self.tree = [0] * (2 * self.total_integers)
+        self._build(integers)
 
-    def _build(self, data: list[int] | tuple[int]):
-        for i in range(self.length):
-            self.tree[self.length + i] = data[i]
+    def _build(self, integers: list[int]):
+        for i in range(self.total_integers):
+            self.tree[self.total_integers + i] = integers[i]
 
-        for i in range(self.length - 1, 0, -1):
+        for i in range(self.total_integers - 1, 0, -1):
             self.tree[i] = max(self.tree[2 * i], self.tree[2 * i + 1])
 
     def find_range_max(self, left_idx: int, right_idx: int):
         # Get max value in interval [left_idx, right_idx).
-        range_max = float('-inf')
+        range_max = -float("inf")
 
-        left_idx += self.length
-        right_idx += self.length
+        left_idx += self.total_integers
+        right_idx += self.total_integers
         while left_idx < right_idx:
             if left_idx % 2 == 1:
                 range_max = max(range_max, self.tree[left_idx])
