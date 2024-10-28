@@ -1,5 +1,5 @@
 
-def count_valid_options(n: int, return_table: bool = False):  # LeetCode Q.1359.
+def count_valid_options(n: int, return_table: bool = False) -> int | dict[int, tuple[int, int]]:  # LeetCode Q.1359.
     if n == 1:  # Base case.
         # Table format: key = orders count, value = tuple.
         # Tuple format: combinations, each combination's length.

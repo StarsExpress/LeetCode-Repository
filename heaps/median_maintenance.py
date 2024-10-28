@@ -2,7 +2,7 @@ from heaps.min_heap import MinHeap
 from heaps.max_heap import MaxHeap
 
 
-def track_medians(numbers: list[int | float] | tuple[int | float], return_sum=False, only_last_4_digits=False):
+def track_medians(numbers: list[int | float], return_sum=False, only_last_4_digits=False):
     if len(numbers) <= 0:
         return 0
 

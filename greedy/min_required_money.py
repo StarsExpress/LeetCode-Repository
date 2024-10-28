@@ -1,5 +1,5 @@
 
-def calculate_min_money(transactions: list[list[int]]) -> int:  # LeetCode Q.2412.
+def calculate_min_required_money(transactions: list[list[int]]) -> int:  # LeetCode Q.2412.
     total_non_loss_transactions, max_non_loss_cost = 0, 0
     max_cumulated_loss = 0
     for cost, cashback in transactions:

@@ -1,5 +1,5 @@
 
-def concatenate_binary_strings(n: int):  # LeetCode Q.1680.
+def concatenate_binary_strings(n: int) -> int:  # LeetCode Q.1680.
     """Return decimal value of concatenated binary strings from 1 to n."""
     decimal_value = 0
     threshold, current_len = 2, 1  # Threshold is always a power of 2.

@@ -2,12 +2,12 @@ import heapq
 
 
 class Twitter:  # LeetCode Q.355.
-    def __init__(self):
+    def __init__(self) -> None:
         self.followers_table = dict()
         self.tweets_table = dict()
         self.tweet_order = 1
 
-    def post_tweet(self, user_id: int, tweet_id: int):
+    def post_tweet(self, user_id: int, tweet_id: int) -> None:
         if user_id not in self.tweets_table.keys():
             self.tweets_table.update({user_id: []})
 
@@ -15,7 +15,7 @@ class Twitter:  # LeetCode Q.355.
         self.tweets_table[user_id].append((self.tweet_order, tweet_id))
         self.tweet_order += 1  # Increment for next tweet.
 
-    def get_news_feed(self, user_id: int):
+    def get_news_feed(self, user_id: int) -> list[int]:
         tweets_lists = []
         if user_id in self.followers_table.keys():
             for followee_id in self.followers_table[user_id]:
@@ -44,11 +44,11 @@ class Twitter:  # LeetCode Q.355.
         # Reverse list to select top 10 latest. Only need to return IDs.
         return [tweet_id for _, tweet_id in sorted_tweets[::-1][:10]]
 
-    def follow(self, follower_id: int, followee_id: int):
+    def follow(self, follower_id: int, followee_id: int) -> None:
         if follower_id not in self.followers_table.keys():
             self.followers_table.update({follower_id: set()})
         self.followers_table[follower_id].add(followee_id)
 
-    def unfollow(self, follower_id: int, followee_id: int):
+    def unfollow(self, follower_id: int, followee_id: int) -> None:
         if follower_id in self.followers_table.keys():
             self.followers_table[follower_id].discard(followee_id)

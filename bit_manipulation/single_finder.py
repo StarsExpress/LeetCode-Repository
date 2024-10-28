@@ -1,5 +1,5 @@
 
-def find_single_integer(integers: list[int] | tuple[int]):  # LeetCode 136.
+def find_single_integer(integers: list[int]) -> int:  # LeetCode 136.
     """One int appears once while others appear twice. Find this int."""
     xor_value = integers.pop(0)
     while integers:

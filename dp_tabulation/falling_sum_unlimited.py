@@ -1,5 +1,5 @@
 
-def _binary_sort(target: tuple[int, int], sorted_val_idx: list[tuple[int, int]]):
+def _binary_sort(target: tuple[int, int], sorted_val_idx: list[tuple[int, int]]) -> int:
     if len(sorted_val_idx) <= 0:
         return 0
 
@@ -14,7 +14,7 @@ def _binary_sort(target: tuple[int, int], sorted_val_idx: list[tuple[int, int]])
     return back_idx  # Number of tuples < target, implying insertion idx.
 
 
-def find_unlimited_falling_sum(grid: list[list[int]]):  # LeetCode Q.1289.
+def find_unlimited_falling_sum(grid: list[list[int]]) -> int:  # LeetCode Q.1289.
     if len(grid) == 1:  # Base case: matrix has just one row.
         return min(grid[0])
 

@@ -1,5 +1,5 @@
 
-def count_unique_unblocked_paths(obstacles_grid: list[list[int]]):  # LeetCode Q.63.
+def count_unique_unblocked_paths(obstacles_grid: list[list[int]]) -> int:  # LeetCode Q.63.
     if obstacles_grid[0][0] == 1:  # Base case: if start point is already blocked.
         return 0
 

@@ -1,5 +1,5 @@
 
-def find_min_path_sum(triangle: list[list[int]]):  # LeetCode Q.120.
+def find_min_path_sum(triangle: list[list[int]]) -> int:  # LeetCode Q.120.
     """
     Given a triangle array, return minimum path sum from top to bottom.
     For each step, you may move to an adjacent number of the row below.

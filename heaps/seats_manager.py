@@ -2,7 +2,7 @@ import heapq
 
 
 class SeatsManager:  # LeetCode Q.1845.
-    def __init__(self, n: int):
+    def __init__(self, n: int) -> None:
         self.unreserved_seats = [number for number in range(1, n + 1)]
 
     def reserve(self) -> int:

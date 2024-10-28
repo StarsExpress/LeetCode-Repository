@@ -2,7 +2,7 @@
 digits = [str(i) for i in range(10)]
 
 
-def decode_string(string: str, recursive: bool=False):  # LeetCode Q.394.
+def decode_string(string: str, recursive: bool = False) -> str:  # LeetCode Q.394.
     if len(string) <= 1:
         return string
 

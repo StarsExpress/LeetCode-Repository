@@ -1,5 +1,5 @@
 
-def find_longest_subarray(numbers: list[int]):  # LeetCode Q.2419.
+def find_longest_subarray(numbers: list[int]) -> int:  # LeetCode Q.2419.
     max_num, total_nums = max(numbers), len(numbers)
     max_streak = current_streak = 0
     for idx, number in enumerate(numbers):

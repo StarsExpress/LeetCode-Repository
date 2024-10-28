@@ -1,6 +1,6 @@
 
-def rob_max_properties(properties: list[int] | tuple[int]):  # LeetCode Q.213.
-    # Constraint: can't rob back-to-back houses. Last and first houses are seen as back-to-back.
+def rob_max_properties(properties: list[int]) -> int:  # LeetCode Q.213.
+    # Constraint: can't rob back-to-back houses. Last and 1st houses are seen as back-to-back.
     if 1 <= len(properties) <= 2:
         return max(properties)
 
@@ -9,8 +9,7 @@ def rob_max_properties(properties: list[int] | tuple[int]):  # LeetCode Q.213.
     properties.pop(-1)
     for i in range(2):
         two_before_mis, last_mis = properties.pop(0), properties.pop(0)  # MIS: max independent set.
-        while properties:
-            new_property = properties.pop(0)
+        for new_property in properties:
             if two_before_mis + new_property > last_mis:  # If two-before set retakes lead.
                 last_mis = max(two_before_mis, last_mis)
                 two_before_mis += new_property

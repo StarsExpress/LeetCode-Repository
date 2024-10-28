@@ -1,5 +1,5 @@
 
-def calculate_range_and(left: int, right: int):  # LeetCode Q.201.
+def calculate_range_and(left: int, right: int) -> int:  # LeetCode Q.201.
     """
     Given two integers left and right, return bitwise AND of all numbers in this inclusive range.
 

@@ -1,5 +1,5 @@
 
-def find_min_coins_usage(coins: list[int], amount: int):  # LeetCode Q.322.
+def find_min_coins_usage(coins: list[int], amount: int) -> int:  # LeetCode Q.322.
     # Base case: 0 amount needs no coins at all.
     min_denomination = [0] + [-1] * amount
     for target_amount in range(1, amount + 1):

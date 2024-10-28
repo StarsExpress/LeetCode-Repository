@@ -1,5 +1,5 @@
 
-def _find_next_smallers(integers: list[int]):
+def _find_next_smallers(integers: list[int]) -> list[tuple[int, int]]:
     total_ints = len(integers)
     next_smaller = [(-1, -1)] * total_ints
     stack = [(0, integers[0])]  # Increasing monotonic stack: (idx, num).
@@ -14,7 +14,7 @@ def _find_next_smallers(integers: list[int]):
     return next_smaller
 
 
-def sum_subarray_mins(integers: list[int]):  # LeetCode Q.907.
+def sum_subarray_mins(integers: list[int]) -> int:  # LeetCode Q.907.
     total_ints = len(integers)
     subarray_mins = [0] * total_ints
 

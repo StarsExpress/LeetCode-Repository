@@ -5,21 +5,19 @@ def find_window_maximums(integers: list[int], window_size: int) -> list[int]:  #
 
     window_maximums = []
     # Queue contains indices of ints under current sliding window.
-    idx_queue = [0]  # Queue's 1st idx always points to window maximum.
+    queue = [0]  # Leftmost idx always points to window maximum.
     for idx, integer in enumerate(integers):
-        if idx == 0:  # 1st int's idx is automatically into queue.
-            continue
+        if idx > 0:  # Int at 0th idx is automatically into queue.
+            # Ensure last idx's int > current int.
+            while queue and integers[queue[-1]] <= integer:
+                queue.pop(-1)
 
-        # Ensure last idx's corresponding int > current int.
-        while idx_queue and integers[idx_queue[-1]] <= integer:
-            idx_queue.pop(-1)
+            # Ensure leftmost idx is in window.
+            while queue and idx - window_size + 1 > queue[0]:
+                queue.pop(0)
 
-        # Ensure 1st idx is in current window.
-        while idx_queue and idx - window_size + 1 > idx_queue[0]:
-            idx_queue.pop(0)
-
-        idx_queue.append(idx)
-        if idx >= window_size - 1:  # When 1st (window size) ints have all been "seen".
-            window_maximums.append(integers[idx_queue[0]])
+            queue.append(idx)
+            if idx >= window_size - 1:  # When 1st k ints have all been "seen".
+                window_maximums.append(integers[queue[0]])
 
     return window_maximums

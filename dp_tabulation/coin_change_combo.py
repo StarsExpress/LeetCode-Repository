@@ -1,5 +1,5 @@
 
-def find_all_combinations(amount: int, coins: list[int]):  # LeetCode Q.518.
+def find_all_combinations(amount: int, coins: list[int]) -> int:  # LeetCode Q.518.
     # Base case: 0 amount only has 1 combo (no coins at all).
     all_combo = [1] + [0] * amount
     for coin in coins:

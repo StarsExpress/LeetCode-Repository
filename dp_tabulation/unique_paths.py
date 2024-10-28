@@ -1,5 +1,5 @@
 
-def count_unique_paths(rows: int, columns: int):  # LeetCode Q.62.
+def count_unique_paths(rows: int, columns: int) -> int:  # LeetCode Q.62.
     """
     There is a robot on an m x n grid. Robot is initially located at top-left corner.
     Robot tries to move to bottom-right corner.

@@ -2,11 +2,11 @@
 max_broken_products = dict()
 
 
-def _build_table():
+def _build_table() -> None:
     max_broken_products.clear()  # Reset before breaking max product.
 
 
-def break_max_product(integer: int, recursion: bool = False):  # LeetCode Q.343.
+def break_max_product(integer: int, recursion: bool = False) -> int:  # LeetCode Q.343.
     if not recursion:  # Called by outside.
         _build_table()
 

@@ -1,5 +1,5 @@
 
-def _find_best_candidate(candidates: list[list[int]]):
+def _find_best_candidate(candidates: list[list[int]]) -> tuple[int, int]:
     # Each candidate's format: [best sum, best sum's paths count].
     candidates.sort(reverse=True)
     best_score, paths_count = candidates[0][0], candidates[0][1]
@@ -9,7 +9,7 @@ def _find_best_candidate(candidates: list[list[int]]):
     return best_score, paths_count
 
 
-def count_max_score_paths(board: list[str]):  # LeetCode Q.1301.
+def count_max_score_paths(board: list[str]) -> list[int]:  # LeetCode Q.1301.
     # Use for loop to create matrix with separate list entries.
     # Each entry's format: [best sum, best sum's paths count].
     matrix = [[[0, 0] for _ in range(len(board[i]))] for i in range(len(board))]

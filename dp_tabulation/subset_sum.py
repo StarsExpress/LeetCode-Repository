@@ -1,5 +1,5 @@
 
-def find_constrained_subset_sum(numbers: list[int], k: int):  # LeetCode Q.1425.
+def find_constrained_subset_sum(numbers: list[int], k: int) -> int:  # LeetCode Q.1425.
     # Base case: subsequence of only 1st number.
     best_sum = [numbers[0]] + [0] * (len(numbers) - 1)
     max_sum = numbers[0]

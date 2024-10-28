@@ -1,5 +1,5 @@
 
-def find_combination_sum(nums: list[int], target: int):  # LeetCode Q.377.
+def find_combination_sum(nums: list[int], target: int) -> int:  # LeetCode Q.377.
     # Base case: 0 target has only 1 permutation (no numbers at all).
     permutations = [1] + [0] * target
     for iter_target in range(1, target + 1):

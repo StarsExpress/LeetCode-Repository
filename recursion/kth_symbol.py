@@ -1,5 +1,5 @@
 
-def find_kth_symbol(n: int, k: int):  # LeetCode Q.779.
+def find_kth_symbol(n: int, k: int) -> int:  # LeetCode Q.779.
     """
     Key: nth row = (n - 1)th row + (n - 1)th row 2nd half + (n - 1)th row 1st half.
     """

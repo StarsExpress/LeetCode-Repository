@@ -1,5 +1,5 @@
 
-def search_quotient(dividend: int, divisor: int):  # LeetCode Q.29.
+def search_quotient(dividend: int, divisor: int) -> int:  # LeetCode Q.29.
     negative = True if max(dividend, divisor) > 0 > min(dividend, divisor) else False
     dividend, divisor = abs(dividend), abs(divisor)
 

@@ -1,5 +1,5 @@
 
-def multiply_big_int(int_1: int, int_2: int):
+def multiply_big_int(int_1: int, int_2: int) -> int:
     """
     Karatsuba multiplication: int_1 = ab, int_2 = cd; int_1*int_2 = part_1 + part_2 + part_3.
 

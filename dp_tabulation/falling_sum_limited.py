@@ -1,5 +1,5 @@
 
-def find_limited_falling_sum(matrix: list[list[int]]):  # LeetCode Q.931.
+def find_limited_falling_sum(matrix: list[list[int]]) -> int:  # LeetCode Q.931.
     path_sum = []  # Track cumulated path sum until each entry.
     for idx, row in enumerate(matrix):
         if idx == 0:  # Base case: matrix's top row.

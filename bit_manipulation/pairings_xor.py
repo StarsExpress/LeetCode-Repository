@@ -1,5 +1,5 @@
 
-def compute_all_pairings_xor(numbers_1: list[int], numbers_2: list[int]):  # LeetCode Q.2425.
+def compute_all_pairings_xor(numbers_1: list[int], numbers_2: list[int]) -> int:  # LeetCode Q.2425.
     all_pairings_xor_value = 0
     if len(numbers_2) % 2 == 1:
         for num in numbers_1:

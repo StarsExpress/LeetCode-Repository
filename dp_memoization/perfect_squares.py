@@ -1,5 +1,5 @@
 
-def find_min_squares_usage(area: int):  # LeetCode Q.279.
+def find_min_squares_usage(area: int) -> int:  # LeetCode Q.279.
     """Fin min number of perfect squares to form area."""
     max_sqrt = int(area ** 0.5)  # Find all squares <= area.
     perfect_squares = [sqrt ** 2 for sqrt in range(1, max_sqrt + 1)]
