@@ -1,22 +1,15 @@
 
-def find_lonely_integers(integers: list[int]):  # LeetCode Q.2150.
-    ints_count = len(integers)
-    if ints_count <= 1:
-        return integers
+def find_lonely_integers(numbers: list[int]) -> list[int]:  # LeetCode Q.2150.
+    counts: dict[int, int] = dict()
+    occurred_numbers, lonely_nums = set(), []
+    for number in numbers:
+        if number not in counts.keys():
+            occurred_numbers.add(number)
+            counts.update({number: 0})
+        counts[number] += 1
 
-    integers.sort()
-    lonely_nums, current_idx = [], 1
-    if integers[0] + 1 < integers[1]:
-        lonely_nums.append(integers[0])
+    for number in occurred_numbers:
+        if counts[number] == 1 and {number - 1, number + 1} & occurred_numbers == set():
+            lonely_nums.append(number)
 
-    while True:
-        if current_idx >= ints_count - 1:
-            if integers[current_idx - 1] + 1 < integers[current_idx]:
-                lonely_nums.append(integers[current_idx])
-            return lonely_nums
-
-        if integers[current_idx - 1] + 1 < integers[current_idx]:
-            if integers[current_idx] + 1 < integers[current_idx + 1]:
-                lonely_nums.append(integers[current_idx])
-
-        current_idx += 1
+    return lonely_nums

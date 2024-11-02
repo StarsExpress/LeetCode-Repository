@@ -1,5 +1,5 @@
 
-def find_next_permutation(numbers: list[int]):  # LeetCode Q.31.
+def find_next_permutation(numbers: list[int]) -> None:  # LeetCode Q.31.
     """Required to modify numbers in-place."""
     total_nums = len(numbers)
     start_idx = 0  # Default to sort the entire nums from smallest to biggest.

@@ -22,16 +22,16 @@ def find_max_min_product(numbers: list[int]) -> int:  # LeetCode Q.1856.
         stack.append((current_idx, number))
         prefix_sums.append(prefix_sums[-1] + number)
 
-    last_smaller_indices: list[int | None] = [None] * total_numbers
+    previous_smaller_indices: list[int | None] = [None] * total_numbers
     stack.clear()
     stack.append((-1, numbers[-1]))  # Increasing monotonic stack: (idx, number).
 
     for reverse_idx, number in enumerate(numbers[::-1]):  # Backward iteration.
-        if reverse_idx > 0:  # Not the last number.
-            # Future number > current number: last smaller found.
+        if reverse_idx > 0:  # Not the previous number.
+            # Future number > current number: previous smaller found.
             while stack and stack[-1][1] > number:
                 future_idx, _ = stack.pop(-1)  # Current idx = -1 - reverse idx.
-                last_smaller_indices[future_idx] = -1 - reverse_idx
+                previous_smaller_indices[future_idx] = -1 - reverse_idx
 
             stack.append((-1 - reverse_idx, number))
 
@@ -46,12 +46,12 @@ def find_max_min_product(numbers: list[int]) -> int:  # LeetCode Q.1856.
         else:  # All the way to the rightmost number.
             subarray_sum += prefix_sums[-1] - prefix_sums[idx]
 
-        last_smaller_idx = last_smaller_indices[idx]
-        if last_smaller_idx is not None:  # All the way to (last smaller idx + 1)th number.
-            subarray_sum += prefix_sums[idx - 1] - prefix_sums[last_smaller_idx]
+        previous_smaller_idx = previous_smaller_indices[idx]
+        if previous_smaller_idx is not None:  # All the way to (previous smaller idx + 1)th number.
+            subarray_sum += prefix_sums[idx - 1] - prefix_sums[previous_smaller_idx]
 
-        if idx > 0 and last_smaller_idx is None:
-            # Current number isn't the 1st number and doesn't have a last smaller number.
+        if idx > 0 and previous_smaller_idx is None:
+            # Current number isn't the 1st number and doesn't have a previous smaller number.
             subarray_sum += prefix_sums[idx - 1]
 
         min_product = number * subarray_sum

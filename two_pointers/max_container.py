@@ -1,5 +1,5 @@
 
-def seek_max_volume(heights: list[int]):  # LeetCode Q.11.
+def seek_max_volume(heights: list[int]) -> int:  # LeetCode Q.11.
     back_idx, front_idx = 0, len(heights) - 1
     current_volume, max_volume = 0, 0
 

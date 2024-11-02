@@ -1,5 +1,5 @@
 
-def find_largest_substring(string: str):  # LeetCode Q.1163.
+def find_largest_substring(string: str) -> str:  # LeetCode Q.1163.
     """Find substring with the largest lex order."""
     largest_substring = string  # Base case.
     start_idx, s_len = 1, len(string)

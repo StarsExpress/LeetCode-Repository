@@ -1,5 +1,5 @@
 
-def find_k_closest(array: list[int], k: int, target: int):  # LeetCode Q.658.
+def find_k_closest(array: list[int], k: int, target: int) -> list[int]:  # LeetCode Q.658.
     arr_len = len(array)
     back_idx, front_idx = 0, arr_len - 1
     while back_idx <= front_idx:

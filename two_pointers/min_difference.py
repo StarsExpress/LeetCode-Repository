@@ -1,5 +1,5 @@
 
-def find_min_time_difference(time_points: list[str]):  # LeetCode Q.539.
+def find_min_time_difference(time_points: list[str]) -> int:  # LeetCode Q.539.
     original_len = len(time_points)
     time_points = list(set(time_points))  # Take unique time points.
     new_len = len(time_points)

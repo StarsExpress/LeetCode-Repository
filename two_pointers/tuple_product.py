@@ -1,5 +1,5 @@
 
-def count_same_product_tuples(integers: list[int]):  # LeetCode Q.1726.
+def count_same_product_tuples(integers: list[int]) -> Int:  # LeetCode Q.1726.
     integers = list(set(integers))  # Only consider unique ints.
     ints_count = len(integers)
     if ints_count < 4:

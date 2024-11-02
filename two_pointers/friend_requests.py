@@ -1,5 +1,5 @@
 
-def count_suitable_requests(ages: list[int]):  # LeetCode Q.825.
+def count_suitable_requests(ages: list[int]) -> int:  # LeetCode Q.825.
     ages_count = len(ages)
     if ages_count <= 1:
         return 0

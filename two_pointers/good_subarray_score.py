@@ -1,5 +1,5 @@
 
-def find_max_score(numbers: list[int], k: int):  # LeetCode Q.1793.
+def find_max_score(numbers: list[int], k: int) -> int:  # LeetCode Q.1793.
     """
     Score of subarray (i, j) is min(numbers[i], ..., numbers[j]) * (j - i + 1).
     A good subarray is a subarray where i <= k <= j.
