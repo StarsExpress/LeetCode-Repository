@@ -5,9 +5,6 @@ class RangesSummary:  # LeetCode Q.352.
         self.intervals = []  # List of lists representing intervals.
 
     def _binary_search(self, target: list[int]):
-        if not self.intervals:
-            return 0
-
         back_idx, front_idx = 0, len(self.intervals) - 1
         while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2

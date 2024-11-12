@@ -1,8 +1,5 @@
 
 def _binary_search(target: int | list[int], sorted_list: list[int] | list[list[int]], size: int):
-    if size == 0:
-        return False, 0
-
     back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2

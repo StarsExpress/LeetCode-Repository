@@ -1,8 +1,5 @@
 
 def _count_valid_3rd_edges(two_edges_sum: int, sorted_edges: list[int]) -> int:
-    if not sorted_edges:
-        return 0
-
     back_idx, front_idx = 0, len(sorted_edges) - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2

@@ -8,9 +8,6 @@ class StockPriceTracker:  # LeetCode Q.2034.
         self.prices, self.prices_count = [], 0
 
     def _binary_search(self, target: int) -> int:
-        if not self.prices:
-            return 0
-
         back_idx, front_idx = 0, self.prices_count - 1
         while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2

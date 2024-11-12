@@ -1,9 +1,6 @@
 
 def _count_smaller(target: int, sorted_integers: list[int], size: int) -> int:
     """Count number of integers smaller than target."""
-    if size == 0:
-        return 0
-
     back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:
         mid_idx = (back_idx + front_idx) // 2

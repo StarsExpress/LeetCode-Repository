@@ -7,9 +7,6 @@ class MKAverage:  # LeetCode Q.1825.
         self.total_numbers = 0
 
     def _binary_search(self, target: int) -> int:
-        if self.total_numbers == 0:
-            return 0
-
         back_idx, front_idx = 0, self.total_numbers - 1
         while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2

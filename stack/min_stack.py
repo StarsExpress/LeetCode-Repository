@@ -10,8 +10,7 @@ class MinStack:  # LeetCode Q.155.
         self.min_stack.append(latest_min)
 
     def pop_top(self) -> None:
-        self.stack.pop(-1)
-        self.min_stack.pop(-1)
+        self.stack.pop(-1), self.min_stack.pop(-1)
 
     def get_top(self) -> int:
         return self.stack[-1]

@@ -6,15 +6,13 @@ class SitesRanker:  # LeetCode Q.2102.
         self.received_calls = 0  # Count of get method being called.
 
     def add_site(self, name: str, score: int) -> None:
-        back_idx = 0  # Back idx is also insertion idx.
-        if self.size > 0:
-            front_idx = self.size - 1
-            while back_idx <= front_idx:
-                mid_idx = (back_idx + front_idx) // 2
-                if self.negative_scores_and_names[mid_idx] < (-score, name):
-                    back_idx = mid_idx + 1
-                    continue
-                front_idx = mid_idx - 1
+        back_idx, front_idx = 0, self.size - 1  # Back idx is also insertion idx.
+        while back_idx <= front_idx:
+            mid_idx = (back_idx + front_idx) // 2
+            if self.negative_scores_and_names[mid_idx] < (-score, name):
+                back_idx = mid_idx + 1
+                continue
+            front_idx = mid_idx - 1
 
         self.negative_scores_and_names.insert(back_idx, (-score, name))
         self.size += 1

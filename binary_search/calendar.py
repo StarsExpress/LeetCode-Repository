@@ -5,9 +5,6 @@ class Calendar:  # LeetCode Q.729.
         self.booked_times, self.booked_count = [], 0
 
     def _binary_search(self, time: int):
-        if self.booked_count <= 0:
-            return 0
-
         back_idx, front_idx = 0, self.booked_count - 1
         while back_idx <= front_idx:
             mid_idx = (back_idx + front_idx) // 2

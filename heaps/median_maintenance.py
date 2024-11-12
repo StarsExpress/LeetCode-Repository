@@ -3,22 +3,21 @@ from heaps.max_heap import MaxHeap
 
 
 def track_medians(numbers: list[int | float], return_sum=False, only_last_4_digits=False):
-    if len(numbers) <= 0:
+    if not numbers:
         return 0
 
     medians, min_heap, max_heap = [], MinHeap([]), MaxHeap([])  # Initialize both heaps with empty lists.
-    while numbers:
-        current_item = numbers.pop(0)
-        if len(medians) <= 0:
-            min_heap.add_items(current_item)
-            medians.append(current_item)
+    for number in numbers:
+        if not medians:
+            min_heap.add_items(number)
+            medians.append(number)
             continue
 
-        if current_item < medians[-1]:
-            max_heap.add_items(current_item)
+        if number < medians[-1]:
+            max_heap.add_items(number)
 
         else:
-            min_heap.add_items(current_item)
+            min_heap.add_items(number)
 
         if len(max_heap.items_list) - 1 > len(min_heap.items_list):  # Ensure heaps size diff <= 1.
             max_heap_root = max_heap.find_max(remove=True)

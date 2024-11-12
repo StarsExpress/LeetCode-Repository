@@ -1,9 +1,6 @@
 
 def _count_reverse(target: int, sorted_integers: list[int], size: int) -> tuple[int, int]:
     """Count how many integers < 0.5 * target. Beware of negative integers."""
-    if size == 0:
-        return 0, 0
-
     back_idx, front_idx = 0, size - 1
     while back_idx <= front_idx:  # First while: search for insertion idx.
         mid_idx = (back_idx + front_idx) // 2
