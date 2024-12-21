@@ -1,31 +1,23 @@
 
-def _binary_search(target: int | float, sorted_numbers: list[int | float], size: int) -> int:
-    if size == 0:
-        return 0
-
-    back_idx, front_idx = 0, size - 1
-    while back_idx <= front_idx:
-        mid_idx = (back_idx + front_idx) // 2
-        if sorted_numbers[mid_idx] < target:
-            back_idx = mid_idx + 1
-            continue
-        front_idx = mid_idx - 1
-
-    return back_idx  # Number of ints < target.
-
-
 def track_medians(
     numbers: list[int | float], return_sum=False, only_last_4_digits=False
 ) -> int | list[int | float]:
     if not numbers:
         return 0
 
-    medians, sorted_numbers, count = [], [], 0  # Track count of sorted numbers.
-    while numbers:
-        newcomer = numbers.pop(0)
-        insertion_idx = _binary_search(newcomer, sorted_numbers, count)
-        sorted_numbers.insert(insertion_idx, newcomer)
-        count += 1  # Update size.
+    medians = []
+    sorted_numbers, count = [], 0  # Track count of sorted numbers.
+    for number in numbers:
+        back_idx, front_idx = 0, count - 1
+        while back_idx <= front_idx:
+            mid_idx = (back_idx + front_idx) // 2
+            if sorted_numbers[mid_idx] < number:
+                back_idx = mid_idx + 1
+                continue
+            front_idx = mid_idx - 1
+
+        sorted_numbers.insert(back_idx, number)  # Back idx: count of sorted numbers < new number.
+        count += 1  # Update count.
         if count % 2 == 1:
             medians.append(sorted_numbers[count // 2])
             continue

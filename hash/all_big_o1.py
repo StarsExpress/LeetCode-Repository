@@ -1,59 +1,50 @@
 
 class AllBigO1:  # LeetCode Q.432.
-    def __init__(self):
-        self.keys_counts = dict()
-        self.keys_pool, self.counts_pool = set(), []
+    def __init__(self) -> None:
+        self.keys2counts: dict[str, int] = dict()
+        self.counts2keys: dict[int, dict[str, bool]] = dict()
 
-    def increment(self, key: str):
-        if key not in self.keys_pool:
-            self.keys_pool.add(key)
-            self.keys_counts.update({key: 0})
+    def increment(self, key: str) -> None:
+        if key not in self.keys2counts.keys():
+            self.keys2counts.update({key: 0})
 
         else:  # Remove old count.
-            old_count_idx = self._binary_search(self.keys_counts[key])
-            self.counts_pool.pop(old_count_idx)
+            old_count = self.keys2counts[key]
+            del self.counts2keys[old_count][key]
+            if not self.counts2keys[old_count]:
+                del self.counts2keys[old_count]
 
-        self.keys_counts[key] += 1  # This is new count.
-        new_count_idx = self._binary_search(self.keys_counts[key])
-        self.counts_pool.insert(new_count_idx, self.keys_counts[key])
+        self.keys2counts[key] += 1  # This is new count.
+        new_count = self.keys2counts[key]
 
-    def decrement(self, key: str):
-        if key not in self.keys_pool:
+        if new_count not in self.counts2keys.keys():
+            self.counts2keys.update({new_count: dict()})
+        self.counts2keys[new_count].update({key: True})
+
+    def decrement(self, key: str) -> None:
+        old_count = self.keys2counts[key]
+        del self.counts2keys[old_count][key]
+        if not self.counts2keys[old_count]:
+            del self.counts2keys[old_count]
+
+        self.keys2counts[key] -= 1  # This is new count.
+        if self.keys2counts[key] == 0:
+            del self.keys2counts[key]
             return
 
-        old_count_idx = self._binary_search(self.keys_counts[key])
-        self.counts_pool.pop(old_count_idx)  # Remove old count.
+        new_count = self.keys2counts[key]
+        if new_count not in self.counts2keys.keys():
+            self.counts2keys.update({new_count: dict()})
+        self.counts2keys[new_count].update({key: True})
 
-        self.keys_counts[key] -= 1  # This is new count.
-        if self.keys_counts[key] == 0:  # 0 count: remove from data structure.
-            self.keys_pool.remove(key)
-            return
+    def get_max_key(self) -> str:
+        if not self.keys2counts:  # No key has max count.
+            return ""
+        max_count = max(self.counts2keys.keys())  # Answer found.
+        return list(self.counts2keys[max_count].keys())[0]
 
-        new_count_idx = self._binary_search(self.keys_counts[key])
-        self.counts_pool.insert(new_count_idx, self.keys_counts[key])
-
-    def get_max_key(self):
-        for key in self.keys_pool:
-            if self.keys_counts[key] == self.counts_pool[-1]:
-                return key  # Answer found.
-        return ""  # If no key has max count.
-
-    def get_min_key(self):
-        for key in self.keys_pool:
-            if self.keys_counts[key] == self.counts_pool[0]:
-                return key  # Answer found.
-        return ""  # If no key has min count.
-
-    def _binary_search(self, count: int):
-        if not self.counts_pool:
-            return 0
-
-        back_idx, front_idx = 0, len(self.counts_pool) - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
-            if self.counts_pool[mid_idx] < count:
-                back_idx = mid_idx + 1
-                continue
-            front_idx = mid_idx - 1
-
-        return back_idx  # Number of counts < target count.
+    def get_min_key(self) -> str:
+        if not self.keys2counts:  # No key has min count.
+            return ""
+        min_count = min(self.counts2keys.keys())  # Answer found.
+        return list(self.counts2keys[min_count].keys())[0]
