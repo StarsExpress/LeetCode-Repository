@@ -4,17 +4,17 @@ min_letter = "a"
 
 
 class TrieNode:
-    def __init__(self):
+    def __init__(self) -> None:
         self.child_node: list[TrieNode | None] = [None] * total_letters
         self.word_end = False  # If any word stops at this node.
 
 
 class BasicTrie:
     """Word insertion, search & deletion."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.root = TrieNode()
 
-    def insert_word(self, word: str):
+    def insert_word(self, word: str) -> None:
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
@@ -28,7 +28,7 @@ class BasicTrie:
 
         current_node.word_end = True  # Last iterated node has a word ending here.
 
-    def search_word(self, word: str):
+    def search_word(self, word: str) -> bool:
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
@@ -39,7 +39,7 @@ class BasicTrie:
 
         return current_node.word_end
 
-    def delete_word(self, word: str):
+    def delete_word(self, word: str) -> None:
         current_node = self.root
         last_branch_node = None
         last_branch_char = min_letter

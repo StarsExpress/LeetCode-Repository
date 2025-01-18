@@ -1,15 +1,14 @@
 
 def calculate_min_formation(target: list[int]) -> int:  # LeetCode Q.1526.
-    min_operations, stack = 0, []  # Decreasing monotonic stack.
-    cushion = 0  # Left neighbor of stack[0] in target array. Default to 0.
+    min_operations = 0
+    # Cushion: head number's left neighbor target array. Default to 0.
+    head, cushion = 0, 0
+    for idx, number in enumerate(target):
+        if idx == 0:
+            head = number
 
-    for number in target:
-        if stack and number > stack[-1]:
-            min_operations += stack[0] - cushion
-            cushion = stack[-1]
-            stack.clear()  # Numbers in stack can't fully cover current number.
+        if idx > 0 and number > target[idx - 1]:
+            min_operations += head - cushion
+            head, cushion = number, target[idx - 1]
 
-        stack.append(number)
-
-    min_operations += stack[0] - cushion  # Deal with the last iteration.
-    return min_operations
+    return min_operations + head - cushion  # Deal with the last iteration.
