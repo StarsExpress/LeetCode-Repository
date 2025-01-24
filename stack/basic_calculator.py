@@ -36,7 +36,4 @@ def calculate(string: str) -> int:  # LeetCode Q.224.
             else:
                 numbers[-1][1] += int(char)
 
-    result = 0
-    while numbers:
-        result += numbers.pop(-1)[1]
-    return result
+    return sum(number for _, number in numbers)
