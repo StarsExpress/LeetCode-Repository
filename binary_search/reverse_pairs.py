@@ -1,25 +1,25 @@
 
 def _count_reverse(target: int, sorted_integers: list[int], size: int) -> tuple[int, int]:
     """Count how many integers < 0.5 * target. Beware of negative integers."""
-    back_idx, front_idx = 0, size - 1
-    while back_idx <= front_idx:  # First while: search for insertion idx.
-        mid_idx = (back_idx + front_idx) // 2
+    left_idx, right_idx = 0, size - 1
+    while left_idx <= right_idx:  # First while: search for insertion idx.
+        mid_idx = (left_idx + right_idx) // 2
         if sorted_integers[mid_idx] < target:
-            back_idx = mid_idx + 1
+            left_idx = mid_idx + 1
             continue
-        front_idx = mid_idx - 1
+        right_idx = mid_idx - 1
 
-    insertion_idx = back_idx
+    insertion_idx = left_idx
 
-    back_idx, front_idx = 0, size - 1  # Front idx starts at size - 1: in case of negative ints.
-    while back_idx <= front_idx:  # Second while: count number of ints < 0.5 * target.
-        mid_idx = (back_idx + front_idx) // 2
+    left_idx, right_idx = 0, size - 1  # Front idx starts at size - 1: in case of negative ints.
+    while left_idx <= right_idx:  # Second while: count number of ints < 0.5 * target.
+        mid_idx = (left_idx + right_idx) // 2
         if 2 * sorted_integers[mid_idx] < target:
-            back_idx = mid_idx + 1
+            left_idx = mid_idx + 1
             continue
-        front_idx = mid_idx - 1
+        right_idx = mid_idx - 1
 
-    return back_idx, insertion_idx  # Back idx implies number of ints < 0.5 * target.
+    return left_idx, insertion_idx  # Back idx implies number of ints < 0.5 * target.
 
 
 def count_reverse_pairs(integers: list[int]) -> int:  # LeetCode Q.493.

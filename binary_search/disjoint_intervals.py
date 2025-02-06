@@ -1,19 +1,20 @@
 
 class RangesSummary:  # LeetCode Q.352.
     """Given integers stream, summarize all numbers seen so far as list of disjoint intervals."""
+
     def __init__(self):
         self.intervals = []  # List of lists representing intervals.
 
     def _binary_search(self, target: list[int]):
-        back_idx, front_idx = 0, len(self.intervals) - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
+        left_idx, right_idx = 0, len(self.intervals) - 1
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx) // 2
             if self.intervals[mid_idx] < target:
-                back_idx = mid_idx + 1
+                left_idx = mid_idx + 1
                 continue
-            front_idx = mid_idx - 1
+            right_idx = mid_idx - 1
 
-        return back_idx  # Number of intervals with start < int inside target.
+        return left_idx  # Number of intervals with start < int inside target.
 
     def add_value(self, value: int):
         if not self.intervals:

@@ -1,14 +1,14 @@
 
 def _binary_search(target: int, sorted_integers: list[int], size: int) -> int:
-    back_idx, front_idx = 0, size - 1
-    while back_idx <= front_idx:
-        mid_idx = (back_idx + front_idx) // 2
+    left_idx, right_idx = 0, size - 1
+    while left_idx <= right_idx:
+        mid_idx = (left_idx + right_idx) // 2
         if sorted_integers[mid_idx] <= target:
-            back_idx = mid_idx + 1
+            left_idx = mid_idx + 1
             continue
-        front_idx = mid_idx - 1
+        right_idx = mid_idx - 1
 
-    return back_idx  # Number of ints <= target.
+    return left_idx  # Number of ints <= target.
 
 
 def count_bloom_flowers(flowers: list[list[int]], people: list[int]) -> list[int]:  # LeetCode Q.2251.

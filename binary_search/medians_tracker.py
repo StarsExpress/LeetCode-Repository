@@ -8,15 +8,15 @@ def track_medians(
     medians = []
     sorted_numbers, count = [], 0  # Track count of sorted numbers.
     for number in numbers:
-        back_idx, front_idx = 0, count - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
+        left_idx, right_idx = 0, count - 1
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx) // 2
             if sorted_numbers[mid_idx] < number:
-                back_idx = mid_idx + 1
+                left_idx = mid_idx + 1
                 continue
-            front_idx = mid_idx - 1
+            right_idx = mid_idx - 1
 
-        sorted_numbers.insert(back_idx, number)  # Back idx: count of sorted numbers < new number.
+        sorted_numbers.insert(left_idx, number)  # Back idx: count of sorted numbers < new number.
         count += 1  # Update count.
         if count % 2 == 1:
             medians.append(sorted_numbers[count // 2])

@@ -1,6 +1,6 @@
-from config import DATA_FOLDER_PATH
 import os
 from itertools import chain
+from config import DATA_FOLDER_PATH
 
 
 class KruskalClustering:
@@ -70,11 +70,11 @@ class KruskalClustering:
         for member in self.subset_1:
             self.roots_dict.update({member: root_2})
 
-    def find(self, node: str):  # Find a node's root in MST.
-        if self.roots_dict[node] is None:  # If a node isn't in MST yet.
+    def find(self, node: str | None):  # Find a node's root in MST.
+        if self.roots_dict[node] is None:  # Node isn't in MST yet.
             return None
 
-        if self.roots_dict[node] != node:  # If a node's root isn't itself, trace upward till the end.
+        if self.roots_dict[node] != node:  # Node's root isn't itself, trace upward until the end.
             self.roots_dict.update({node: self.find(self.roots_dict[node])})
         return self.roots_dict[node]
 

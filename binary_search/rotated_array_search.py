@@ -27,21 +27,21 @@ class RotatedArraySearch:  # LeetCode Q.33 & 81.
         self.nums.extend(nums)
         rotated_idx = self._search_rotated_idx(0, total_nums - 1)
         if rotated_idx is not None:
-            back_indices = [0, rotated_idx]
-            front_indices = [rotated_idx - 1, total_nums - 1]
+            left_indices = [0, rotated_idx]
+            right_indices = [rotated_idx - 1, total_nums - 1]
 
         else:
-            back_indices, front_indices = [0], [total_nums - 1]
+            left_indices, right_indices = [0], [total_nums - 1]
 
-        for back_idx, front_idx in zip(back_indices, front_indices):
-            while back_idx <= front_idx:
-                mid_idx = (back_idx + front_idx) // 2
+        for left_idx, right_idx in zip(left_indices, right_indices):
+            while left_idx <= right_idx:
+                mid_idx = (left_idx + right_idx) // 2
                 if nums[mid_idx] == target:
                     return True
 
                 if nums[mid_idx] < target:
-                    back_idx = mid_idx + 1
+                    left_idx = mid_idx + 1
                     continue
-                front_idx = mid_idx - 1
+                right_idx = mid_idx - 1
 
         return False

@@ -1,21 +1,22 @@
 
 class MKAverage:  # LeetCode Q.1825.
     """Compute average of last m integers exclusive of k smallest & biggest."""
+
     def __init__(self, m: int, k: int) -> None:
         self.m, self.k = m, k
         self.integers, self.sorted_integers = [], []
         self.total_numbers = 0
 
     def _binary_search(self, target: int) -> int:
-        back_idx, front_idx = 0, self.total_numbers - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
+        left_idx, right_idx = 0, self.total_numbers - 1
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx) // 2
             if self.sorted_integers[mid_idx] < target:
-                back_idx = mid_idx + 1
+                left_idx = mid_idx + 1
                 continue
-            front_idx = mid_idx - 1
+            right_idx = mid_idx - 1
 
-        return back_idx  # Number of ints < target.
+        return left_idx  # Number of ints < target.
 
     def add_integer(self, integer: int) -> None:
         while self.total_numbers >= self.m:

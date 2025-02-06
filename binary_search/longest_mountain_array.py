@@ -10,16 +10,16 @@ def _find_rising_subsequence(
 
     for idx, number in enumerate(numbers):
         # After binary search is over, back idx is insertion idx.
-        back_idx, front_idx = 0, subsequence_len - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
+        left_idx, right_idx = 0, subsequence_len - 1
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx) // 2
             if rising_subsequence[mid_idx] < number:
-                back_idx = mid_idx + 1
+                left_idx = mid_idx + 1
                 continue
-            front_idx = mid_idx - 1
+            right_idx = mid_idx - 1
 
-        if back_idx != subsequence_len:
-            rising_subsequence[back_idx] = number
+        if left_idx != subsequence_len:
+            rising_subsequence[left_idx] = number
             continue
 
         rising_subsequence.append(number)

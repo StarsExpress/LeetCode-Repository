@@ -3,6 +3,7 @@ import math
 
 class KthAncestor:  # LeetCode Q.1483.
     """Tree's root is node 0. Array parent[i] is parent of ith node."""
+
     def __init__(self, num_nodes: int, parent: list[int]):
         self.max_ancestor_dist = int(math.log2(num_nodes)) + 1  # Max power of 2 needed.
         self.ancestors = [[-1] * self.max_ancestor_dist for _ in range(num_nodes)]

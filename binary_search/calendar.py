@@ -1,19 +1,20 @@
 
 class Calendar:  # LeetCode Q.729.
     """Book schedules without conflicts."""
+
     def __init__(self):
         self.booked_times, self.booked_count = [], 0
 
     def _binary_search(self, time: int):
-        back_idx, front_idx = 0, self.booked_count - 1
-        while back_idx <= front_idx:
-            mid_idx = (back_idx + front_idx) // 2
+        left_idx, right_idx = 0, self.booked_count - 1
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx) // 2
             if self.booked_times[mid_idx] <= time:
-                back_idx = mid_idx + 1
+                left_idx = mid_idx + 1
                 continue
-            front_idx = mid_idx - 1
+            right_idx = mid_idx - 1
 
-        return back_idx  # Number of booked times <= time is insertion idx.
+        return left_idx  # Number of booked times <= time is insertion idx.
 
     def book(self, start: int, end: int):
         start_idx = self._binary_search(start)
