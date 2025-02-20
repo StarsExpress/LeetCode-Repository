@@ -1,47 +1,38 @@
 
-def find_max_score(numbers_1: list[int], numbers_2: list[int]) -> int:  # LeetCode Q.1537.
-    max_score = 0
-    range_sum_1, range_sum_2 = numbers_1[0], numbers_2[0]
+def find_max_score(nums_1: list[int], nums_2: list[int]) -> int:  # LeetCode Q.1537.
+    max_score, modulo = 0, 10 ** 9 + 7
+    score_1, score_2 = nums_1[0], nums_2[0]
+    nums_1_idx, nums_2_idx = 1, 1
+    total_nums_1, total_nums_2 = len(nums_1), len(nums_2)
 
-    total_numbers_1, total_numbers_2 = len(numbers_1), len(numbers_2)
-    numbers_1_idx, numbers_2_idx = 0, 0
-    while numbers_1_idx < total_numbers_1 and numbers_2_idx < total_numbers_2:
-        if numbers_1[numbers_1_idx] == numbers_2[numbers_2_idx]:
-            max_score += max(range_sum_1, range_sum_2)
+    while nums_1_idx < total_nums_1 or nums_2_idx < total_nums_2:
+        # nums1[nums_1_idx - 1]: latest num of nums 1 added into score 1.
+        # nums2[nums_1_idx - 1]: latest num of nums 2 added into score 2.
+        while nums_1[nums_1_idx - 1] < nums_2[nums_2_idx - 1] and nums_1_idx < total_nums_1:
+            score_1 += nums_1[nums_1_idx]
+            nums_1_idx += 1
 
-            range_sum_1 -= range_sum_1  # Reset range sum 1.
-            numbers_1_idx += 1
-            if numbers_1_idx < total_numbers_1:
-                range_sum_1 += numbers_1[numbers_1_idx]
+        while nums_2[nums_2_idx - 1] < nums_1[nums_1_idx - 1] and nums_2_idx < total_nums_2:
+            score_2 += nums_2[nums_2_idx]
+            nums_2_idx += 1
 
-            range_sum_2 -= range_sum_2  # Reset range sum 2.
-            numbers_2_idx += 1
-            if numbers_2_idx < total_numbers_2:
-                range_sum_2 += numbers_2[numbers_2_idx]
+        if nums_1[nums_1_idx - 1] == nums_2[nums_2_idx - 1]:  # Can change paths.
+            max_score += max(score_1, score_2) % modulo
+            score_1, score_2 = 0, 0  # Reset both sides' scores.
+            if nums_1_idx < total_nums_1:
+                score_1 += nums_1[nums_1_idx]
+                nums_1_idx += 1
 
-            continue
+            if nums_2_idx < total_nums_2:
+                score_2 += nums_2[nums_2_idx]
+                nums_2_idx += 1
 
-        while numbers_1[numbers_1_idx] < numbers_2[numbers_2_idx] and numbers_1_idx < total_numbers_1 - 1:
-            numbers_1_idx += 1
-            range_sum_1 += numbers_1[numbers_1_idx]
+        if nums_1_idx == total_nums_1 and nums_1[nums_1_idx - 1] < nums_2[nums_2_idx - 1]:
+            break  # Remaining nums in nums 2 > max of nums 1.
 
-        if numbers_1[numbers_1_idx] < numbers_2[numbers_2_idx]:
-            break
+        if nums_2_idx == total_nums_2 and nums_2[nums_2_idx - 1] < nums_1[nums_1_idx - 1]:
+            break  # Remaining nums in nums 1 > max of nums 2.
 
-        while numbers_2[numbers_2_idx] < numbers_1[numbers_1_idx] and numbers_2_idx < total_numbers_2 - 1:
-            numbers_2_idx += 1
-            range_sum_2 += numbers_2[numbers_2_idx]
-
-        if numbers_2[numbers_2_idx] < numbers_1[numbers_1_idx]:
-            break
-
-    while numbers_1_idx < total_numbers_1 - 1:  # nums1[numbers_1_idx] is already included.
-        range_sum_1 += numbers_1[numbers_1_idx + 1]
-        numbers_1_idx += 1
-
-    while numbers_2_idx < total_numbers_2 - 1:  # nums2[numbers_2_idx] is already included.
-        range_sum_2 += numbers_2[numbers_2_idx + 1]
-        numbers_2_idx += 1
-
-    max_score += max(range_sum_1, range_sum_2)
-    return max_score % (10 ** 9 + 7)
+    score_1 += sum(nums_1[nums_1_idx:])  # Remaining part of score 1.
+    score_2 += sum(nums_2[nums_2_idx:])  # Remaining part of score 2.
+    return (max_score + max(score_1, score_2)) % modulo
