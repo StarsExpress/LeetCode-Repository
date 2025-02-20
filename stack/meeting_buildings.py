@@ -24,15 +24,15 @@ def query_meeting_buildings(heights: list[int], queries: list[list[int]]) -> lis
 
             stack.append((heights[new_idx], new_idx))
 
-        front_idx, back_idx = 0, len(stack) - 1
-        while front_idx <= back_idx:
-            mid_idx = (front_idx + back_idx) // 2
+        back_idx, front_idx = 0, len(stack) - 1
+        while back_idx <= front_idx:
+            mid_idx = (back_idx + front_idx) // 2
             if stack[mid_idx][0] <= heights[left_idx]:
-                back_idx = mid_idx - 1
+                front_idx = mid_idx - 1
                 continue
-            front_idx = mid_idx + 1
+            back_idx = mid_idx + 1
 
-        if front_idx > 0:
-            common_building_indices[query_idx] = stack[front_idx - 1][1]
+        if back_idx > 0:
+            common_building_indices[query_idx] = stack[back_idx - 1][1]
 
     return common_building_indices
