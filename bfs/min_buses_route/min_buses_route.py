@@ -1,5 +1,5 @@
 
-def find_min_route(routes: list[list[int]], source: int, target: int) -> int:  # LeetCode Q.815.
+def find_min_buses_route(routes: list[list[int]], source: int, target: int) -> int:  # LeetCode Q.815.
     if source == target:  # Base case.
         return 0
 

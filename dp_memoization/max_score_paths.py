@@ -15,6 +15,7 @@ def count_max_score_paths(board: list[str]) -> list[int]:  # LeetCode Q.1301.
     matrix = [[[0, 0] for _ in range(len(board[i]))] for i in range(len(board))]
     candidates = []  # List of lists of potential best sum & paths count for each entry.
 
+    best_score_paths_count = []  # Format: [best sum, its paths count].
     for row_idx, row in enumerate(reversed(board)):
         entries = list(row)
         for col_idx, entry in enumerate(reversed(entries)):
@@ -31,8 +32,8 @@ def count_max_score_paths(board: list[str]) -> list[int]:  # LeetCode Q.1301.
                 candidates.append(matrix[-row_idx][-col_idx])  # Slant.
 
                 best_score, paths_count = _find_best_candidate(candidates)
-                # Answer is found: take modulo to control final paths count.
-                return [best_score, paths_count % (10 ** 9 + 7)]
+                best_score_paths_count.extend([best_score, paths_count % (10 ** 9 + 7)])
+                break  # Answer is found: take modulo to control final paths count.
 
             if col_idx == 0:  # Entry only has bottom neighbor.
                 if matrix[-row_idx][-1][1] != 0:  # Bottom neighbor isn't obstacle.
@@ -70,3 +71,5 @@ def count_max_score_paths(board: list[str]) -> list[int]:  # LeetCode Q.1301.
                     matrix[-row_idx - 1][-col_idx - 1][0] += int(entry) + best_score
 
                     candidates.clear()
+
+    return best_score_paths_count

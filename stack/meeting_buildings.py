@@ -10,7 +10,7 @@ def query_meeting_buildings(heights: list[int], queries: list[list[int]]) -> lis
     queries.sort(key=lambda x: -max(x[1], x[2]))
 
     # Height decreasing monotonic stack. Format: (height, idx).
-    stack = [(heights[-1], len(heights) - 1)]
+    stack: list[tuple[int, int]] = [(heights[-1], len(heights) - 1)]
 
     for query_idx, left_idx, right_idx in queries:
         if left_idx == right_idx or heights[left_idx] < heights[right_idx]:

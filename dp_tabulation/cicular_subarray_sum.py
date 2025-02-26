@@ -22,7 +22,7 @@ def compute_circular_max_subarray_sum(numbers: list[int]) -> int:  # LeetCode Q.
             max_ordinary_sum = incremental_subarray_sum
 
         if idx == total_nums - 1:  # Last num: excluded by decremental subarray.
-            return max(total_sum - min_ordinary_sum, max_ordinary_sum)
+            break
 
         if decremental_subarray_sum > 0:  # Decremental sum > 0: reset subarray.
             decremental_subarray_sum = 0
@@ -30,3 +30,5 @@ def compute_circular_max_subarray_sum(numbers: list[int]) -> int:  # LeetCode Q.
         decremental_subarray_sum += num
         if decremental_subarray_sum < min_ordinary_sum:
             min_ordinary_sum = decremental_subarray_sum
+
+    return max(total_sum - min_ordinary_sum, max_ordinary_sum)

@@ -13,7 +13,7 @@ def find_min_time_difference(time_points: list[str]) -> int:  # LeetCode Q.539.
     while True:
         if front_idx >= new_len:
             if back_idx >= front_idx - 1:
-                return min_diff
+                break
 
             back_idx += 1
             for idx, char in enumerate(time_points[back_idx].split(':')):
@@ -49,3 +49,5 @@ def find_min_time_difference(time_points: list[str]) -> int:  # LeetCode Q.539.
             min_diff += current_diff - min_diff
 
         front_idx += 1
+
+    return min_diff

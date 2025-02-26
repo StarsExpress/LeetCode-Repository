@@ -40,9 +40,11 @@ class FrequencyStack:  # LeetCode Q.895.
                 self.freqs_pool_size += 1
 
                 self.values_pool_size -= 1
-                return self.values_pool.pop(pool_idx)
+                break
 
             pool_idx -= 1
+
+        return self.values_pool.pop(pool_idx)
 
     def _binary_search(self, frequency: int) -> int:
         if self.freqs_pool_size == 0:
