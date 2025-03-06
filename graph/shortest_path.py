@@ -42,7 +42,7 @@ def find_shortest_path(adjacency_matrix:  list[list[int]], source_node: int) -> 
         raise ValueError("Source node not found in adjacency matrix.")
 
     shortest_paths: dict[int, int] = dict()  # Shortest paths from source node to all nodes.
-    distances_heap: list[list[int, int]] = []  # Min heap. Format: [distance, node].
+    distances_heap: list[list[int]] = []  # Min heap. Format: [distance, node].
     for i in range(total_nodes):
         shortest_paths.update({i + 1: adjacency_matrix[source_node - 1][i]})
         heapq.heappush(distances_heap, [adjacency_matrix[source_node - 1][i], i + 1])
@@ -63,7 +63,7 @@ def find_shortest_path(adjacency_matrix:  list[list[int]], source_node: int) -> 
                         distances_heap, [adjacency_matrix[closest_node - 1][node - 1], node]
                     )
 
-            visited_nodes.add(closest_node)  # This closest unvisited node becomes visited.
+            visited_nodes.add(closest_node)  # Closest unvisited node is visited.
 
     return shortest_paths
 

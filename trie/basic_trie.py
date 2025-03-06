@@ -18,22 +18,19 @@ class BasicTrie:
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
-            # Iterated char hasn't had a node in trie.
             if not current_node.child_node[idx]:
-                # Open a new node for this char.
                 current_node.child_node[idx] = TrieNode()
 
-            # Move to iterated char's node.
             current_node = current_node.child_node[idx]
 
-        current_node.word_end = True  # Last iterated node has a word ending here.
+        current_node.word_end = True
 
     def search_word(self, word: str) -> bool:
         current_node = self.root
         for char in word:
             idx = ord(char) - ord(min_letter)
-            if not current_node.child_node[idx]:  # Iterated char has no nodes in trie.
-                return False  # Target word not in trie.
+            if not current_node.child_node[idx]:
+                return False
 
             current_node = current_node.child_node[idx]
 
