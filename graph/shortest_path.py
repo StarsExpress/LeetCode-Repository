@@ -12,70 +12,60 @@ def process_distances() -> list[list[int]]:
         nodes = file.read().splitlines()
         file.close()
 
-    adjacency_matrix = [[no_path_dist] * len(nodes) for _ in range(len(nodes))]
-    for i in range(len(nodes)):
-        adjacency_matrix[i][i] = 0  # Entire diagonal is 0 as it's the "self" distance.
+    adj_matrix = [[no_path_dist] * len(nodes) for _ in range(len(nodes))]
+    for node in range(1, len(nodes) + 1):
+        # Minus 1: nodes order starts from 1, not 0.
+        adj_matrix[node - 1][node - 1] = 0  # Entire diagonal is 0 as it's the "self" distance.
 
-    visited_edges = set()
     for node in nodes:
         dist_list = (node.lstrip().rstrip().split("\t"))  # Remove boundary spaces and split by \t.
-        pivot_node = int(dist_list.pop(0))  # 1st item of list is pivot node. Convert to integer.
+        node_1 = int(dist_list.pop(0))
 
-        for dist_str in dist_list:  # The rest items indicate distances between pivot node and other nodes,
-            destination_node, dist = dist_str.split(",")
-            destination_node, dist = int(destination_node), int(dist)
+        for dist_str in dist_list:
+            node_2, dist = dist_str.split(",")
+            node_2, dist = int(node_2), int(dist)
 
-            # Edge format: smaller node on left, and bigger node on right.
-            edge = (min([pivot_node, destination_node]), max([pivot_node, destination_node]))
-            if edge not in visited_edges:  # Store unvisited edge distance into matrix.
-                # Minus 1: nodes order starts from 1, not 0.
-                adjacency_matrix[pivot_node - 1][destination_node - 1] = dist
-                adjacency_matrix[destination_node - 1][pivot_node - 1] = dist
+            adj_matrix[node_1 - 1][node_2 - 1] = dist  # Minus 1: nodes order starts from 1, not 0.
+            adj_matrix[node_2 - 1][node_1 - 1] = dist
 
-    return adjacency_matrix
+    return adj_matrix
 
 
-def find_shortest_path(adjacency_matrix:  list[list[int]], source_node: int) -> dict[int, int]:
-    # Nodes order starts from 1, not 0. Indexing needs +/- 1.
-    total_nodes = len(adjacency_matrix)
+def find_shortest_path(adj_matrix:  list[list[int]], source_node: int) -> dict[int, int]:
+    total_nodes = len(adj_matrix)  # Nodes orders start from 1, not 0. Nodes minus 1 become indices.
+
     if source_node < 1 or source_node > total_nodes:  # Source node isn't in adjacency matrix.
         raise ValueError("Source node not found in adjacency matrix.")
 
-    shortest_paths: dict[int, int] = dict()  # Shortest paths from source node to all nodes.
-    distances_heap: list[list[int]] = []  # Min heap. Format: [distance, node].
-    for i in range(total_nodes):
-        shortest_paths.update({i + 1: adjacency_matrix[source_node - 1][i]})
-        heapq.heappush(distances_heap, [adjacency_matrix[source_node - 1][i], i + 1])
+    # Shortest paths from source node to all nodes. Keys: nodes. Values: shortest distances.
+    shortest_paths: dict[int, int] = dict()
+    for idx, dist in enumerate(adj_matrix[source_node - 1]):
+        shortest_paths[idx + 1] = dist  # Node = idx + 1.
 
-    visited_nodes = {source_node}  # Source is already visited.
-    while distances_heap:
-        closest_dist, closest_node = heapq.heappop(distances_heap)
-        if closest_node not in visited_nodes:
-            shortest_paths.update({closest_node: closest_dist})  # Closest unvisited node to source.
+    dist_heap: list[list[int]] = []  # Min heap. Format: [distance, node].
+    for node in range(1, total_nodes + 1):
+        if node != source_node and shortest_paths[node] < no_path_dist:
+            heapq.heappush(dist_heap, [shortest_paths[node], node])
 
-            for node in shortest_paths.keys():  # Update distances from min node to other nodes.
-                if adjacency_matrix[closest_node - 1][node - 1] + closest_dist < shortest_paths[node]:
-                    adjacency_matrix[closest_node - 1][node - 1] += closest_dist
-                    shortest_paths.update(
-                        {node: adjacency_matrix[closest_node - 1][node - 1]}
-                    )
-                    heapq.heappush(
-                        distances_heap, [adjacency_matrix[closest_node - 1][node - 1], node]
-                    )
-
-            visited_nodes.add(closest_node)  # Closest unvisited node is visited.
+    while dist_heap and dist_heap[0][0] != no_path_dist:  # In case of disconnected graph.
+        closest_dist, closest_node = heapq.heappop(dist_heap)
+        for idx, dist in enumerate(adj_matrix[closest_node - 1]):
+            node = idx + 1
+            if closest_dist + dist < shortest_paths[node]:
+                shortest_paths[node] = closest_dist + dist
+                heapq.heappush(dist_heap, [shortest_paths[node], node])
 
     return shortest_paths
 
 
 if __name__ == "__main__":
     source, destinations = 1, [7, 37, 59, 82, 99, 115, 133, 165, 188, 197]
-    shortest_paths_dictionary = find_shortest_path(process_distances(), source)
+    shortest_paths_distances = find_shortest_path(process_distances(), source)
 
     distances_str = ""
-    if shortest_paths_dictionary:
+    if shortest_paths_distances:
         for destination in destinations:
-            distances_str += str(shortest_paths_dictionary[destination])
+            distances_str += str(shortest_paths_distances[destination])
             if destinations[-1] != destination:
                 distances_str += ","
 
