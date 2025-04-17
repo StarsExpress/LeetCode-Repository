@@ -1,41 +1,23 @@
+from bisect import bisect_right
+
 
 class Calendar:  # LeetCode Q.729.
     """Book schedules without conflicts."""
 
     def __init__(self):
-        self.booked_times, self.booked_count = [], 0
-
-    def _binary_search(self, time: int):
-        left_idx, right_idx = 0, self.booked_count - 1
-        while left_idx <= right_idx:
-            mid_idx = (left_idx + right_idx) // 2
-            if self.booked_times[mid_idx] <= time:
-                left_idx = mid_idx + 1
-                continue
-            right_idx = mid_idx - 1
-
-        return left_idx  # Number of booked times <= time is insertion idx.
+        self.booked_times = []  # Format: [inclusive start, inclusive end].
 
     def book(self, start: int, end: int):
-        start_idx = self._binary_search(start)
-        # Already booked times are pairs. Odd start idx means booking conflict.
-        if start_idx & 1:
-            return False
+        end -= 1  # Adjust to inclusive end time.
 
-        end_idx = self._binary_search(end)
-        if start_idx == end_idx:
-            self.booked_times.insert(start_idx, start)
-            self.booked_count += 1
-            self.booked_times.insert(self._binary_search(end), end)
-            self.booked_count += 1
-            return True
+        # Idx of the first booked time w/ start > current booking start.
+        idx = bisect_right(self.booked_times, [start, start])
 
-        if self.booked_times[start_idx] == self.booked_times[end_idx - 1]:
-            if (self.booked_times[start_idx] <= start) | (end <= self.booked_times[end_idx - 1]):
-                self.booked_times.insert(start_idx, start)
-                self.booked_count += 1
-                self.booked_times.insert(self._binary_search(end), end)
-                self.booked_count += 1
-                return True
+        if idx > 0 and self.booked_times[idx - 1][1] >= start:
+            return False  # Current booking causes double booking.
 
-        return False
+        if idx < len(self.booked_times) and self.booked_times[idx][0] <= end:
+            return False  # Current booking causes double booking.
+
+        self.booked_times.insert(idx, [start, end])
+        return True

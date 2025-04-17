@@ -1,37 +1,25 @@
 #include <vector>
-#include <queue>
 using namespace std;
 
 long long count_subarray_scores(vector<int> &nums, long long k)
 { // LeetCode Q.2302.
     long long total_subarrays = 0;
+    long long subarray_sum = 0;
 
-    long long prefix_sum = 0;          // Prefix sum from 0th to ith num.
-    queue<pair<int, long long>> queue; // Format: {idx, prefix sum}.
-
-    for (int idx = 0; idx < nums.size(); idx++)
+    int start_idx = 0;
+    for (int end_idx = 0; end_idx < nums.size(); end_idx++)
     {
-        prefix_sum += nums[idx];
+        subarray_sum += nums[end_idx];
+        long long score = subarray_sum * (end_idx + 1 - start_idx);
 
-        while (!queue.empty())
+        while (score >= k && start_idx <= end_idx)
         {
-            int subarray_len = idx - queue.front().first;
-            long long subarray_sum = prefix_sum - queue.front().second;
-            if (subarray_sum * subarray_len < k)
-            {
-                break;
-            }
-            queue.pop();
+            subarray_sum -= nums[start_idx];
+            start_idx++;
+            score = subarray_sum * (end_idx + 1 - start_idx);
         }
 
-        total_subarrays += queue.size();
-
-        if (prefix_sum * (idx + 1) < k)
-        {
-            total_subarrays += 1;
-        }
-
-        queue.push({idx, prefix_sum});
+        total_subarrays += end_idx + 1 - start_idx;
     }
 
     return total_subarrays;

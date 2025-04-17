@@ -1,25 +1,15 @@
 
-def count_subarray_products(positive_integers: list[int], k: int) -> int:  # LeetCode Q.713.
-    """Count the number of continuous subarrays with product < k."""
-    continuous_subarrays = 0
-    prefix_products, length = [], 0  # Length: prefix products array length.
-    for idx, integer in enumerate(positive_integers):
-        if idx == 0:  # 1st integer.
-            prefix_products.append(integer)
-            length += 1
-            if integer < k:
-                continuous_subarrays += 1
-            continue
+def count_subarray_products(positive_nums: list[int], k: int) -> int:  # LeetCode Q.713.
+    total_subarrays = 0
+    subarray_product = 1
+    start_idx = 0
+    for end_idx, num in enumerate(positive_nums):
+        subarray_product *= num
+        while subarray_product >= k and start_idx <= end_idx:
+            subarray_product /= positive_nums[start_idx]
+            start_idx += 1
 
-        prefix_products.append(prefix_products[-1] * integer)
-        length += 1
+        if start_idx <= end_idx:
+            total_subarrays += end_idx + 1 - start_idx
 
-        while length > 1 and prefix_products[-1] // prefix_products[0] >= k:
-            prefix_products.pop(0)
-            length -= 1
-
-        continuous_subarrays += length - 1  # Minus 1: don't re-count latest prefix product.
-        if prefix_products[-1] < k:  # Subarray from 0th idx to (idx)th idx.
-            continuous_subarrays += 1
-
-    return continuous_subarrays
+    return total_subarrays

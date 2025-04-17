@@ -3,44 +3,40 @@ def find_min_buses_route(routes: list[list[int]], source: int, target: int) -> i
     if source == target:  # Base case.
         return 0
 
+    # Routes passing through source and target, respectively.
     source_routes, target_routes = set(), set()
-    routes_intersections: dict[int, set[int]] = dict()
+    stations2routes: dict[int, list[int]] = dict()
 
-    total_routes = len(routes)
-    for route_1, route_1_stops in enumerate(routes):
-        if source in route_1_stops:
-            source_routes.add(route_1)
+    for route, stations in enumerate(routes):
+        route += 1  # Route num = idx + 1.
+        for station in stations:
+            if station == source:
+                source_routes.add(route)
 
-        if target in route_1_stops:
-            target_routes.add(route_1)
+            if station == target:
+                target_routes.add(route)
 
-        if route_1 not in routes_intersections.keys():
-            routes_intersections.update({route_1: set()})
+            if station not in stations2routes.keys():
+                stations2routes.update({station: []})
+            stations2routes[station].append(route)
 
-        for route_2 in range(route_1 + 1, total_routes):
-            route_2_stops = routes[route_2]
-            if set(route_1_stops) & set(route_2_stops) != set():
-                routes_intersections[route_1].add(route_2)
-                if route_2 not in routes_intersections.keys():
-                    routes_intersections.update({route_2: set()})
-                routes_intersections[route_2].add(route_1)
-
-    if target_routes:  # Target stop has bus routes.
-        taken_routes = set()
+    if source_routes and target_routes:  # Source to target is possible.
+        taken_routes, visited_stations = set(), set()
         # Format: (current route, buses taken).
         queue = [(route, 1) for route in source_routes]
 
         while queue:
-            current_route, buses_taken = queue.pop(0)
-            if target in routes[current_route]:
+            route, buses_taken = queue.pop(0)
+            taken_routes.add(route)
+            if route in target_routes:
                 return buses_taken
 
-            if current_route not in taken_routes:
-                taken_routes.add(current_route)
-                buses_taken += 1
-                if current_route in routes_intersections.keys():
-                    for intersection_route in routes_intersections[current_route]:
-                        if intersection_route not in taken_routes:
-                            queue.append((intersection_route, buses_taken))
+            buses_taken += 1
+            for station in routes[route - 1]:  # Route num = idx + 1.
+                if station not in visited_stations:
+                    visited_stations.add(station)
+                    for crossed_route in stations2routes[station]:
+                        if crossed_route not in taken_routes:
+                            queue.append((crossed_route, buses_taken))
 
     return -1
