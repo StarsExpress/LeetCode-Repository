@@ -11,13 +11,13 @@ private:
     unordered_map<int, int> nums2replacements;
 
 public:
-    UnBlockedPick(int n, vector<int> &blacklist)
+    UnBlockedPick(int n, vector<int> &blocklist)
     {
-        unordered_set<int> blocked_nums(blacklist.begin(), blacklist.end());
+        unordered_set<int> blocked_nums(blocklist.begin(), blocklist.end());
 
-        total_candidates = n - blacklist.size();
+        total_candidates = n - blocklist.size();
         int replacement = total_candidates;
-        for (auto blocked_num : blacklist)
+        for (auto blocked_num : blocklist)
         {
             if (blocked_num < total_candidates)
             { // Need replacements for blocked nums in [0, total candidates - 1].

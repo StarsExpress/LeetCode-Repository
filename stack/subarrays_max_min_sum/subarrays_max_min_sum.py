@@ -1,5 +1,5 @@
 
-def compute_subarrays_min_max_sum(nums: list[int], k: int) -> int:  # LeetCode Q.3430.
+def compute_max_min_sum(nums: list[int], k: int) -> int:  # LeetCode Q.3430.
     subarrays_max_min_sum = 0
 
     decreasing_stack: list[list[int]] = []  # Format: [idx, num, shares].

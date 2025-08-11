@@ -2,65 +2,66 @@
 #include <vector>
 using namespace std;
 
-long long compute_subarrays_min_max_sum(vector<int> &nums, int k)
+long long compute_max_min_sum(vector<int> &nums, int k)
 { //  LeetCode Q.3430.
-    long long subarrays_max_min_sum = 0;
+    long long total_max_sum = 0, total_min_sum = 0;
+    long long window_max_shares = 0, window_min_shares = 0;
+    long long window_max_sum = 0, window_min_sum = 0;
 
-    deque<vector<long long>> decreasing_stack; // Format: {idx, num, shares}.
-    long long subarrays_max_sum = 0;
-    deque<vector<long long>> increasing_stack; // Format: {idx, num, shares}.
-    long long subarrays_min_sum = 0;
-
-    int start_idx = 1 - k;
-    for (int end_idx = 0; end_idx < nums.size(); end_idx++)
+    deque<pair<int, long long>> max_stack, min_stack; // Format: {num idx, num shares}.
+    for (int idx = 0; idx < nums.size(); idx++)
     {
-        if (start_idx > 0) // Ensure both stacks have current subarrays' window.
+        long long num = nums[idx];
+        while (!max_stack.empty() && nums[max_stack.back().first] < num)
         {
-            decreasing_stack.front()[2] -= 1; // Decrement stack's 1st num shares by 1.
-            subarrays_max_sum -= decreasing_stack.front()[1];
-            if (decreasing_stack.front()[0] < start_idx)
-                decreasing_stack.pop_front(); // Stack's 1st num out of window.
-
-            increasing_stack.front()[2] -= 1; // Decrement stack's 1st num shares by 1.
-            subarrays_min_sum -= increasing_stack.front()[1];
-            if (increasing_stack.front()[0] < start_idx)
-                increasing_stack.pop_front(); // Stack's 1st num out of window.
+            window_max_shares -= max_stack.back().second;
+            window_max_sum -= nums[max_stack.back().first] * max_stack.back().second;
+            max_stack.pop_back();
         }
 
-        long long num = nums[end_idx];
-        while (!decreasing_stack.empty() && decreasing_stack.back()[1] <= num)
+        long long max_shares = min(idx + 1, k);
+        if (!max_stack.empty())
+            max_shares = idx - max_stack.back().first;
+
+        max_stack.push_back({idx, max_shares});
+        window_max_shares += max_shares;
+        window_max_sum += num * max_shares;
+
+        if (window_max_shares > k)
         {
-            subarrays_max_sum -= decreasing_stack.back()[1] * decreasing_stack.back()[2];
-            decreasing_stack.pop_back();
+            window_max_shares--;
+            window_max_sum -= nums[max_stack.front().first];
+            max_stack.front().second--;
+            if (max_stack.front().second == 0)
+                max_stack.pop_front();
+        }
+        total_max_sum += window_max_sum;
+
+        while (!min_stack.empty() && nums[min_stack.back().first] > num)
+        {
+            window_min_shares -= min_stack.back().second;
+            window_min_sum -= nums[min_stack.back().first] * min_stack.back().second;
+            min_stack.pop_back();
         }
 
-        int shares = min(end_idx + 1, k);
-        if (!decreasing_stack.empty())
+        long long min_shares = min(idx + 1, k);
+        if (!min_stack.empty())
+            min_shares = idx - min_stack.back().first;
+
+        min_stack.push_back({idx, min_shares});
+        window_min_shares += min_shares;
+        window_min_sum += num * min_shares;
+
+        if (window_min_shares > k)
         {
-            shares = end_idx - decreasing_stack.back()[0];
+            window_min_shares--;
+            window_min_sum -= nums[min_stack.front().first];
+            min_stack.front().second--;
+            if (min_stack.front().second == 0)
+                min_stack.pop_front();
         }
-
-        subarrays_max_sum += num * shares;
-        subarrays_max_min_sum += subarrays_max_sum;
-        decreasing_stack.push_back({end_idx, num, shares});
-
-        while (!increasing_stack.empty() && increasing_stack.back()[1] >= num)
-        {
-            subarrays_min_sum -= increasing_stack.back()[1] * increasing_stack.back()[2];
-            increasing_stack.pop_back();
-        }
-
-        shares = min(end_idx + 1, k);
-        if (!increasing_stack.empty())
-        {
-            shares = end_idx - increasing_stack.back()[0];
-        }
-
-        subarrays_min_sum += num * shares;
-        subarrays_max_min_sum += subarrays_min_sum;
-        increasing_stack.push_back({end_idx, num, shares});
-
-        start_idx++;
+        total_min_sum += window_min_sum;
     }
-    return subarrays_max_min_sum;
+
+    return total_max_sum + total_min_sum;
 }
