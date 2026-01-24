@@ -1,5 +1,6 @@
 #include <vector>
 #include <numeric>
+#include <algorithm>
 using namespace std;
 
 int count_min_deletions(vector<int> &nums, vector<int> &divided_nums)

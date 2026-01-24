@@ -1,4 +1,6 @@
 #include <vector>
+#include <algorithm>
+#include <cmath>
 using namespace std;
 
 int sum_heroes_power(vector<int> &nums)

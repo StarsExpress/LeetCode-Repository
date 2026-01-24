@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int count_max_frequency(vector<int> &nums, int k, int operations_limit)

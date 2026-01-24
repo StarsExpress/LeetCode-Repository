@@ -37,9 +37,7 @@ public:
         for (int node = 0; node < total_nodes; node++)
         {
             if (start != node && shortest_paths[start][node] != infinity)
-            {
                 cost_heap.push({shortest_paths[start][node], node});
-            }
         }
 
         while (!cost_heap.empty() && cost_heap.top().first != infinity)
@@ -62,9 +60,7 @@ public:
         }
 
         if (shortest_paths[start][end] == infinity)
-        {
             return -1;
-        }
         return shortest_paths[start][end];
     }
 };

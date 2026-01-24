@@ -1,5 +1,6 @@
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
 bool count_almost_duplicates(vector<int> &nums, int idx_diff, int val_diff)

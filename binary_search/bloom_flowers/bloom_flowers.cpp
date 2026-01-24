@@ -1,5 +1,6 @@
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 vector<int> count_bloom_flowers(vector<vector<int>> &flowers, vector<int> &people)

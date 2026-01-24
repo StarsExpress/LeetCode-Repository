@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int erase_overlapping_intervals(vector<vector<int>> &intervals)

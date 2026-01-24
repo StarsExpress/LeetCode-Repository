@@ -1,5 +1,6 @@
 #include <deque>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 class SitesRanker

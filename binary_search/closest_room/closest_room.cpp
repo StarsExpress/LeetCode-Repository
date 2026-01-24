@@ -1,5 +1,6 @@
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
 vector<int> query_closest_rooms(vector<vector<int>> &rooms, vector<vector<int>> &queries)

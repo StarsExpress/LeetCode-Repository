@@ -20,9 +20,7 @@ private:
             while (!inversion_nums.empty())
             {
                 if (nums_1[idx_1] <= 2 * inversion_nums.front())
-                {
                     break;
-                }
                 inversions += nums_1.size() - idx_1;
                 inversion_nums.pop();
             }
@@ -43,9 +41,7 @@ private:
             while (!inversion_nums.empty())
             {
                 if (nums_1[idx_1] <= 2 * inversion_nums.front())
-                {
                     break;
-                }
                 inversions += nums_1.size() - idx_1;
                 inversion_nums.pop();
             }
@@ -66,9 +62,7 @@ private:
     vector<int> merge_sort(vector<int> nums)
     {
         if (nums.size() <= 1)
-        {
             return nums;
-        }
 
         size_t center_idx = nums.size() / 2;
         vector<int> nums_1(nums.begin(), nums.begin() + center_idx);
