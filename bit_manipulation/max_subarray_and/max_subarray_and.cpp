@@ -3,22 +3,26 @@ using namespace std;
 
 int find_longest_subarray(vector<int> &nums) // LeetCode Q.2419.
 {
-    int longest_subarray_len = 1; // Base case.
-    int max_num = *max_element(nums.begin(), nums.end());
-    int max_num_streak = 0;
+    int longest_len = 1; // Base case.
+    int max_num = 0, max_streak = 0;
 
     for (auto num : nums)
-    {
-        if (num == max_num)
-        { // Max AND: only need to consider max num streak.
-            max_num_streak += 1;
-            if (max_num_streak > longest_subarray_len)
-            {
-                longest_subarray_len = max_num_streak;
-            }
-            continue;
+    { // Max AND: only need to consider max num streak.
+        if (num != max_num)
+        {
+            max_streak -= max_streak; // Reset.
+
+            if (num > max_num)
+                max_num = num, longest_len = 1; // Reset.
         }
-        max_num_streak -= max_num_streak;
+
+        if (num == max_num)
+        {
+            max_streak++;
+            if (max_streak > longest_len)
+                longest_len = max_streak;
+        }
     }
-    return longest_subarray_len;
+
+    return longest_len;
 }

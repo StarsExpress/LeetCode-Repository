@@ -2,18 +2,20 @@
 #include <unordered_map>
 using namespace std;
 
-int find_shortest_impossible_sequence(vector<int> &rolls, int dice_values)
+int findShortestImpossibleSequence(vector<int> &rolls, int diceValues)
 { // LeetCode Q.2350.
-    int shortest_impossible_len = 1;
-    unordered_map<int, bool> nums2occurrences;
+    int shortestImpossibleLen = 1;
+    unordered_map<int, bool> nums2Counts;
+
     for (auto num : rolls)
     {
-        nums2occurrences[num] = true;
-        if (nums2occurrences.size() == dice_values)
-        {                              // Current seq len is possible.
-            nums2occurrences.clear();  // Reset.
-            shortest_impossible_len++; // Go to next seq len.
+        nums2Counts[num] = true;
+        if (nums2Counts.size() == diceValues) // Current seq len is possible.
+        {
+            nums2Counts.clear();     // Reset.
+            shortestImpossibleLen++; // Go to next seq len.
         }
     }
-    return shortest_impossible_len;
+
+    return shortestImpossibleLen;
 }

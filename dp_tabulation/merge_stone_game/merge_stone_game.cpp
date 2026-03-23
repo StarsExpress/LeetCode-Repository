@@ -1,7 +1,8 @@
 #include <vector>
+#include <numeric>
 using namespace std;
 
-int maximize_scores_difference(vector<int> &stones) // LeetCode Q.1872.
+int maximizeScoresDifference(vector<int> &stones) // LeetCode Q.1872.
 {
     auto stones_sum = reduce(stones.begin(), stones.end());
     int max_diff = stones_sum;

@@ -35,11 +35,11 @@ vector<int> query_max_sum(vector<int> &nums_1, vector<int> &nums_2, vector<vecto
             nums.pop_back();
 
             // Current y and pair sum overpower stack top.
-            while (!stack.empty() && stack.back()[0] <= y && stack.back()[1] <= pair_sum)
+            while (!stack.empty() && stack.back()[1] <= pair_sum)
                 stack.pop_back();
 
             // Stack top overpowers current y and pair sum.
-            if (!stack.empty() && stack.back()[0] >= y && stack.back()[1] >= pair_sum)
+            if (!stack.empty() && stack.back()[0] >= y)
                 continue;
             stack.push_back({y, pair_sum});
         }

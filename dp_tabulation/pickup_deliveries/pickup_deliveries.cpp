@@ -1,7 +1,7 @@
 #include <cmath>
 using namespace std;
 
-int count_valid_options(int total_orders) // LeetCode Q.1359.
+int countValidOptions(int total_orders) // LeetCode Q.1359.
 {
     long long valid_pickups = 1, sequence_len = 2; // Base case at n = 1: (P1, D1).
 

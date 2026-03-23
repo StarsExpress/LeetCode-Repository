@@ -16,18 +16,18 @@ class BinaryTreeMaxPathSum // LeetCode Q.124.
 private:
     int global_max_path_sum = -1000; // Min node value stated by question.
 
-    int dfs_path_sum(TreeNode *node)
+    int dfsPathSum(TreeNode *node)
     {
         int left_child_path_sum = 0;
         int right_child_path_sum = 0;
 
         if (node->left != nullptr)
         {
-            left_child_path_sum += max(dfs_path_sum(node->left), 0);
+            left_child_path_sum += max(dfsPathSum(node->left), 0);
         }
         if (node->right != nullptr)
         {
-            right_child_path_sum += max(dfs_path_sum(node->right), 0);
+            right_child_path_sum += max(dfsPathSum(node->right), 0);
         }
 
         int left_end_path_sum = left_child_path_sum + node->val;
@@ -46,9 +46,9 @@ private:
     }
 
 public:
-    int find_max_path_sum(TreeNode *root)
+    int findMaxPathSum(TreeNode *root)
     {
-        dfs_path_sum(root);
+        dfsPathSum(root);
         return global_max_path_sum;
     }
 };

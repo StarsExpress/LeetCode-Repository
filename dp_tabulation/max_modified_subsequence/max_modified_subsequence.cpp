@@ -1,8 +1,9 @@
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 using namespace std;
 
-int find_max_modified_subsequence(vector<int> &nums)
+int findMaxModifiedSubsequence(vector<int> &nums)
 { // LeetCode Q.3041.
     sort(nums.begin(), nums.end());
 

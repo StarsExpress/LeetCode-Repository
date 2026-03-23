@@ -18,22 +18,23 @@ private:
     queue<char> characters;
     int hyphens = 0;
 
-    TreeNode *dfs_recover_tree(int level)
+    TreeNode *dfsRecoverTree(int level)
     {
-        int node_value;
+        int nodeValue = 0;
         if (level == hyphens)
         {
             hyphens -= hyphens; // Reset.
 
-            string node_value_str = "";
+            string nodeValueStr = "";
             while (!characters.empty() && characters.front() != '-')
             {
-                node_value_str += characters.front();
+                nodeValueStr += characters.front();
                 characters.pop();
             }
-            node_value = stoi(node_value_str);
+            nodeValue = stoi(nodeValueStr);
         }
-        TreeNode *tree = new TreeNode(node_value);
+
+        TreeNode *tree = new TreeNode(nodeValue);
 
         level += 1; // Increment level to do DFS on left and right children.
         while (!characters.empty() && characters.front() == '-')
@@ -41,20 +42,19 @@ private:
             characters.pop();
             hyphens += 1;
         }
+
         if (level == hyphens)
-        {
-            tree->left = dfs_recover_tree(level);
-        }
+            tree->left = dfsRecoverTree(level);
 
         while (!characters.empty() && characters.front() == '-')
         {
             characters.pop();
             hyphens += 1;
         }
+
         if (level == hyphens)
-        {
-            tree->right = dfs_recover_tree(level);
-        }
+            tree->right = dfsRecoverTree(level);
+
         return tree;
     }
 
@@ -62,9 +62,8 @@ public:
     TreeNode *recover(string traversal)
     {
         for (auto character : traversal)
-        {
             characters.push(character);
-        }
-        return dfs_recover_tree(0);
+
+        return dfsRecoverTree(0);
     }
 };

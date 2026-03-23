@@ -1,7 +1,8 @@
 #include <vector>
+#include <cmath>
 using namespace std;
 
-int count_possibilities(int record_len) // LeetCode Q.552.
+int countPossibilities(int record_len) // LeetCode Q.552.
 {
     long long modulo = pow(10, 9) + 7; // Use long long to prevent overflow.
 
@@ -19,6 +20,7 @@ int count_possibilities(int record_len) // LeetCode Q.552.
         // AL0 count change at current length.
         one_absence_changes.push_back(
             no_absence[0] + no_absence[1] + no_absence[2]);
+
         one_absence_changes[0] += one_absence[1] + one_absence[2];
 
         // AL1 count change at current length.

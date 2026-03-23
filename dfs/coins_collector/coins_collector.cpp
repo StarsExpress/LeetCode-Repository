@@ -1,5 +1,6 @@
 #include <vector>
 #include <unordered_set>
+#include <algorithm>
 using namespace std;
 
 class CoinsCollector
@@ -7,85 +8,88 @@ class CoinsCollector
 private:
     vector<unordered_set<int>> graph;
 
-    vector<bool> leaves, leaves_parents; // If a node is a coin leave or parent of coin leave.
-    vector<bool> required_visits;        // If a node must be visited to collect all coins.
-    vector<bool> visited;                // For DFS visited marks.
+    vector<bool> leaves, leavesParents; // If a node is a coin leave or parent of coin leave.
+    vector<bool> requiredVisits;        // If a node must be visited to collect all coins.
+    vector<bool> visited;               // For DFS visited marks.
 
-    void dfs_required_visit_nodes(int node)
+    void dfsRequiredVisitNodes(int node)
     {
         visited[node] = true;
         for (auto neighbor : graph[node])
         {
-            if (leaves_parents[neighbor] == true && visited[neighbor] == false)
+            if (leavesParents[neighbor] == true && visited[neighbor] == false)
             {
-                required_visits[node] = true;
-                dfs_required_visit_nodes(neighbor);
+                requiredVisits[node] = true;
+                dfsRequiredVisitNodes(neighbor);
             }
         }
     }
 
-    int must_visit_edges = 0;
-    bool dfs_must_visit_edges(int parent, int node)
+    int mustVisitEdges = 0;
+
+    bool dfsMustVisitEdges(int parent, int node)
     {
         visited[node] = true;
         for (auto neighbor : graph[node])
         {
             if (visited[neighbor] == false)
             {
-                if (dfs_must_visit_edges(node, neighbor))
+                if (dfsMustVisitEdges(node, neighbor))
                 {
-                    required_visits[node] = true;
+                    requiredVisits[node] = true;
                 }
             }
         }
 
-        if (required_visits[node] && parent != -1)
+        if (requiredVisits[node] && parent != -1)
         {
-            must_visit_edges++;
+            mustVisitEdges++;
         }
-        return required_visits[node];
+        return requiredVisits[node];
     }
 
-    unordered_set<int> empty_parents;
-    int max_empty_parents_dist = 1;
-    int dfs_max_empty_parents_dist(int node)
+    unordered_set<int> emptyParents;
+    int maxEmptyParentsDist = 1;
+
+    int dfsMaxEmptyParentsDist(int node)
     {
         visited[node] = true;
-        vector<int> children_dists;
+        vector<int> childrenDists;
+
         for (auto neighbor : graph[node])
         {
-            if (empty_parents.find(neighbor) != empty_parents.end())
+            if (emptyParents.find(neighbor) != emptyParents.end())
             {
                 if (visited[neighbor] == false)
                 {
-                    children_dists.push_back(dfs_max_empty_parents_dist(neighbor));
+                    childrenDists.push_back(dfsMaxEmptyParentsDist(neighbor));
                 }
             }
         }
 
-        int local_max_dist = 1;
-        if (children_dists.empty())
+        int localMaxDist = 1;
+        if (childrenDists.empty())
         {
-            return local_max_dist;
+            return localMaxDist;
         }
 
-        sort(children_dists.begin(), children_dists.end());
-        local_max_dist = children_dists.back();
+        sort(childrenDists.begin(), childrenDists.end());
+        localMaxDist = childrenDists.back();
 
-        if (children_dists.size() >= 2)
+        if (childrenDists.size() >= 2)
         {
-            local_max_dist += children_dists[children_dists.size() - 2];
+            localMaxDist += childrenDists[childrenDists.size() - 2];
         }
-        if (local_max_dist > max_empty_parents_dist)
+        if (localMaxDist > maxEmptyParentsDist)
         {
-            max_empty_parents_dist = local_max_dist;
+            maxEmptyParentsDist = localMaxDist;
         }
 
-        return children_dists.back() + 1;
+        return childrenDists.back() + 1;
     }
 
 public:
-    int collectTheCoins(vector<int> &coins, vector<vector<int>> &edges)
+    int collectCoins(vector<int> &coins, vector<vector<int>> &edges)
     {
         graph.resize(coins.size());
         for (auto edge : edges)
@@ -107,7 +111,8 @@ public:
         }
 
         leaves.resize(coins.size(), false);
-        leaves_parents.resize(coins.size(), false);
+        leavesParents.resize(coins.size(), false);
+
         for (int node = 0; node < coins.size(); node++)
         {
             if (coins[node] == 1 && graph[node].size() == 1)
@@ -117,64 +122,67 @@ public:
                 int neighbor = *graph[node].begin();
                 if (coins[neighbor] == 0 || graph[neighbor].size() > 1)
                 {
-                    leaves_parents[neighbor] = true;
+                    leavesParents[neighbor] = true;
                 }
             }
         }
 
-        bool parents_all_empty = true;
-        required_visits.resize(coins.size(), false);
+        bool parentsAllEmpty = true;
+        requiredVisits.resize(coins.size(), false);
+
         for (int node = 0; node < coins.size(); node++)
         {
-            if (leaves_parents[node])
+            if (leavesParents[node])
             {
-                bool is_empty_parent = true;
+                bool isEmptyParent = true;
 
                 for (auto neighbor : graph[node])
                 {
-                    if (leaves_parents[neighbor] == false && leaves[neighbor] == false)
+                    if (leavesParents[neighbor] == false && leaves[neighbor] == false)
                     {
-                        required_visits[neighbor] = true;
-                        is_empty_parent = false, parents_all_empty = false;
+                        requiredVisits[neighbor] = true;
+                        isEmptyParent = false, parentsAllEmpty = false;
                     }
                 }
 
-                if (is_empty_parent)
+                if (isEmptyParent)
                 {
-                    empty_parents.insert(node);
+                    emptyParents.insert(node);
                 }
             }
         }
 
-        if (parents_all_empty)
+        if (parentsAllEmpty)
         {
-            if (empty_parents.empty())
+            if (emptyParents.empty())
             {
                 return 0;
             }
             visited.resize(coins.size(), false);
-            dfs_max_empty_parents_dist(*empty_parents.begin());
-            return max(0, (max_empty_parents_dist - 2) * 2);
+            dfsMaxEmptyParentsDist(*emptyParents.begin());
+            return max(0, (maxEmptyParentsDist - 2) * 2);
         }
 
         visited.clear(); // Must clear before resize to reset all values to false.
         visited.resize(coins.size(), false);
-        int must_visit_node = -1;
+
+        int mustVisitNode = -1;
+
         for (int node = 0; node < coins.size(); node++)
         {
-            if (required_visits[node] && visited[node] == false)
+            if (requiredVisits[node] && visited[node] == false)
             {
-                must_visit_node = node;
-                dfs_required_visit_nodes(node);
+                mustVisitNode = node;
+                dfsRequiredVisitNodes(node);
             }
         }
 
-        if (must_visit_node != -1)
+        if (mustVisitNode != -1)
         {
             visited.clear(); // Must clear before resize to reset all values to false.
             visited.resize(coins.size(), false);
-            dfs_must_visit_edges(-1, must_visit_node);
+            dfsMustVisitEdges(-1, mustVisitNode);
         }
-        return must_visit_edges * 2;
+        return mustVisitEdges * 2;
     }
 };

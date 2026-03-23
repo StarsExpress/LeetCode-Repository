@@ -2,7 +2,7 @@
 #include <unordered_map>
 using namespace std;
 
-int count_special_subsequences(vector<int> &nums)
+int countSpecialSubsequences(vector<int> &nums)
 { // LeetCode Q.1955.
     long long modulo = pow(10, 9) + 7;
     unordered_map<int, long long> subarrays_ends_counts;

@@ -2,52 +2,55 @@
 def compute_max_min_sum(nums: list[int], k: int) -> int:  # LeetCode Q.3430.
     subarrays_max_min_sum = 0
 
-    decreasing_stack: list[list[int]] = []  # Format: [idx, num, shares].
+    max_stack: list[list[int]] = []  # Format: [idx, num, shares].
     subarrays_max_sum = 0
-    increasing_stack: list[list[int]] = []  # Format: [idx, num, shares].
+
+    min_stack: list[list[int]] = []  # Format: [idx, num, shares].
     subarrays_min_sum = 0
 
-    start_idx = 1 - k
     for end_idx, num in enumerate(nums):
-        if start_idx > 0:  # Ensure both stacks have current subarrays' window.
-            decreasing_stack[0][2] -= 1  # Decrement stack's 1st num shares by 1.
-            subarrays_max_sum -= decreasing_stack[0][1]
-            if decreasing_stack[0][0] < start_idx:  # Stack's 1st num out of window.
-                decreasing_stack.pop(0)
+        start_idx = max(0, end_idx - k + 1)
 
-            increasing_stack[0][2] -= 1  # Decrement stack's 1st num shares by 1.
-            subarrays_min_sum -= increasing_stack[0][1]
-            if increasing_stack[0][0] < start_idx:  # Stack's 1st num out of window.
-                increasing_stack.pop(0)
+        # Window start idx slides by 1: must update stacks' info.
+        if start_idx > 0:
+            max_stack[0][2] -= 1  # Decrement stack's front num shares.
+            subarrays_max_sum -= max_stack[0][1]
 
-        while decreasing_stack and decreasing_stack[-1][1] <= num:
-            subarrays_max_sum -= decreasing_stack[-1][1] * decreasing_stack[-1][2]
-            decreasing_stack.pop(-1)
+            if max_stack[0][0] < start_idx:  # Front num out of window.
+                max_stack.pop(0)
 
-        if not decreasing_stack:
+            min_stack[0][2] -= 1  # Decrement stack's front num shares.
+            subarrays_min_sum -= min_stack[0][1]
+
+            if min_stack[0][0] < start_idx:  # Front num out of window.
+                min_stack.pop(0)
+
+        while max_stack and max_stack[-1][1] <= num:
+            _, prev_num, prev_shares = max_stack.pop(-1)
+            subarrays_max_sum -= prev_num * prev_shares
+
+        if not max_stack:
             shares = min(end_idx + 1, k)
 
         else:
-            shares = end_idx - decreasing_stack[-1][0]
+            shares = end_idx - max_stack[-1][0]
 
         subarrays_max_sum += num * shares
-        subarrays_max_min_sum += subarrays_max_sum
-        decreasing_stack.append([end_idx, num, shares])
+        max_stack.append([end_idx, num, shares])
 
-        while increasing_stack and increasing_stack[-1][1] >= num:
-            subarrays_min_sum -= increasing_stack[-1][1] * increasing_stack[-1][2]
-            increasing_stack.pop(-1)
+        while min_stack and min_stack[-1][1] >= num:
+            _, prev_num, prev_shares = min_stack.pop(-1)
+            subarrays_min_sum -= prev_num * prev_shares
 
-        if not increasing_stack:
+        if not min_stack:
             shares = min(end_idx + 1, k)
 
         else:
-            shares = end_idx - increasing_stack[-1][0]
+            shares = end_idx - min_stack[-1][0]
 
         subarrays_min_sum += num * shares
-        subarrays_max_min_sum += subarrays_min_sum
-        increasing_stack.append([end_idx, num, shares])
+        min_stack.append([end_idx, num, shares])
 
-        start_idx += 1
+        subarrays_max_min_sum += subarrays_max_sum + subarrays_min_sum
 
     return subarrays_max_min_sum

@@ -5,85 +5,89 @@ using namespace std;
 
 class MaxRisingPath
 { // LeetCode Q.329.
-public:
-    int find_longest_rising_path(vector<vector<int>> &matrix)
-    {
-        stored_matrix = matrix;
-        total_rows = matrix.size();
-        total_cols = matrix[0].size();
-
-        // Initialize matrix to 0 as 0 denotes an unsearched cell.
-        longest_rising_lens = vector<vector<int>>(
-            total_rows, vector<int>(total_cols, 0));
-
-        for (int row_idx = 0; row_idx < total_rows; row_idx++)
-        {
-            for (int col_idx = 0; col_idx < total_cols; col_idx++)
-            {
-                if (longest_rising_lens[row_idx][col_idx] == 0)
-                {
-                    dfs_max_rising_path(row_idx, col_idx);
-                }
-            }
-        }
-        return max_rising_len;
-    }
-
 private:
-    int max_rising_len = 1; // Base case.
-    vector<vector<int>> longest_rising_lens;
-    int total_rows;
-    int total_cols;
-    vector<vector<int>> stored_matrix;
+    int maxRisingLen = 1; // Base case.
+    vector<vector<int>> longestRisingLens;
 
-    void dfs_max_rising_path(int row_idx, int col_idx)
+    int totalRows;
+    int totalCols;
+    vector<vector<int>> storedMatrix;
+
+    void dfsMaxRisingPath(int rowIdx, int colIdx)
     {
         list<vector<int>> neighbors;
-        if (col_idx < total_cols - 1)
+
+        if (colIdx < totalCols - 1)
         { // Can go East.
-            neighbors.push_back({row_idx, col_idx + 1});
+            neighbors.push_back({rowIdx, colIdx + 1});
         }
 
-        if (0 < col_idx)
+        if (0 < colIdx)
         { // Can go West.
-            neighbors.push_back({row_idx, col_idx - 1});
+            neighbors.push_back({rowIdx, colIdx - 1});
         }
 
-        if (row_idx < total_rows - 1)
+        if (rowIdx < totalRows - 1)
         { // Can go South.
-            neighbors.push_back({row_idx + 1, col_idx});
+            neighbors.push_back({rowIdx + 1, colIdx});
         }
 
-        if (0 < row_idx)
+        if (0 < rowIdx)
         { // Can go North.
-            neighbors.push_back({row_idx - 1, col_idx});
+            neighbors.push_back({rowIdx - 1, colIdx});
         }
 
-        int max_neighbor_len = 0;
+        int maxNeighborLen = 0;
         for (auto neighbor : neighbors)
         {
-            int next_row_idx = neighbor[0];
-            int next_col_idx = neighbor[1];
-            int neighbor_val = stored_matrix[next_row_idx][next_col_idx];
+            int nextRowIdx = neighbor[0];
+            int nextColIdx = neighbor[1];
+            int neighborVal = storedMatrix[nextRowIdx][nextColIdx];
 
-            if (neighbor_val > stored_matrix[row_idx][col_idx])
+            if (neighborVal > storedMatrix[rowIdx][colIdx])
             {
-                if (longest_rising_lens[next_row_idx][next_col_idx] == 0)
+                if (longestRisingLens[nextRowIdx][nextColIdx] == 0)
                 {
-                    dfs_max_rising_path(next_row_idx, next_col_idx);
+                    dfsMaxRisingPath(nextRowIdx, nextColIdx);
                 }
-                int neighbor_len = longest_rising_lens[next_row_idx][next_col_idx];
-                if (neighbor_len > max_neighbor_len)
+
+                int neighborLen = longestRisingLens[nextRowIdx][nextColIdx];
+
+                if (neighborLen > maxNeighborLen)
                 {
-                    max_neighbor_len = neighbor_len;
+                    maxNeighborLen = neighborLen;
                 }
             }
         }
 
-        longest_rising_lens[row_idx][col_idx] = 1 + max_neighbor_len;
-        if (longest_rising_lens[row_idx][col_idx] > max_rising_len)
+        longestRisingLens[rowIdx][colIdx] = 1 + maxNeighborLen;
+        if (longestRisingLens[rowIdx][colIdx] > maxRisingLen)
         {
-            max_rising_len = longest_rising_lens[row_idx][col_idx];
+            maxRisingLen = longestRisingLens[rowIdx][colIdx];
         }
+    }
+
+public:
+    int findLongestRisingPath(vector<vector<int>> &matrix)
+    {
+        storedMatrix = matrix;
+        totalRows = matrix.size();
+        totalCols = matrix[0].size();
+
+        // Initialize matrix to 0, denoting all unsearched cells.
+        longestRisingLens = vector<vector<int>>(
+            totalRows, vector<int>(totalCols, 0));
+
+        for (int rowIdx = 0; rowIdx < totalRows; rowIdx++)
+        {
+            for (int colIdx = 0; colIdx < totalCols; colIdx++)
+            {
+                if (longestRisingLens[rowIdx][colIdx] == 0)
+                {
+                    dfsMaxRisingPath(rowIdx, colIdx);
+                }
+            }
+        }
+        return maxRisingLen;
     }
 };

@@ -14,20 +14,20 @@ struct TreeNode
 class BinaryTreeHouseRobber // LeetCode Q.337.
 {
 private:
-    pair<int, int> dfs_rob(TreeNode *node)
+    pair<int, int> dfsRobbery(TreeNode *node)
     { // Pair format: {robbed money w.r.t. node, robbed money w.r.t. children}.
         int children_money = 0;
         int node_money = node->val;
 
         if (node->left != nullptr)
         {
-            pair<int, int> robbed_money_pair = dfs_rob(node->left);
+            pair<int, int> robbed_money_pair = dfsRobbery(node->left);
             node_money += robbed_money_pair.second;
             children_money += robbed_money_pair.first;
         }
         if (node->right != nullptr)
         {
-            pair<int, int> robbed_money_pair = dfs_rob(node->right);
+            pair<int, int> robbed_money_pair = dfsRobbery(node->right);
             node_money += robbed_money_pair.second;
             children_money += robbed_money_pair.first;
         }
@@ -38,6 +38,6 @@ private:
 public:
     int rob(TreeNode *root)
     {
-        return dfs_rob(root).first;
+        return dfsRobbery(root).first;
     }
 };

@@ -1,3 +1,4 @@
+#include <vector>
 #include <unordered_map>
 #include <list>
 #include <numeric>
@@ -9,9 +10,9 @@ class LongestNonRepeatingPath
 private:
     string chars;
     unordered_map<int, list<int>> tree;
-    int max_non_repeating_len;
+    int maxNonRepeatingLen;
 
-    int dfs_max_non_repeating_len(int idx)
+    int dfsMaxNonRepeatingLen(int idx)
     {
         if (tree.find(idx) == tree.end())
         { // Base case: leave nodes.
@@ -22,7 +23,7 @@ private:
         for (auto child_idx : tree[idx])
         {
             top_2_children_lens.push_back(0); // Default to 0.
-            int children_len = dfs_max_non_repeating_len(child_idx);
+            int children_len = dfsMaxNonRepeatingLen(child_idx);
             if (chars[child_idx] != chars[idx])
             {
                 top_2_children_lens.back() += children_len;
@@ -40,33 +41,33 @@ private:
         // Curve path is centered at current node.
         int curve_len = accumulate(top_2_children_lens.begin(), top_2_children_lens.end(), 1);
 
-        if (max(straight_len, curve_len) > max_non_repeating_len)
+        if (max(straight_len, curve_len) > maxNonRepeatingLen)
         {
-            max_non_repeating_len = max(straight_len, curve_len);
+            maxNonRepeatingLen = max(straight_len, curve_len);
         }
         return straight_len; // Only straight len can be reported to parent.
     }
 
 public:
-    int find_longest_non_repeating_len(vector<int> &parent, string characters)
+    int findLongestNonRepeatingLen(vector<int> &parent, string characters)
     {
         chars = characters;
         tree.clear();
-        for (int child_idx = 0; child_idx < parent.size(); child_idx++)
+        for (int childIdx = 0; childIdx < parent.size(); childIdx++)
         {
-            int parent_idx = parent[child_idx];
-            if (parent_idx != -1)
+            int parentIdx = parent[childIdx];
+            if (parentIdx != -1)
             { // Non root nodes.
-                if (tree.find(parent_idx) == tree.end())
+                if (tree.find(parentIdx) == tree.end())
                 {
-                    tree[parent_idx] = {};
+                    tree[parentIdx] = {};
                 }
-                tree[parent_idx].push_back(child_idx);
+                tree[parentIdx].push_back(childIdx);
             }
         }
 
-        max_non_repeating_len = 1;    // Base case.
-        dfs_max_non_repeating_len(0); // Start from root.
-        return max_non_repeating_len;
+        maxNonRepeatingLen = 1;   // Base case.
+        dfsMaxNonRepeatingLen(0); // Start from root.
+        return maxNonRepeatingLen;
     }
 };
