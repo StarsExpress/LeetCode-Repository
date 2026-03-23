@@ -3,50 +3,50 @@
 #include <string>
 using namespace std;
 
-vector<int> partition_labels(string s) // LeetCode Q.763.
+vector<int> partitionLabels(string s) // LeetCode Q.763.
 {
-    unordered_map<char, int> chars2orders;
-    vector<pair<int, int>> indices_pairs; // Same char's 1st and last indices pair.
+    unordered_map<char, int> charsOrders;
+    vector<pair<int, int>> indicesPairs; // Same char's 1st and last indices pair.
 
     for (int idx = 0; idx < s.size(); idx++)
     {
         char character = s[idx];
-        if (chars2orders.find(character) == chars2orders.end())
+        if (charsOrders.find(character) == charsOrders.end())
         {
-            chars2orders[character] = chars2orders.size() + 1;
-            indices_pairs.push_back({idx, idx});
+            charsOrders[character] = charsOrders.size() + 1;
+            indicesPairs.push_back({idx, idx});
         }
 
-        int order = chars2orders[character];
-        indices_pairs[order - 1].second = idx;
+        int order = charsOrders[character];
+        indicesPairs[order - 1].second = idx;
     }
 
-    vector<int> partition_sizes;
+    vector<int> partitionSizes;
 
-    int current_size = 0;
-    int current_right_idx = -1;
+    int currentSize = 0;
+    int currentRightIdx = -1;
 
-    for (auto [first_idx, last_idx] : indices_pairs)
+    for (auto [firstIdx, lastIdx] : indicesPairs)
     {
-        if (current_right_idx < first_idx) // Start a new partition.
+        if (currentRightIdx < firstIdx) // Start a new partition.
         {
-            if (current_size > 0) // Store the latest partition.
-                partition_sizes.push_back(current_size);
+            if (currentSize > 0) // Store the latest partition.
+                partitionSizes.push_back(currentSize);
 
-            current_size = last_idx + 1 - first_idx;
-            current_right_idx = last_idx;
+            currentSize = lastIdx + 1 - firstIdx;
+            currentRightIdx = lastIdx;
             continue;
         }
 
-        if (last_idx > current_right_idx) // Current partition extends.
+        if (lastIdx > currentRightIdx) // Current partition extends.
         {
-            current_size += last_idx - current_right_idx;
-            current_right_idx = last_idx;
+            currentSize += lastIdx - currentRightIdx;
+            currentRightIdx = lastIdx;
         }
     }
 
-    if (current_size > 0) // Last remaining partition.
-        partition_sizes.push_back(current_size);
+    if (currentSize > 0) // Last remaining partition.
+        partitionSizes.push_back(currentSize);
 
-    return partition_sizes;
+    return partitionSizes;
 }

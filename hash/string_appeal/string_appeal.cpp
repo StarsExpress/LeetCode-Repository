@@ -2,21 +2,20 @@
 #include <unordered_map>
 using namespace std;
 
-long long sum_total_appeal(string s)
+long long sumTotalAppeal(string s)
 { // LeetCode 2262.
-    long long total_appeal = 0, last_appeal = 0;
-    unordered_map<char, int> chars2indices; // Each char's last occurred idx.
+    long long totalAppeal = 0, lastAppeal = 0;
+    unordered_map<char, int> charsIndices; // Each char's last occurred idx.
 
     for (int idx = 0; idx < s.length(); idx++)
     {
-        if (chars2indices.find(s[idx]) != chars2indices.end())
-        {
-            last_appeal -= 1 + chars2indices[s[idx]];
-        }
-        chars2indices[s[idx]] = idx;
+        if (charsIndices.find(s[idx]) != charsIndices.end())
+            lastAppeal -= 1 + charsIndices[s[idx]];
 
-        last_appeal += 1 + idx;
-        total_appeal += last_appeal;
+        charsIndices[s[idx]] = idx;
+
+        lastAppeal += 1 + idx;
+        totalAppeal += lastAppeal;
     }
-    return total_appeal;
+    return totalAppeal;
 }

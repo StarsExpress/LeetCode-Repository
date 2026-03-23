@@ -4,35 +4,33 @@ using namespace std;
 class Skiplist
 { // LeetCode Q.1206.
 private:
-    unordered_map<int, int> nums2counts;
+    unordered_map<int, int> numsCounts;
 
 public:
     Skiplist() {}
 
     bool search(int target)
     {
-        if (nums2counts.find(target) == nums2counts.end())
-        {
+        if (numsCounts.find(target) == numsCounts.end())
             return false;
-        }
-        if (nums2counts[target] == 0)
-        {
+
+        if (numsCounts[target] == 0)
             return false;
-        }
+
         return true;
     }
 
     void add(int num)
     {
-        nums2counts[num]++;
+        numsCounts[num]++;
     }
 
     bool erase(int num)
     {
-        nums2counts[num]--;
-        if (nums2counts[num] == -1)
-        {                       // Num isn't in skiplist.
-            nums2counts[num]++; // Back to 0.
+        numsCounts[num]--;
+        if (numsCounts[num] == -1) // Num isn't in skiplist.
+        {
+            numsCounts[num]++; // Back to 0.
             return false;
         }
         return true;

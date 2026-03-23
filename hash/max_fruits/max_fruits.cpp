@@ -1,68 +1,64 @@
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-int harvest_max_fruits(vector<vector<int>> &fruits, int start_position, int steps)
+int harvestMaxFruits(vector<vector<int>> &fruits, int startPosition, int steps)
 { // LeetCode Q.2106.
-    vector<int> positions, fruits_prefix_sums;
+    vector<int> positions, fruitsPrefixSums;
     for (auto fruit : fruits) // Format: {position, fruits}.
     {
         positions.push_back(fruit[0]);
 
-        if (fruits_prefix_sums.empty())
-        {
-            fruits_prefix_sums.push_back(fruit[1]);
-        }
+        if (fruitsPrefixSums.empty())
+            fruitsPrefixSums.push_back(fruit[1]);
+
         else
-        {
-            fruits_prefix_sums.push_back(fruits_prefix_sums.back() + fruit[1]);
-        }
+            fruitsPrefixSums.push_back(fruitsPrefixSums.back() + fruit[1]);
     }
 
-    int max_harvested_fruits = 0;
+    int maxHarvestedFruits = 0;
+
     // Idx of the last position <= start position.
-    int start_idx = upper_bound(positions.begin(), positions.end(), start_position) - positions.begin() - 1;
+    int startIdx = upper_bound(positions.begin(), positions.end(), startPosition) - positions.begin() - 1;
 
     for (int step_1 = 0; step_1 <= steps / 2; step_1++)
     {
         int step_2 = steps - step_1 * 2;
 
         vector<pair<int, int>> ends_pairs = {
-            {start_position - step_1, start_position + step_2},
-            {start_position - step_2, start_position + step_1}};
+            {startPosition - step_1, startPosition + step_2},
+            {startPosition - step_2, startPosition + step_1}};
 
         for (auto ends_pair : ends_pairs)
         {
             auto [left_end, right_end] = ends_pair;
+
             // Idx of the last position <= left end - 1.
-            int left_idx = upper_bound(positions.begin(), positions.end(), left_end - 1) - positions.begin() - 1;
+            int leftIdx = upper_bound(positions.begin(), positions.end(), left_end - 1) - positions.begin() - 1;
+
             // Idx of the last position <= right end.
-            int right_idx = upper_bound(positions.begin(), positions.end(), right_end) - positions.begin() - 1;
+            int rightIdx = upper_bound(positions.begin(), positions.end(), right_end) - positions.begin() - 1;
 
-            int harvested_fruits = 0;
-            if (right_idx > start_idx)
+            int harvestedFruits = 0;
+
+            if (rightIdx > startIdx)
             { // Can harvest fruits at start position's right side.
-                harvested_fruits += fruits_prefix_sums[right_idx];
-                if (start_idx >= 0)
-                {
-                    harvested_fruits -= fruits_prefix_sums[start_idx];
-                }
+                harvestedFruits += fruitsPrefixSums[rightIdx];
+                if (startIdx >= 0)
+                    harvestedFruits -= fruitsPrefixSums[startIdx];
             }
 
-            if (start_idx > left_idx)
+            if (startIdx > leftIdx)
             { // Can harvest fruits at start position's left side.
-                harvested_fruits += fruits_prefix_sums[start_idx];
-                if (left_idx >= 0)
-                {
-                    harvested_fruits -= fruits_prefix_sums[left_idx];
-                }
+                harvestedFruits += fruitsPrefixSums[startIdx];
+                if (leftIdx >= 0)
+                    harvestedFruits -= fruitsPrefixSums[leftIdx];
             }
 
-            if (harvested_fruits > max_harvested_fruits)
-            {
-                max_harvested_fruits = harvested_fruits;
-            }
+            if (harvestedFruits > maxHarvestedFruits)
+                maxHarvestedFruits = harvestedFruits;
         }
     }
 
-    return max_harvested_fruits;
+    return maxHarvestedFruits;
 }

@@ -6,12 +6,12 @@ using namespace std;
 class CoprimeProducts
 { // LeetCode Q.2584.
 private:
-    unordered_map<int, int> find_primes(int num)
+    unordered_map<int, int> findPrimes(int num)
     {
-        unordered_map<int, int> primes2counts; // Counts of all occurred primes.
+        unordered_map<int, int> primes2Counts; // Counts of all occurred primes.
         while (num % 2 == 0)
         {
-            primes2counts[2]++;
+            primes2Counts[2]++;
             num /= 2;
         }
 
@@ -20,65 +20,58 @@ private:
         {
             while (num % factor == 0)
             {
-                primes2counts[factor]++;
+                primes2Counts[factor]++;
                 num /= factor;
             }
         }
 
-        if (num > 2)
-        { // When num is a prime greater than 2.
-            primes2counts[num]++;
-        }
+        if (num > 2) // When num is a prime greater than 2.
+            primes2Counts[num]++;
 
-        return primes2counts;
+        return primes2Counts;
     }
 
 public:
     int find_split_idx(vector<int> &nums)
     {
-        unordered_map<int, unordered_map<int, int>> nums2primes;
-        unordered_map<int, int> prefix_primes, suffix_primes;
+        unordered_map<int, unordered_map<int, int>> nums2Primes;
+        unordered_map<int, int> prefixPrimes, suffixPrimes;
+
         for (auto num : nums)
         {
-            if (nums2primes.find(num) == nums2primes.end())
-            {
-                nums2primes[num] = find_primes(num);
-            }
+            if (nums2Primes.find(num) == nums2Primes.end())
+                nums2Primes[num] = findPrimes(num);
 
-            for (auto &pair : nums2primes[num])
+            for (auto &pair : nums2Primes[num])
             {
                 auto [prime, count] = pair;
-                suffix_primes[prime] += count;
+                suffixPrimes[prime] += count;
             }
         }
 
-        unordered_set<int> common_primes;
+        unordered_set<int> commonPrimes;
         for (int idx = 0; idx < nums.size() - 1; idx++)
         {
-            for (auto &pair : nums2primes[nums[idx]])
+            for (auto &pair : nums2Primes[nums[idx]])
             {
                 auto [prime, count] = pair;
-                prefix_primes[prime] += count;
-                common_primes.insert(prime);
+                prefixPrimes[prime] += count;
+                commonPrimes.insert(prime);
             }
 
-            for (auto &pair : nums2primes[nums[idx]])
+            for (auto &pair : nums2Primes[nums[idx]])
             {
                 auto [prime, count] = pair;
-                suffix_primes[prime] -= count;
-                if (suffix_primes[prime] == 0)
+                suffixPrimes[prime] -= count;
+                if (suffixPrimes[prime] == 0)
                 {
-                    if (common_primes.find(prime) != common_primes.end())
-                    {
-                        common_primes.erase(prime);
-                    }
+                    if (commonPrimes.find(prime) != commonPrimes.end())
+                        commonPrimes.erase(prime);
                 }
             }
 
-            if (common_primes.empty())
-            { // Current idx is the smallest idx to split.
+            if (commonPrimes.empty()) // Current idx is the smallest idx to split.
                 return idx;
-            }
         }
         return -1;
     }

@@ -7,24 +7,24 @@ using namespace std;
 class UnBlockedPick
 { // LeetCode Q.710.
 private:
-    int total_candidates;
-    unordered_map<int, int> nums2replacements;
+    int totalCandidates;
+    unordered_map<int, int> numsReplacements;
 
 public:
     UnBlockedPick(int n, vector<int> &blocklist)
     {
-        unordered_set<int> blocked_nums(blocklist.begin(), blocklist.end());
+        unordered_set<int> blockedNums(blocklist.begin(), blocklist.end());
 
-        total_candidates = n - blocklist.size();
-        int replacement = total_candidates;
-        for (auto blocked_num : blocklist)
+        totalCandidates = n - blocklist.size();
+        int replacement = totalCandidates;
+        for (auto blockedNum : blocklist)
         {
-            if (blocked_num < total_candidates)
+            if (blockedNum < totalCandidates)
             { // Need replacements for blocked nums in [0, total candidates - 1].
-                while (blocked_nums.find(replacement) != blocked_nums.end())
+                while (blockedNums.find(replacement) != blockedNums.end())
                     replacement++;
 
-                nums2replacements[blocked_num] = replacement;
+                numsReplacements[blockedNum] = replacement;
                 replacement++;
             }
         }
@@ -34,11 +34,12 @@ public:
     {
         static random_device rd;
         static mt19937 gen(rd());
-        uniform_int_distribution<> distribution(0, total_candidates - 1);
-        int picked_num = distribution(gen);
 
-        if (nums2replacements.find(picked_num) != nums2replacements.end())
-            picked_num = nums2replacements[picked_num];
-        return picked_num;
+        uniform_int_distribution<> distribution(0, totalCandidates - 1);
+        int pickedNum = distribution(gen);
+
+        if (numsReplacements.find(pickedNum) != numsReplacements.end())
+            pickedNum = numsReplacements[pickedNum];
+        return pickedNum;
     }
 };

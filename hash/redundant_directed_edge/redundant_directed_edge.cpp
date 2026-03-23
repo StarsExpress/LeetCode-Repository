@@ -1,54 +1,49 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class RedundantDirectedEdge
 { // LeetCode Q.685.
 private:
     unordered_map<int, unordered_set<int>> graph;
-    unordered_set<int> visited_nodes;
+    unordered_set<int> visitedNodes;
 
-    void remove_edge(int out_node, int in_node)
+    void removeEdge(int outNode, int inNode)
     {
-        if (graph.find(out_node) != graph.end())
+        if (graph.find(outNode) != graph.end())
         {
-            if (graph[out_node].find(in_node) != graph[out_node].end())
-            {
-                graph[out_node].erase(in_node);
-            }
+            if (graph[outNode].find(inNode) != graph[outNode].end())
+                graph[outNode].erase(inNode);
         }
     }
 
-    void restore_edge(int out_node, int in_node)
+    void restoreEdge(int outNode, int inNode)
     {
-        graph[out_node].insert(in_node);
+        graph[outNode].insert(inNode);
     }
 
-    bool test_connection(int start_node, int end_node)
+    bool testConnection(int startNode, int endNode)
     {
-        visited_nodes.clear();
-        return dfs_connection(start_node, end_node);
+        visitedNodes.clear();
+        return dfsConnection(startNode, endNode);
     }
 
-    bool dfs_connection(int start_node, int end_node)
+    bool dfsConnection(int startNode, int endNode)
     {
-        visited_nodes.insert(start_node);
-        if (graph.find(start_node) != graph.end())
+        visitedNodes.insert(startNode);
+        if (graph.find(startNode) != graph.end())
         {
-            for (auto neighbor_node : graph[start_node])
+            for (auto neighborNode : graph[startNode])
             {
-                if (neighbor_node == end_node)
-                {
+                if (neighborNode == endNode)
                     return true;
-                }
 
-                if (visited_nodes.find(neighbor_node) == visited_nodes.end())
+                if (visitedNodes.find(neighborNode) == visitedNodes.end())
                 {
-                    if (dfs_connection(neighbor_node, end_node))
-                    {
+                    if (dfsConnection(neighborNode, endNode))
                         return true;
-                    }
                 }
             }
         }
@@ -59,29 +54,27 @@ private:
 public:
     vector<int> findRedundantDirectedConnection(vector<vector<int>> &edges)
     {
-        unordered_map<int, int> in_degrees;
+        unordered_map<int, int> inDegrees;
         for (auto edge : edges)
         { // Edge format: {out node, in node}.
             int out_node = edge[0];
             int in_node = edge[1];
+
             if (graph.find(out_node) == graph.end())
-            {
                 graph[out_node] = {};
-            }
+
             graph[out_node].insert(in_node);
 
             for (auto node : edge)
             {
-                if (in_degrees.find(node) == in_degrees.end())
-                {
-                    in_degrees[node] = 0;
-                }
+                if (inDegrees.find(node) == inDegrees.end())
+                    inDegrees[node] = 0;
             }
-            in_degrees[in_node] += 1;
+            inDegrees[in_node] += 1;
         }
 
         int root = -1;
-        for (const auto &pair : in_degrees)
+        for (const auto &pair : inDegrees)
         {
             if (pair.second == 0)
             {
@@ -91,29 +84,28 @@ public:
         }
 
         reverse(edges.begin(), edges.end());
+
         for (auto edge : edges)
         { // Edge format: {out node, in node}.
             if (root != -1)
             { // Root is detected.
-                if (in_degrees[edge[1]] == 2)
+                if (inDegrees[edge[1]] == 2)
                 {
-                    remove_edge(edge[0], edge[1]);
-                    if (test_connection(root, edge[1]))
-                    {
+                    removeEdge(edge[0], edge[1]);
+                    if (testConnection(root, edge[1]))
                         return edge; // Edge removal: root still visits in node.
-                    }
-                    restore_edge(edge[0], edge[1]);
+
+                    restoreEdge(edge[0], edge[1]);
                 }
                 continue;
             }
 
             // Root not detected yet.
-            remove_edge(edge[0], edge[1]);
-            if (test_connection(edge[1], edge[0]))
-            {
+            removeEdge(edge[0], edge[1]);
+            if (testConnection(edge[1], edge[0]))
                 return edge; // Edge removal: in node still visits out node.
-            }
-            restore_edge(edge[0], edge[1]);
+
+            restoreEdge(edge[0], edge[1]);
         }
 
         return {};

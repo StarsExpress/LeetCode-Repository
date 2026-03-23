@@ -2,35 +2,34 @@
 #include <unordered_map>
 using namespace std;
 
-int count_good_partitions(vector<int> &nums)
+int countGoodPartitions(vector<int> &nums)
 { // LeetCode Q.2963.
     // Each num's 1st and last occurred indices.
-    unordered_map<int, pair<int, int>> nums2boundary_indices;
+    unordered_map<int, pair<int, int>> nums2BoundaryIndices;
+
     for (int idx = 0; idx < nums.size(); idx++)
     {
-        if (nums2boundary_indices.find(nums[idx]) == nums2boundary_indices.end())
-        {
-            nums2boundary_indices[nums[idx]] = {idx, idx};
-        }
-        nums2boundary_indices[nums[idx]].second = idx;
+        if (nums2BoundaryIndices.find(nums[idx]) == nums2BoundaryIndices.end())
+            nums2BoundaryIndices[nums[idx]] = {idx, idx};
+
+        nums2BoundaryIndices[nums[idx]].second = idx;
     }
 
     int segments = 0;
-    int last_segment_left_idx = -1, last_segment_right_idx = -1;
+    int lastSegmentLeftIdx = -1, lastSegmentRightIdx = -1;
+
     for (int idx = 0; idx < nums.size(); idx++)
     {
-        auto [left_idx, right_idx] = nums2boundary_indices[nums[idx]];
-        if (last_segment_right_idx < left_idx)
+        auto [leftIdx, rightIdx] = nums2BoundaryIndices[nums[idx]];
+        if (lastSegmentRightIdx < leftIdx)
         { // A new segment is formed.
             segments += 1;
-            last_segment_left_idx = left_idx, last_segment_right_idx = right_idx;
+            lastSegmentLeftIdx = leftIdx, lastSegmentRightIdx = rightIdx;
             continue;
         }
 
-        if (last_segment_right_idx < right_idx)
-        { // Last segment expands.
-            last_segment_right_idx = right_idx;
-        }
+        if (lastSegmentRightIdx < rightIdx) // Last segment expands.
+            lastSegmentRightIdx = rightIdx;
     }
 
     long long partitions = 1, modulo = pow(10, 9) + 7;
@@ -40,5 +39,6 @@ int count_good_partitions(vector<int> &nums)
         partitions %= modulo; // Required to control size.
         segments--;
     }
+
     return partitions;
 }
