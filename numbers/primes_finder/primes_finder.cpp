@@ -2,31 +2,32 @@
 #include <vector>
 using namespace std;
 
-vector<int> find_all_primes(int number)
+vector<int> findAllPrimes(int number)
 {
     vector<int> primes;
     if (number <= 1)
         return primes; // Sanity check.
 
     // From 3 and so on, all primes are odd.
-    int current_prime = 2; // The only even prime is 2.
+    int currentPrime = 2; // The only even prime is 2.
 
     while (number > 1)
     {
-        if (number % current_prime == 0)
+        if (number % currentPrime == 0)
         {
-            primes.push_back(current_prime);
-            number /= current_prime;
+            primes.push_back(currentPrime);
+            number /= currentPrime;
             continue;
         }
 
-        if (current_prime == 2)
-            current_prime++;
-        else
-            current_prime += 2;
+        if (currentPrime == 2)
+            currentPrime++;
 
-        if (current_prime > sqrt(number) && number > 1)
-            current_prime = number;
+        else
+            currentPrime += 2;
+
+        if (currentPrime > sqrt(number) && number > 1)
+            currentPrime = number;
     }
 
     return primes;

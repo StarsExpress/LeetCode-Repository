@@ -1,44 +1,45 @@
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
-vector<int> find_min_intervals(vector<vector<int>> &intervals, vector<int> &queries)
+vector<int> findMinIntervals(vector<vector<int>> &intervals, vector<int> &queries)
 { // LeetCode Q.1851.
     // Min heap. Format: {interval start, size}.
-    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> starts_sizes_heap;
+    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> startsSizesHeap;
 
     // Min heap. Format: {size, interval end}.
-    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> sizes_ends_heap;
+    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> sizesEndsHeap;
 
     for (auto interval : intervals)
-        starts_sizes_heap.push({interval[0], interval[1] + 1 - interval[0]});
+        startsSizesHeap.push({interval[0], interval[1] + 1 - interval[0]});
 
-    vector<pair<int, int>> queries_indices; // Format: {query num, query idx}.
-    for (int query_idx = 0; query_idx < queries.size(); query_idx++)
-        queries_indices.push_back({queries[query_idx], query_idx});
+    vector<pair<int, int>> queriesIndices; // Format: {query num, query idx}.
+
+    for (int queryIdx = 0; queryIdx < queries.size(); queryIdx++)
+        queriesIndices.push_back({queries[queryIdx], queryIdx});
 
     sort( // Sort by ascending query nums.
-        queries_indices.begin(), queries_indices.end(),
+        queriesIndices.begin(), queriesIndices.end(),
         [](const pair<int, int> &a, const pair<int, int> &b)
         { return a.first < b.first; });
 
     vector<int> answers(queries.size(), -1); // Default to -1.
-    for (auto [query_num, query_idx] : queries_indices)
+
+    for (auto [queryNum, queryIdx] : queriesIndices)
     {
-        while (!starts_sizes_heap.empty() && starts_sizes_heap.top()[0] <= query_num)
+        while (!startsSizesHeap.empty() && startsSizesHeap.top()[0] <= queryNum)
         {
-            int start = starts_sizes_heap.top()[0], size = starts_sizes_heap.top()[1];
-            sizes_ends_heap.push({size, start + size - 1}); // Format: {size, interval end}.
-            starts_sizes_heap.pop();
+            int start = startsSizesHeap.top()[0], size = startsSizesHeap.top()[1];
+            sizesEndsHeap.push({size, start + size - 1}); // Format: {size, interval end}.
+            startsSizesHeap.pop();
         }
 
-        while (!sizes_ends_heap.empty() && sizes_ends_heap.top()[1] < query_num)
-        {
-            sizes_ends_heap.pop();
-        }
+        while (!sizesEndsHeap.empty() && sizesEndsHeap.top()[1] < queryNum)
+            sizesEndsHeap.pop();
 
-        if (!sizes_ends_heap.empty())
-            answers[query_idx] = sizes_ends_heap.top()[0];
+        if (!sizesEndsHeap.empty())
+            answers[queryIdx] = sizesEndsHeap.top()[0];
     }
 
     return answers;

@@ -1,94 +1,92 @@
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
-vector<long long> collect_max_segment_sums(vector<int> &nums, vector<int> &queries)
+vector<long long> collectMaxSegmentSums(vector<int> &nums, vector<int> &queries)
 { // LeetCode Q.2382.
 
-    vector<long long> prefix_sums; // Store sums in long long.
+    vector<long long> prefixSums; // Store sums in long long.
     for (auto num : nums)
     {
-        if (prefix_sums.empty())
-        {
-            prefix_sums.push_back(num);
-        }
+        if (prefixSums.empty())
+            prefixSums.push_back(num);
+
         else
-        {
-            prefix_sums.push_back(prefix_sums.back() + num);
-        }
+            prefixSums.push_back(prefixSums.back() + num);
     }
 
     // Max heap. Format: {segment sum, segment start idx, segment end idx}.
-    priority_queue<vector<long long>, vector<vector<long long>>> sums_heap;
-    int total_nums = nums.size();
-    sums_heap.push({prefix_sums.back(), 0, total_nums - 1});
+    priority_queue<vector<long long>, vector<vector<long long>>> sumsHeap;
 
-    vector<long long> max_segment_sums;
-    vector<int> sorted_queries;
+    int totalNums = nums.size();
+    sumsHeap.push({prefixSums.back(), 0, totalNums - 1});
+
+    vector<long long> maxSegmentSums;
+    vector<int> sortedQueries;
 
     for (auto query : queries)
     {
-        if (max_segment_sums.size() == queries.size() - 1)
+        if (maxSegmentSums.size() == queries.size() - 1)
         {
-            max_segment_sums.push_back(0); // Last query's answer is always 0.
+            maxSegmentSums.push_back(0); // Last query's answer is always 0.
             break;
         }
 
-        int query_idx = upper_bound(sorted_queries.begin(), sorted_queries.end(), query) - sorted_queries.begin();
-        sorted_queries.insert(sorted_queries.begin() + query_idx, query);
+        int queryIdx = upper_bound(sortedQueries.begin(), sortedQueries.end(), query) - sortedQueries.begin();
+        sortedQueries.insert(sortedQueries.begin() + queryIdx, query);
 
-        while (!sums_heap.empty())
+        while (!sumsHeap.empty())
         {
-            long long segment_sum = sums_heap.top()[0]; // Store sums in long long.
-            int start = sums_heap.top()[1];
-            int end = sums_heap.top()[2];
+            long long segmentSum = sumsHeap.top()[0]; // Store sums in long long.
+            int start = sumsHeap.top()[1];
+            int end = sumsHeap.top()[2];
 
             // Idx of the 1st query >= start.
-            int start_idx = upper_bound(sorted_queries.begin(), sorted_queries.end(), start - 1) - sorted_queries.begin();
+            int startIdx = upper_bound(sortedQueries.begin(), sortedQueries.end(), start - 1) - sortedQueries.begin();
 
             // Idx of the 1st query >= end.
-            int end_idx = upper_bound(sorted_queries.begin(), sorted_queries.end(), end - 1) - sorted_queries.begin();
+            int endIdx = upper_bound(sortedQueries.begin(), sortedQueries.end(), end - 1) - sortedQueries.begin();
 
-            if (start_idx == end_idx)
+            if (startIdx == endIdx)
             {
-                if (end_idx == sorted_queries.size())
+                if (endIdx == sortedQueries.size())
                 { // Edge case.
-                    max_segment_sums.push_back(segment_sum);
+                    maxSegmentSums.push_back(segmentSum);
                     break;
                 }
-                if (sorted_queries[end_idx] != end)
+
+                if (sortedQueries[endIdx] != end)
                 {
-                    max_segment_sums.push_back(segment_sum);
+                    maxSegmentSums.push_back(segmentSum);
                     break;
                 }
             }
 
-            sums_heap.pop(); // Max segment sum is split by a removed idx.
-            int removed_idx = sorted_queries[start_idx];
+            sumsHeap.pop(); // Max segment sum is split by a removed idx.
+            int removedIdx = sortedQueries[startIdx];
 
-            int new_end = removed_idx - 1;
-            if (start <= new_end)
+            int newEnd = removedIdx - 1;
+            if (start <= newEnd)
             {
-                segment_sum = prefix_sums[new_end];
+                segmentSum = prefixSums[newEnd];
                 if (start > 0)
-                {
-                    segment_sum -= prefix_sums[start - 1];
-                }
-                sums_heap.push({segment_sum, start, new_end});
+                    segmentSum -= prefixSums[start - 1];
+
+                sumsHeap.push({segmentSum, start, newEnd});
             }
 
-            int new_start = removed_idx + 1;
-            if (new_start <= end)
+            int newStart = removedIdx + 1;
+            if (newStart <= end)
             {
-                segment_sum = prefix_sums[end];
-                if (new_start > 0)
-                {
-                    segment_sum -= prefix_sums[new_start - 1];
-                }
-                sums_heap.push({segment_sum, new_start, end});
+                segmentSum = prefixSums[end];
+                if (newStart > 0)
+                    segmentSum -= prefixSums[newStart - 1];
+
+                sumsHeap.push({segmentSum, newStart, end});
             }
         }
     }
 
-    return max_segment_sums;
+    return maxSegmentSums;
 }

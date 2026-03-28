@@ -13,7 +13,7 @@ struct Node
 class LRUCache // LeetCode Q.146.
 {
 private:
-    int max_capacity = 1; // Default value.
+    int maxCapacity = 1; // Default value.
     unordered_map<int, Node *> cache;
 
     Node *head = new Node(-1, -1); // Initiate head and tail.
@@ -40,7 +40,7 @@ private:
 public:
     LRUCache(int capacity)
     {
-        max_capacity = capacity;
+        maxCapacity = capacity;
         head->next = tail; // Connect head and tail upon initialization.
         tail->prev = head;
     }
@@ -62,7 +62,7 @@ public:
     {
         if (cache.find(key) == cache.end()) // New key coming.
         {
-            if (cache.size() == max_capacity) // Capacity is full.
+            if (cache.size() == maxCapacity) // Capacity is full.
             {
                 int removed_key = tail->prev->key;
                 cache.erase(removed_key);
@@ -70,9 +70,7 @@ public:
             }
         }
         else // Remove already existing node from current spot.
-        {
             remove(cache[key]);
-        }
 
         Node *node = new Node(key, value);
         add(node);

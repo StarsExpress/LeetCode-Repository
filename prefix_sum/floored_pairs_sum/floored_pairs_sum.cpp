@@ -2,57 +2,53 @@
 #include <unordered_set>
 using namespace std;
 
-int sum_floored_pairs(vector<int> &nums)
+int sumFlooredPairs(vector<int> &nums)
 { // LeetCode Q.1862.
-    int max_num = *max_element(nums.begin(), nums.end());
-    vector<int> nums2counts(max_num + 1, 0); // Idx i stores count of num i.
-    unordered_set<int> distinct_nums;
+    int maxNum = *max_element(nums.begin(), nums.end());
+    vector<int> numsCounts(maxNum + 1, 0); // Idx i stores count of num i.
+
+    unordered_set<int> distinctNums;
     for (auto num : nums)
     {
-        nums2counts[num] += 1;
-        distinct_nums.insert(num);
+        numsCounts[num] += 1;
+        distinctNums.insert(num);
     }
 
-    vector<int> prefix_counts;
-    for (int idx = 0; idx < nums2counts.size(); idx++)
+    vector<int> prefixCounts;
+    for (int idx = 0; idx < numsCounts.size(); idx++)
     {
         if (idx == 0)
-        {
-            prefix_counts.push_back(nums2counts[idx]);
-        }
+            prefixCounts.push_back(numsCounts[idx]);
+
         else
-        {
-            prefix_counts.push_back(prefix_counts.back() + nums2counts[idx]);
-        }
+            prefixCounts.push_back(prefixCounts.back() + numsCounts[idx]);
     }
 
-    long long floored_pairs_sum = 0, modulo = pow(10, 9) + 7;
-    for (auto num : distinct_nums)
+    long long flooredPairsSum = 0, modulo = pow(10, 9) + 7;
+    for (auto num : distinctNums)
     {
-        int max_multiple = max_num / num;
-        for (int multiple = 1; multiple <= max_multiple; multiple++)
+        int maxMultiple = maxNum / num;
+
+        for (int multiple = 1; multiple <= maxMultiple; multiple++)
         {
             long long count = 0, product = num * multiple;
 
-            if (multiple == max_multiple)
-            {
-                count += prefix_counts.back();
-            }
+            if (multiple == maxMultiple)
+                count += prefixCounts.back();
+
             else
-            {
-                count += prefix_counts[product + num - 1];
-            }
+                count += prefixCounts[product + num - 1];
 
-            count -= prefix_counts[product - 1];
+            count -= prefixCounts[product - 1];
 
-            long long increment = nums2counts[num] % modulo;
+            long long increment = numsCounts[num] % modulo;
             increment *= multiple % modulo;
             increment *= count % modulo;
 
-            floored_pairs_sum += increment;
-            floored_pairs_sum %= modulo;
+            flooredPairsSum += increment;
+            flooredPairsSum %= modulo;
         }
     }
 
-    return floored_pairs_sum;
+    return flooredPairsSum;
 }

@@ -2,33 +2,34 @@
 #include <queue>
 using namespace std;
 
-long long maximize_spending(vector<vector<int>> &values)
+long long maximizeSpending(vector<vector<int>> &values)
 { // LeetCode Q.2931.
     // Min heap. Format: {item, row idx}.
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> items_heap;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> itemsHeap;
 
-    for (int row_idx = 0; row_idx < values.size(); row_idx++)
+    for (int rowIdx = 0; rowIdx < values.size(); rowIdx++)
     {
-        int item = values[row_idx].back();
-        items_heap.push({item, row_idx});
-        values[row_idx].pop_back();
+        int item = values[rowIdx].back();
+        itemsHeap.push({item, rowIdx});
+        values[rowIdx].pop_back();
     }
 
-    long long max_spent_money = 0, day = 1;
-    while (!items_heap.empty())
+    long long maxSpentMoney = 0, day = 1;
+
+    while (!itemsHeap.empty())
     {
-        auto [item, row_idx] = items_heap.top();
-        items_heap.pop();
-        max_spent_money += item * day;
+        auto [item, rowIdx] = itemsHeap.top();
+        itemsHeap.pop();
+        maxSpentMoney += item * day;
         day++;
 
-        if (!values[row_idx].empty())
+        if (!values[rowIdx].empty())
         {
-            int new_item = values[row_idx].back();
-            items_heap.push({new_item, row_idx});
-            values[row_idx].pop_back();
+            int newItem = values[rowIdx].back();
+            itemsHeap.push({newItem, rowIdx});
+            values[rowIdx].pop_back();
         }
     }
 
-    return max_spent_money;
+    return maxSpentMoney;
 }

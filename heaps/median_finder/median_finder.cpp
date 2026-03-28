@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class MedianFinder
@@ -11,19 +12,18 @@ public:
     {
     }
 
-    void add_num(int num)
+    void addNum(int num)
     {
         int idx = upper_bound(nums.begin(), nums.end(), num) - nums.begin();
         nums.insert(nums.begin() + idx, num);
     }
 
-    double find_median()
+    double findMedian()
     {
-        int mid_idx = nums.size() / 2;
+        int midIdx = nums.size() / 2;
         if (nums.size() % 2 == 1)
-        {
-            return nums[mid_idx];
-        }
-        return (nums[mid_idx - 1] + nums[mid_idx]) * 0.5;
+            return nums[midIdx];
+
+        return (nums[midIdx - 1] + nums[midIdx]) * 0.5;
     }
 };

@@ -1,50 +1,56 @@
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-int maximize_frequency_score(vector<int> &nums, long long limit)
+int maximizeFrequencyScore(vector<int> &nums, long long limit)
 { // LeetCode Q.2968.
     sort(nums.begin(), nums.end());
-    vector<long long> prefix_sums;
+    vector<long long> prefixSums;
+
     for (auto num : nums)
     {
-        if (prefix_sums.empty())
+        if (prefixSums.empty())
         {
-            prefix_sums.push_back(num);
+            prefixSums.push_back(num);
             continue;
         }
-        prefix_sums.push_back(prefix_sums.back() + num);
+        prefixSums.push_back(prefixSums.back() + num);
     }
 
-    int max_score = 1; // Base case.
+    int maxScore = 1; // Base case.
     long long operations = 0;
 
-    long long left_idx = 0, mid_idx = 0; // Set long long to prevent overflow.
-    for (long long right_idx = 0; right_idx < nums.size(); right_idx++)
+    long long leftIdx = 0, midIdx = 0; // Set long long to prevent overflow.
+
+    for (long long rightIdx = 0; rightIdx < nums.size(); rightIdx++)
     {
-        bool first_while = true;
+        bool firstWhile = true;
         do
         {
-            if (first_while == false)
-                left_idx++; // Since 2nd while, the subarray left bound rises.
+            if (firstWhile == false)
+                leftIdx++; // Since 2nd while, the subarray left bound rises.
 
             // Always optimal to change all nums to the num at mid idx.
-            mid_idx = (left_idx + right_idx) / 2;
-            operations = prefix_sums[right_idx] - prefix_sums[mid_idx];
-            operations -= nums[mid_idx] * (right_idx - mid_idx);
+            midIdx = (leftIdx + rightIdx) / 2;
 
-            operations += nums[mid_idx] * (mid_idx - left_idx);
-            if (mid_idx > 0)
-                operations -= prefix_sums[mid_idx - 1];
-            if (left_idx > 0)
-                operations += prefix_sums[left_idx - 1];
+            operations = prefixSums[rightIdx] - prefixSums[midIdx];
+            operations -= nums[midIdx] * (rightIdx - midIdx);
 
-            first_while = false;
-        } while (limit < operations && left_idx < right_idx);
+            operations += nums[midIdx] * (midIdx - leftIdx);
 
-        int score = right_idx + 1 - left_idx;
-        if (score > max_score)
-            max_score = score;
+            if (midIdx > 0)
+                operations -= prefixSums[midIdx - 1];
+
+            if (leftIdx > 0)
+                operations += prefixSums[leftIdx - 1];
+
+            firstWhile = false;
+        } while (limit < operations && leftIdx < rightIdx);
+
+        int score = rightIdx + 1 - leftIdx;
+        if (score > maxScore)
+            maxScore = score;
     }
 
-    return max_score;
+    return maxScore;
 }

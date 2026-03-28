@@ -8,7 +8,7 @@ struct ListNode
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-void delete_node(ListNode *node) // LeetCode Q.237.
+void deleteNode(ListNode *node) // LeetCode Q.237.
 {
     node->val = node->next->val;
     node->next = node->next->next;
