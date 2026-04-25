@@ -3,45 +3,41 @@ using namespace std;
 
 int computeCircularMaxSubarraySum(vector<int> &nums)
 { // LeetCode Q.918.
-    int array_total_sum = 0;
-    int max_num = nums.front();
+    int arrayTotalSum = 0;
+    int maxNum = nums.front();
 
-    int pos_subarray_sum = 0, max_pos_sum = 0;
+    int posSubarraySum = 0, maxPosSum = 0;
 
-    int neg_subarray_sum = 0, min_neg_sum = 0;
+    int negSubarraySum = 0, minNegSum = 0;
 
-    int total_nums = nums.size();
-
-    for (int idx = 0; idx < total_nums; idx++)
+    for (int idx = 0; idx < nums.size(); idx++)
     {
         int num = nums[idx];
-        array_total_sum += num;
-        if (num > max_num)
-            max_num = num;
+        if (num > maxNum)
+            maxNum = num;
 
-        // Positive sum <= 0: reset subarray.
-        if (pos_subarray_sum <= 0)
-            pos_subarray_sum = 0;
+        arrayTotalSum += num;
 
-        pos_subarray_sum += num;
-        if (pos_subarray_sum > max_pos_sum)
-            max_pos_sum = pos_subarray_sum;
+        posSubarraySum += num;
+        if (posSubarraySum > maxPosSum)
+            maxPosSum = posSubarraySum;
 
-        // Front and last nums are excluded by negative sum subarray.
-        if (0 < idx && idx < total_nums - 1)
-        {
-            // Negative sum >= 0: reset subarray.
-            if (neg_subarray_sum >= 0)
-                neg_subarray_sum = 0;
+        if (posSubarraySum <= 0) // Positive sum <= 0: reset subarray.
+            posSubarraySum = 0;
 
-            neg_subarray_sum += num;
-            if (neg_subarray_sum < min_neg_sum)
-                min_neg_sum = neg_subarray_sum;
-        }
+        negSubarraySum += num;
+        if (negSubarraySum < minNegSum)
+            minNegSum = negSubarraySum;
+
+        if (negSubarraySum >= 0) // Negative sum >= 0: reset subarray.
+            negSubarraySum = 0;
     }
 
-    if (max_num <= 0)
-        return max_num; // All numbers are not positive.
+    if (maxPosSum == 0) // All numbers are non-positive.
+        return maxNum;
 
-    return max(array_total_sum - min_neg_sum, max_pos_sum);
+    if (minNegSum == 0) // All numbers are non-negative.
+        return arrayTotalSum;
+
+    return max(arrayTotalSum - minNegSum, maxPosSum);
 }

@@ -1,58 +1,51 @@
 #include <vector>
 using namespace std;
 
-int find_max_score(vector<int> &nums, int k)
-{ // LeetCode Q.1793.
+int findMaxScore(vector<int> &nums, int k) // LeetCode Q.1793.
+{
+    int subarrayMin = nums[k]; // Base case: subarray of only num at kth idx.
+    int maxSubarrayScore = nums[k];
 
-    int subarray_min = nums[k]; // Base case: subarray of only num at kth idx.
-    int max_subarray_score = nums[k];
-    int left_idx = k;
-    int right_idx = k;
+    int leftIdx = k;
+    int rightIdx = k;
+
     int width = 1;
 
-    while (left_idx >= 0 && right_idx < nums.size())
+    while (leftIdx >= 0 && rightIdx < nums.size())
     {
-        int subarray_score = subarray_min * width;
-        if (subarray_score > max_subarray_score)
-        {
-            max_subarray_score = subarray_score;
-        }
+        int subarrayScore = subarrayMin * width;
+        if (subarrayScore > maxSubarrayScore)
+            maxSubarrayScore = subarrayScore;
 
-        if (left_idx == 0 && right_idx == nums.size() - 1)
-        {
+        if (leftIdx == 0 && rightIdx == nums.size() - 1)
             break;
-        }
 
-        if (left_idx == 0 && right_idx < nums.size() - 1)
+        if (leftIdx == 0 && rightIdx < nums.size() - 1)
         {
-            right_idx += 1;
+            rightIdx += 1;
             width += 1;
         }
 
-        if (left_idx > 0 && right_idx == nums.size() - 1)
+        if (leftIdx > 0 && rightIdx == nums.size() - 1)
         {
-            left_idx -= 1;
+            leftIdx -= 1;
             width += 1;
         }
 
-        if (left_idx > 0 && right_idx < nums.size() - 1)
-        { // Both sides can go.
-            if (nums[left_idx - 1] > nums[right_idx + 1])
-            {
-                left_idx -= 1;
-            }
+        if (leftIdx > 0 && rightIdx < nums.size() - 1) // Both sides can go.
+        {
+            if (nums[leftIdx - 1] > nums[rightIdx + 1])
+                leftIdx -= 1;
+
             else
-            {
-                right_idx += 1;
-            }
+                rightIdx += 1;
+
             width += 1;
         }
 
-        if (min(nums[left_idx], nums[right_idx]) < subarray_min)
-        {
-            subarray_min = min(nums[left_idx], nums[right_idx]);
-        }
+        if (min(nums[leftIdx], nums[rightIdx]) < subarrayMin)
+            subarrayMin = min(nums[leftIdx], nums[rightIdx]);
     }
 
-    return max_subarray_score;
+    return maxSubarrayScore;
 }

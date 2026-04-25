@@ -7,7 +7,7 @@ int findMaxModifiedSubsequence(vector<int> &nums)
 { // LeetCode Q.3041.
     sort(nums.begin(), nums.end());
 
-    int max_len = 1; // Base case.
+    int maxLen = 1; // Base case.
     // Keys: put or add. Values: {tail, len}.
     unordered_map<string, vector<int>> lengths = {
         {"put", {nums[0], 1}}, {"add", {nums[0] + 1, 1}}}; // Base case.
@@ -15,25 +15,25 @@ int findMaxModifiedSubsequence(vector<int> &nums)
     nums.erase(nums.begin());
     for (auto num : nums)
     {
-        int put_len = 1; // Initialize these values by 1.
-        int add_len = 1;
+        int putLen = 1; // Initialize these values by 1.
+        int addLen = 1;
 
         if (num == lengths["add"][0] + 1)
         { // Num stays put.
-            put_len += lengths["add"][1];
+            putLen += lengths["add"][1];
         }
         if (num == lengths["put"][0] + 1)
         { // Num stays put.
-            put_len += lengths["put"][1];
+            putLen += lengths["put"][1];
         }
 
         if (num == lengths["add"][0])
         { // Num increments by 1.
-            add_len += lengths["add"][1];
+            addLen += lengths["add"][1];
         }
         if (num == lengths["put"][0])
         { // Num increments by 1.
-            add_len += lengths["put"][1];
+            addLen += lengths["put"][1];
         }
 
         if (num > lengths["put"][0] + 1)
@@ -41,9 +41,9 @@ int findMaxModifiedSubsequence(vector<int> &nums)
             // Future nums staying put can't extend put len.
             lengths["put"] = {num, 1}; // Reset.
         }
-        if (put_len > lengths["put"][1])
+        if (putLen > lengths["put"][1])
         { // Update put len.
-            lengths["put"] = {num, put_len};
+            lengths["put"] = {num, putLen};
         }
 
         if (num + 1 > lengths["add"][0] + 1)
@@ -51,16 +51,16 @@ int findMaxModifiedSubsequence(vector<int> &nums)
             // Future nums adding 1 can't extend add len.
             lengths["add"] = {num + 1, 1}; // Reset.
         }
-        if (add_len > lengths["add"][1])
+        if (addLen > lengths["add"][1])
         { // Update add len.
-            lengths["add"] = {num + 1, add_len};
+            lengths["add"] = {num + 1, addLen};
         }
 
-        if (max(lengths["put"][1], lengths["add"][1]) > max_len)
+        if (max(lengths["put"][1], lengths["add"][1]) > maxLen)
         {
-            max_len = max(lengths["put"][1], lengths["add"][1]);
+            maxLen = max(lengths["put"][1], lengths["add"][1]);
         }
     }
 
-    return max_len;
+    return maxLen;
 }

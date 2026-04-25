@@ -10,31 +10,33 @@ private:
     unordered_map<int, unordered_set<int>> forbidden;
     vector<int> parents;
 
-    int find_parent(int person)
+    int findParent(int person)
     {
         if (parents[person] == person)
-        {
             return person;
-        }
-        return find_parent(parents[person]);
+
+        return findParent(parents[person]);
     }
 
-    void union_people(int person_1, int person_2)
+    void unionPeople(int personOne, int personTwo)
     {
-        int parent_1 = find_parent(min(person_1, person_2));
-        int parent_2 = find_parent(max(person_1, person_2));
-        if (parent_1 != parent_2)
+        int parentOne = findParent(min(personOne, personTwo));
+        int parentTwo = findParent(max(personOne, personTwo));
+
+        if (parentOne != parentTwo)
         {
-            parents[parent_2] = parent_1;
+            parents[parentTwo] = parentOne;
+
             // Must merge parent 2's restricted people into parent 1's.
-            forbidden[parent_1].insert(
-                forbidden[parent_2].begin(), forbidden[parent_2].end());
-            forbidden.erase(parent_2); // Clear unused memory.
+            forbidden[parentOne].insert(
+                forbidden[parentTwo].begin(), forbidden[parentTwo].end());
+
+            forbidden.erase(parentTwo); // Clear unused memory.
         }
     }
 
 public:
-    vector<bool> process_requests(int n, vector<vector<int>> &restrictions, vector<vector<int>> &requests)
+    vector<bool> processRequests(int n, vector<vector<int>> &restrictions, vector<vector<int>> &requests)
     {
         for (int person = 0; person < n; person++)
         {
@@ -48,40 +50,40 @@ public:
             forbidden[restriction[1]].insert(restriction[0]);
         }
 
-        vector<bool> requests_results;
+        vector<bool> requestsResults;
+
         for (auto request : requests)
         {
-            int parent_1 = find_parent(request[0]);
-            int parent_2 = find_parent(request[1]);
-            bool request_success = true; // Default to True.
+            int parentOne = findParent(request[0]);
+            int parentTwo = findParent(request[1]);
+            bool requestSuccess = true; // Default to True.
 
-            for (auto forbidden_person : forbidden[parent_1])
-            { // Test parent 1.
-                if (find_parent(forbidden_person) == parent_2)
+            for (auto forbidden_person : forbidden[parentOne]) // Test parent 1.
+            {
+                if (findParent(forbidden_person) == parentTwo)
                 {
-                    request_success = false;
+                    requestSuccess = false;
                     break;
                 }
             }
-            if (request_success)
-            { // Test parent 2.
-                for (auto forbidden_person : forbidden[parent_2])
+
+            if (requestSuccess) // Test parent 2.
+            {
+                for (auto forbidden_person : forbidden[parentTwo])
                 {
-                    if (find_parent(forbidden_person) == parent_1)
+                    if (findParent(forbidden_person) == parentOne)
                     {
-                        request_success = false;
+                        requestSuccess = false;
                         break;
                     }
                 }
             }
 
-            requests_results.push_back(request_success);
-            if (request_success)
-            {
-                union_people(parent_1, parent_2);
-            }
+            requestsResults.push_back(requestSuccess);
+            if (requestSuccess)
+                unionPeople(parentOne, parentTwo);
         }
 
-        return requests_results;
+        return requestsResults;
     }
 };
