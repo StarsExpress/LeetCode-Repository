@@ -4,20 +4,22 @@ using namespace std;
 
 int maximizeScoresDifference(vector<int> &stones) // LeetCode Q.1872.
 {
-    auto stones_sum = reduce(stones.begin(), stones.end());
-    int max_diff = stones_sum;
+    int prefixSum = 0;
+    for (auto stone : stones)
+        prefixSum += stone;
 
-    // For stones count >= 3, DP starts from the 3rd rightmost stone.
-    int idx = stones.size() - 3;
-    while (idx > -1)
+    // Base case: Alice merges everything as the only attempt.
+    int maxScoreDiff = prefixSum;
+
+    prefixSum -= stones.back();
+
+    for (int idx = stones.size() - 2; idx >= 1; idx--)
     {
-        // Current round's stones sum = stones[0] + ... + stones[idx + 1].
-        stones_sum -= stones[idx + 2];
-        if (stones_sum - max_diff > max_diff)
-        {
-            max_diff = stones_sum - max_diff;
-        }
-        idx--;
+        if (prefixSum - maxScoreDiff > maxScoreDiff)
+            maxScoreDiff = prefixSum - maxScoreDiff;
+
+        prefixSum -= stones[idx];
     }
-    return max_diff;
+
+    return maxScoreDiff;
 }
