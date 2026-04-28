@@ -1,6 +1,6 @@
 
 def rot_oranges(grid: list[list[int]]) -> int:  # LeetCode Q.994.
-    current_rot: list[tuple[int, int]] = []  # Foramt: (row idx, col idx).
+    current_rot: list[tuple[int, int]] = []  # Format: (row idx, col idx).
     next_rot: list[tuple[int, int]] = []  # Format: (row idx, col idx).
     
     fresh_oranges: dict[tuple[int, int], bool] = dict()

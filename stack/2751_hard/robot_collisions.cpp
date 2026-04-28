@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <algorithm>
 using namespace std;
 
 vector<int> find_survivors(vector<int> &positions, vector<int> &healths, string directions)

@@ -6,7 +6,7 @@ class TreeNode:
         self.right = right
 
 
-def _bfs_height(root: TreeNode | None) -> int:
+def _bfs_height(root: TreeNode) -> int:
     total_height = 0
     if not root.left and not root.right:  # Only root node.
         return total_height
@@ -33,7 +33,7 @@ def _bfs_height(root: TreeNode | None) -> int:
     return total_height
 
 
-def print_tree(self, root: TreeNode | None) -> list[list[str]]:  # LeetCode Q.655.
+def print_tree(self, root: TreeNode) -> list[list[str]]:  # LeetCode Q.655.
     matrix = []
     total_height = self._bfs_height(root)
     for _ in range(total_height + 1):
