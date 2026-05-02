@@ -95,9 +95,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: '天碼行空 SkyHorse',
+      title: '天码行空 SkyHorse',
       logo: {
-        alt: '天碼行空 SkyHorse Logo',
+        alt: '天码行空 SkyHorse Logo',
         src: 'img/logo.jpg',
       },
       items: [
@@ -105,7 +105,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'LeetCode',
+          label: 'LeetCode Catalog📒',
         },
         {
           // Link to the directory for direct code scripts lookup.

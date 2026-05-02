@@ -6,19 +6,23 @@ vector<int> find_second_next_greater(vector<int> &nums) // LeetCode Q.2454.
 {
     vector<int> secondNextGreater(nums.size(), -1);
 
-    stack<pair<int, int>> stackOne, stackTwo; // Format: {num, idx}.
-    vector<pair<int, int>> transporter;       // Format: {num, idx}.
+    // Decreasing monotonic stacks: {num, idx}.
+    stack<pair<int, int>> stackOne, stackTwo;
+
+    vector<pair<int, int>> transporter; // Format: {num, idx}.
 
     for (int idx = 0; idx < nums.size(); idx++)
     {
-        while (!stackTwo.empty() && stackTwo.top().first < nums[idx])
+        int num = nums[idx];
+
+        while (!stackTwo.empty() && stackTwo.top().first < num)
         {
             int past_idx = stackTwo.top().second;
-            secondNextGreater[past_idx] = nums[idx];
+            secondNextGreater[past_idx] = num;
             stackTwo.pop();
         }
 
-        while (!stackOne.empty() && stackOne.top().first < nums[idx])
+        while (!stackOne.empty() && stackOne.top().first < num)
         {
             transporter.push_back(stackOne.top()); // Keep decreasing monotonicity.
             stackOne.pop();
@@ -30,7 +34,8 @@ vector<int> find_second_next_greater(vector<int> &nums) // LeetCode Q.2454.
             transporter.pop_back();
         }
 
-        stackOne.push({nums[idx], idx});
+        stackOne.push({num, idx});
     }
+
     return secondNextGreater;
 }

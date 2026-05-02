@@ -1,8 +1,11 @@
 
 def find_second_next_greater(nums: list[int]) -> list[int]:  # LeetCode Q.2454.
     second_next_greater = [-1] * len(nums)
-    stack_1, stack_2 = [], []  # Decreasing monotonic stacks: (num, idx).
-    transporter = []  # Transport tuples from stack 1 to stack 2.
+
+    stack_1: list[tuple[int, int]] = []  # Decreasing monotonic stacks: (num, idx).
+    stack_2: list[tuple[int, int]] = []
+
+    transporter: list[tuple[int, int]] = []  # Transport tuples from stack 1 to stack 2.
 
     for idx, num in enumerate(nums):
         while stack_2 and stack_2[-1][0] < num:

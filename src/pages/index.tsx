@@ -5,7 +5,8 @@ import problems from '../data/problems.json';
 
 const ITEMS_PER_PAGE = 12;
 
-const difficultyColor = {
+// Use Record<string, string> to prevent error marks in PyCharm.
+const difficultyColor: Record<string, string> = {
   Easy: '#00b8a3',
   Medium: '#ffc01e',
   Hard: '#ff375f',
