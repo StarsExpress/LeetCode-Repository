@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksky_horse=self.webpackChunksky_horse||[]).push([["12"],{8512(e){e.exports=JSON.parse('{"metadata":{"permalink":"/SkyHorse/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":0,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
