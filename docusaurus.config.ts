@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: '天碼行空 SkyHorse',
-  tagline: 'Dinosaurs are cool',
+  title: '天码行空 SkyHorse',
+  tagline: '天马行空的思路  天天敲出好代码',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -98,7 +98,7 @@ const config: Config = {
       title: '天碼行空 SkyHorse',
       logo: {
         alt: '天碼行空 SkyHorse Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.jpg',
       },
       items: [
         {

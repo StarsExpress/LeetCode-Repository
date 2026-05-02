@@ -15,7 +15,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "dfs/0329_hard/max_rising_path",
-            "label": "0329. Max Rising Path"
+            "label": "329. Max Rising Path"
           },
           {
             "type": "doc",
@@ -43,8 +43,8 @@ const sidebars: SidebarsConfig = {
         "items": [
           {
             "type": "doc",
-            "id": "dp_tabulation/0918_medium/cicular_subarray_sum",
-            "label": "0918. Cicular Subarray Sum"
+            "id": "dp_tabulation/0918_medium/circular_subarray_sum",
+            "label": "918. Circular Subarray Sum"
           }
         ]
       },
@@ -56,7 +56,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "dp_tabulation/0552_hard/student_attendance",
-            "label": "0552. Student Attendance"
+            "label": "552. Student Attendance"
           },
           {
             "type": "doc",
@@ -89,8 +89,8 @@ const sidebars: SidebarsConfig = {
           },
           {
             "type": "doc",
-            "id": "hash/3351_hard/good_subseqs_sum",
-            "label": "3351. Good Subseqs Sum"
+            "id": "hash/3351_hard/good_subsequences_sum",
+            "label": "3351. Good Subsequences Sum"
           }
         ]
       }
@@ -109,7 +109,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "heaps/0767_medium/reorganized_string",
-            "label": "0767. Reorganized String"
+            "label": "767. Reorganized String"
           }
         ]
       },
@@ -121,7 +121,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "heaps/0295_hard/median_finder",
-            "label": "0295. Median Finder"
+            "label": "295. Median Finder"
           }
         ]
       }
@@ -164,7 +164,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "queue/0068_hard/text_justificator",
-            "label": "0068. Text Justificator"
+            "label": "68. Text Justificator"
           },
           {
             "type": "doc",
@@ -188,7 +188,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "sliding_window/0076_hard/min_window_substring",
-            "label": "0076. Min Window Substring"
+            "label": "76. Min Window Substring"
           },
           {
             "type": "doc",
@@ -212,7 +212,7 @@ const sidebars: SidebarsConfig = {
           {
             "type": "doc",
             "id": "stack/0895_hard/max_frequency_stack",
-            "label": "0895. Max Frequency Stack"
+            "label": "895. Max Frequency Stack"
           },
           {
             "type": "doc",
