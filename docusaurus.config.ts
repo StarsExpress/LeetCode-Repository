@@ -107,7 +107,8 @@ const config: Config = {
           label: 'LeetCode',
         },
         {
-          href: 'https://github.com/StarsExpress/SkyHorse/docs',
+          // Link to the directory for direct code scripts lookup.
+          href: 'https://github.com/StarsExpress/SkyHorse/tree/main/docs',
           label: 'SkyHorse Repo',
           position: 'right',
         },
