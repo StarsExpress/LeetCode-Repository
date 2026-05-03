@@ -5,7 +5,7 @@
     "topic": "Stack",
     "difficulty": "Hard",
     "docId": "stack/3430_hard/subarrays_max_min_sum",
-    "img": "/SkyHorse/img/efficiency/3430_hard_3430_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/3430_efficiency.png"
   },
   {
     "number": 3351,
@@ -13,7 +13,7 @@
     "topic": "Hash",
     "difficulty": "Hard",
     "docId": "hash/3351_hard/good_subsequences_sum",
-    "img": "/SkyHorse/img/efficiency/3351_hard_3351_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/3351_efficiency.png"
   },
   {
     "number": 2963,
@@ -21,7 +21,7 @@
     "topic": "Hash",
     "difficulty": "Hard",
     "docId": "hash/2963_hard/good_partitions",
-    "img": "/SkyHorse/img/efficiency/2963_hard_2963_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2963_efficiency.png"
   },
   {
     "number": 2876,
@@ -29,7 +29,7 @@
     "topic": "DFS",
     "difficulty": "Hard",
     "docId": "dfs/2876_hard/visited_nodes",
-    "img": "/SkyHorse/img/efficiency/2876_hard_2876_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2876_efficiency.png"
   },
   {
     "number": 2454,
@@ -37,7 +37,7 @@
     "topic": "Stack",
     "difficulty": "Hard",
     "docId": "stack/2454_hard/second_next_greater",
-    "img": "/SkyHorse/img/efficiency/2454_hard_2454_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2454_efficiency.png"
   },
   {
     "number": 2444,
@@ -45,7 +45,7 @@
     "topic": "Sliding Window",
     "difficulty": "Hard",
     "docId": "sliding_window/2444_hard/bounded_subarrays",
-    "img": "/SkyHorse/img/efficiency/2444_hard_2444_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2444_efficiency.png"
   },
   {
     "number": 2398,
@@ -53,7 +53,7 @@
     "topic": "Queue",
     "difficulty": "Hard",
     "docId": "queue/2398_hard/max_robots",
-    "img": "/SkyHorse/img/efficiency/2398_hard_2398_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2398_efficiency.png"
   },
   {
     "number": 2360,
@@ -61,7 +61,7 @@
     "topic": "DFS",
     "difficulty": "Hard",
     "docId": "dfs/2360_hard/longest_cycle",
-    "img": "/SkyHorse/img/efficiency/2360_hard_2360_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2360_efficiency.png"
   },
   {
     "number": 2302,
@@ -69,7 +69,7 @@
     "topic": "Prefix Sum",
     "difficulty": "Hard",
     "docId": "prefix_sum/2302_hard/subarray_scores",
-    "img": "/SkyHorse/img/efficiency/2302_hard_2302_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2302_efficiency.png"
   },
   {
     "number": 2025,
@@ -77,7 +77,7 @@
     "topic": "Prefix Sum",
     "difficulty": "Hard",
     "docId": "prefix_sum/2025_hard/partitions_count",
-    "img": "/SkyHorse/img/efficiency/2025_hard_2025_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/2025_efficiency.png"
   },
   {
     "number": 1944,
@@ -85,7 +85,7 @@
     "topic": "Stack",
     "difficulty": "Hard",
     "docId": "stack/1944_hard/visible_people",
-    "img": "/SkyHorse/img/efficiency/1944_hard_1944_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/1944_efficiency.png"
   },
   {
     "number": 1872,
@@ -93,7 +93,7 @@
     "topic": "DP Tabulation",
     "difficulty": "Hard",
     "docId": "dp_tabulation/1872_hard/merge_stone_game",
-    "img": "/SkyHorse/img/efficiency/1872_hard_1872_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/1872_efficiency.png"
   },
   {
     "number": 1359,
@@ -101,7 +101,7 @@
     "topic": "DP Tabulation",
     "difficulty": "Hard",
     "docId": "dp_tabulation/1359_hard/pickup_deliveries",
-    "img": "/SkyHorse/img/efficiency/1359_hard_1359_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/1359_efficiency.png"
   },
   {
     "number": 918,
@@ -109,7 +109,7 @@
     "topic": "DP Tabulation",
     "difficulty": "Medium",
     "docId": "dp_tabulation/0918_medium/circular_subarray_sum",
-    "img": "/SkyHorse/img/efficiency/0918_medium_0918_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/918_efficiency.png"
   },
   {
     "number": 895,
@@ -117,7 +117,7 @@
     "topic": "Stack",
     "difficulty": "Hard",
     "docId": "stack/0895_hard/max_frequency_stack",
-    "img": "/SkyHorse/img/efficiency/0895_hard_0895_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/895_efficiency.png"
   },
   {
     "number": 767,
@@ -125,7 +125,7 @@
     "topic": "Heaps",
     "difficulty": "Medium",
     "docId": "heaps/0767_medium/reorganized_string",
-    "img": "/SkyHorse/img/efficiency/0767_medium_0767_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/767_efficiency.png"
   },
   {
     "number": 552,
@@ -133,7 +133,7 @@
     "topic": "DP Tabulation",
     "difficulty": "Hard",
     "docId": "dp_tabulation/0552_hard/student_attendance",
-    "img": "/SkyHorse/img/efficiency/0552_hard_0552_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/552_efficiency.png"
   },
   {
     "number": 329,
@@ -141,7 +141,7 @@
     "topic": "DFS",
     "difficulty": "Hard",
     "docId": "dfs/0329_hard/max_rising_path",
-    "img": "/SkyHorse/img/efficiency/0329_hard_0329_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/329_efficiency.png"
   },
   {
     "number": 295,
@@ -149,7 +149,7 @@
     "topic": "Heaps",
     "difficulty": "Hard",
     "docId": "heaps/0295_hard/median_finder",
-    "img": "/SkyHorse/img/efficiency/0295_hard_0295_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/295_efficiency.png"
   },
   {
     "number": 76,
@@ -157,7 +157,7 @@
     "topic": "Sliding Window",
     "difficulty": "Hard",
     "docId": "sliding_window/0076_hard/min_window_substring",
-    "img": "/SkyHorse/img/efficiency/0076_hard_0076_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/76_efficiency.png"
   },
   {
     "number": 68,
@@ -165,6 +165,6 @@
     "topic": "Queue",
     "difficulty": "Hard",
     "docId": "queue/0068_hard/text_justificator",
-    "img": "/SkyHorse/img/efficiency/0068_hard_0068_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/68_efficiency.png"
   }
 ]
