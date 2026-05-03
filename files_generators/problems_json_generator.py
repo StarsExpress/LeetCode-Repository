@@ -19,7 +19,9 @@ for dsa_topic in sorted(os.listdir(DOCS_DIR_PATH)):
         difficulty = parts[1].lower()
         if difficulty not in DIFFICULTIES: continue
 
+        number_str = parts[0]  # Has left padded zeros.
         number = int(parts[0])
+        padded_zeros_count = len(number_str) - len(str(number))
 
         title, doc_id = None, None  # Find .md to get title.
 
@@ -46,7 +48,7 @@ for dsa_topic in sorted(os.listdir(DOCS_DIR_PATH)):
 
         for file in os.listdir(problem_path):
             if file.endswith("efficiency.png"):
-                image = f"/SkyHorse/img/efficiency/{number}_efficiency.png"
+                image = f"/SkyHorse/img/efficiency/{number_str}_efficiency.png"
                 break
 
         topic_label = dsa_topic.replace("_", " ").title()
@@ -60,7 +62,7 @@ for dsa_topic in sorted(os.listdir(DOCS_DIR_PATH)):
         problems.append(
             {
                 "number": number,
-                "title": title,
+                "title": title[padded_zeros_count:],  # Remove left padded zeros from title.
                 "topic": topic_label,
                 "difficulty": difficulty.capitalize(),
                 "docId": doc_id,

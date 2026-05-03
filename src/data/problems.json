@@ -113,66 +113,66 @@
   },
   {
     "number": 918,
-    "title": "0918. Circular Subarray Sum",
+    "title": "918. Circular Subarray Sum",
     "topic": "DP Tabulation",
     "difficulty": "Medium",
     "docId": "dp_tabulation/0918_medium/circular_subarray_sum",
-    "img": "/SkyHorse/img/efficiency/918_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0918_efficiency.png"
   },
   {
     "number": 895,
-    "title": "0895. Max Frequency Stack",
+    "title": "895. Max Frequency Stack",
     "topic": "Stack",
     "difficulty": "Hard",
     "docId": "stack/0895_hard/max_frequency_stack",
-    "img": "/SkyHorse/img/efficiency/895_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0895_efficiency.png"
   },
   {
     "number": 767,
-    "title": "0767. Reorganized String",
+    "title": "767. Reorganized String",
     "topic": "Heaps",
     "difficulty": "Medium",
     "docId": "heaps/0767_medium/reorganized_string",
-    "img": "/SkyHorse/img/efficiency/767_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0767_efficiency.png"
   },
   {
     "number": 552,
-    "title": "0552. Student Attendance",
+    "title": "552. Student Attendance",
     "topic": "DP Tabulation",
     "difficulty": "Hard",
     "docId": "dp_tabulation/0552_hard/student_attendance",
-    "img": "/SkyHorse/img/efficiency/552_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0552_efficiency.png"
   },
   {
     "number": 329,
-    "title": "0329. Max Rising Path",
+    "title": "329. Max Rising Path",
     "topic": "DFS",
     "difficulty": "Hard",
     "docId": "dfs/0329_hard/max_rising_path",
-    "img": "/SkyHorse/img/efficiency/329_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0329_efficiency.png"
   },
   {
     "number": 295,
-    "title": "0295. Median Finder",
+    "title": "295. Median Finder",
     "topic": "Heaps",
     "difficulty": "Hard",
     "docId": "heaps/0295_hard/median_finder",
-    "img": "/SkyHorse/img/efficiency/295_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0295_efficiency.png"
   },
   {
     "number": 76,
-    "title": "0076. Min Window Substring",
+    "title": "76. Min Window Substring",
     "topic": "Sliding Window",
     "difficulty": "Hard",
     "docId": "sliding_window/0076_hard/min_window_substring",
-    "img": "/SkyHorse/img/efficiency/76_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0076_efficiency.png"
   },
   {
     "number": 68,
-    "title": "0068. Text Justificator",
+    "title": "68. Text Justificator",
     "topic": "Queue",
     "difficulty": "Hard",
     "docId": "queue/0068_hard/text_justificator",
-    "img": "/SkyHorse/img/efficiency/68_efficiency.png"
+    "img": "/SkyHorse/img/efficiency/0068_efficiency.png"
   }
 ]
