@@ -34,31 +34,39 @@ long long computeMaxMinSum(vector<int> &nums, int k) //  LeetCode Q.3430.
 
         long long num = nums[endIdx];
 
+        long long maxShares = 1; // Base case.
+        windowMaxSum += num;
+
         while (!maxStack.empty() && get<1>(maxStack.back()) <= num)
         {
-            windowMaxSum -= get<1>(maxStack.back()) * get<2>(maxStack.back());
+            int prevNum = get<1>(maxStack.back());
+            long long prevShares = get<2>(maxStack.back());
             maxStack.pop_back();
+
+            maxShares += prevShares; // Max shares transition.
+
+            // Reflect transition in max sum.
+            windowMaxSum += (num - prevNum) * prevShares;
         }
 
-        long long maxShares = min(endIdx + 1, k);
-        if (!maxStack.empty())
-            maxShares = endIdx - get<0>(maxStack.back());
-
         maxStack.push_back({endIdx, num, maxShares});
-        windowMaxSum += num * maxShares;
+
+        long long minShares = 1; // Base case.
+        windowMinSum += num;
 
         while (!minStack.empty() && get<1>(minStack.back()) >= num)
         {
-            windowMinSum -= get<1>(minStack.back()) * get<2>(minStack.back());
+            int prevNum = get<1>(minStack.back());
+            long long prevShares = get<2>(minStack.back());
             minStack.pop_back();
+
+            minShares += prevShares; // Min shares transition.
+
+            // Reflect transition in min sum.
+            windowMinSum += (num - prevNum) * prevShares;
         }
 
-        long long minShares = min(endIdx + 1, k);
-        if (!minStack.empty())
-            minShares = endIdx - get<0>(minStack.back());
-
         minStack.push_back({endIdx, num, minShares});
-        windowMinSum += num * minShares;
 
         totalMaxMinSum += windowMaxSum + windowMinSum;
     }

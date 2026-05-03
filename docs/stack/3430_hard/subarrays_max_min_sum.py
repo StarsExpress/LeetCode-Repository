@@ -1,11 +1,13 @@
+from collections import deque
+
 
 def compute_max_min_sum(nums: list[int], k: int) -> int:  # LeetCode Q.3430.
     subarrays_max_min_sum = 0
 
-    max_stack: list[list[int]] = []  # Format: [idx, num, shares].
+    max_stack: deque[list[int]] = deque([])  # Format: [idx, num, shares].
     subarrays_max_sum = 0
 
-    min_stack: list[list[int]] = []  # Format: [idx, num, shares].
+    min_stack: deque[list[int]] = deque([])  # Format: [idx, num, shares].
     subarrays_min_sum = 0
 
     for end_idx, num in enumerate(nums):
@@ -17,39 +19,39 @@ def compute_max_min_sum(nums: list[int], k: int) -> int:  # LeetCode Q.3430.
             subarrays_max_sum -= max_stack[0][1]
 
             if max_stack[0][0] < start_idx:  # Front num out of window.
-                max_stack.pop(0)
+                max_stack.popleft()
 
             min_stack[0][2] -= 1  # Decrement stack's front num shares.
             subarrays_min_sum -= min_stack[0][1]
 
             if min_stack[0][0] < start_idx:  # Front num out of window.
-                min_stack.pop(0)
+                min_stack.popleft()
+
+        max_shares = 1  # Base case.
+        subarrays_max_sum += num
 
         while max_stack and max_stack[-1][1] <= num:
-            _, prev_num, prev_shares = max_stack.pop(-1)
-            subarrays_max_sum -= prev_num * prev_shares
+            _, prev_num, prev_shares = max_stack.pop()
 
-        if not max_stack:
-            shares = min(end_idx + 1, k)
+            max_shares += prev_shares  # Max shares transition.
 
-        else:
-            shares = end_idx - max_stack[-1][0]
+            # Reflect transition in max sum.
+            subarrays_max_sum += (num - prev_num) * prev_shares
 
-        subarrays_max_sum += num * shares
-        max_stack.append([end_idx, num, shares])
+        max_stack.append([end_idx, num, max_shares])
+
+        min_shares = 1  # Base case.
+        subarrays_min_sum += num
 
         while min_stack and min_stack[-1][1] >= num:
-            _, prev_num, prev_shares = min_stack.pop(-1)
-            subarrays_min_sum -= prev_num * prev_shares
+            _, prev_num, prev_shares = min_stack.pop()
 
-        if not min_stack:
-            shares = min(end_idx + 1, k)
+            min_shares += prev_shares  # Min shares transition.
 
-        else:
-            shares = end_idx - min_stack[-1][0]
+            # Reflect transition in min sum.
+            subarrays_min_sum += (num - prev_num) * prev_shares
 
-        subarrays_min_sum += num * shares
-        min_stack.append([end_idx, num, shares])
+        min_stack.append([end_idx, num, min_shares])
 
         subarrays_max_min_sum += subarrays_max_sum + subarrays_min_sum
 

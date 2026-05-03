@@ -72,6 +72,14 @@
     "img": "/SkyHorse/img/efficiency/2302_efficiency.png"
   },
   {
+    "number": 2296,
+    "title": "2296. Text Editor",
+    "topic": "Stack",
+    "difficulty": "Hard",
+    "docId": "stack/2296_hard/text_editor",
+    "img": "/SkyHorse/img/efficiency/2296_efficiency.png"
+  },
+  {
     "number": 2025,
     "title": "2025. Partitions Count",
     "topic": "Prefix Sum",
